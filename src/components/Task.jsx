@@ -46,6 +46,7 @@ class Task extends React.Component {
   render() {
     return (
       <Fragment>
+        <h1>Tangentbordsträning</h1>
         <label htmlFor="TypeHereForm">
           <span className="done-text">{this.state.doneText}</span>
           <span>{this.state.remainingText}</span>
