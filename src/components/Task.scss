@@ -1,0 +1,27 @@
+.typing-text-input {
+  border: 1px solid black;
+  width: 250px;
+  height: 4em;
+  border-radius: 10px;
+  padding-left: 50px;
+  padding-bottom: 10px;
+
+  &:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+  }
+
+  &__typed-value {
+    color: green;
+  }
+  
+  &__value-to-type {
+    font-size: 3em;
+  }
+}
+
+
+.done-text {
+  color: white; 
+  background-color: black;
+}
