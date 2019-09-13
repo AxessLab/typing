@@ -1,10 +1,29 @@
 version: 2
 
 jobs:
+  react_unit_tests:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache: # special step to restore the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Setup Dependencies
+          command: npm install
+      - run: # run tests
+          name: Run Test and Coverage
+          command: |
+            npm test -- --coverage --passWithNoTests
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
   deploy_to_test:
     machine:
       enabled: true
-    working_directory: ~/public
+    working_directory: ~/repo
     environment:
       HEROKU_APP_NAME: 'typing-stage'
     steps:
@@ -17,7 +36,7 @@ jobs:
   deploy_to_prod:
     machine:
       enabled: true
-    working_directory: ~/public
+    working_directory: ~/repo
     environment:
       HEROKU_APP_NAME: 'typing-prod'
     steps:
@@ -31,6 +50,7 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
+      - react_unit_tests
       - deploy_to_test:
           filters:
             branches:
