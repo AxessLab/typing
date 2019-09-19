@@ -1,10 +1,11 @@
 .typing-text-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid black;
   width: 250px;
-  height: 4em;
   border-radius: 10px;
-  padding-left: 50px;
-  padding-bottom: 10px;
+  font-size: 3em;
 
   &:focus {
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
@@ -16,12 +17,9 @@
   }
   
   &__value-to-type {
-    font-size: 3em;
+    padding: 10px 20px 10px 20px;
+    margin: 0 10px 0 10px;
+    border-radius: 10px;
+    background-color: #eee;
   }
-}
-
-
-.done-text {
-  color: white; 
-  background-color: black;
 }

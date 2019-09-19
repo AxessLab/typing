@@ -4,10 +4,10 @@ import TypingInput from './TypingInput';
 
 const Task = (props) => {
   const [currentPos, setCurrentPos] = useState(0);
+  const [errors, setErrors] = useState(0);
   const [typedText, setTypedText] = useState('');
   const [textToType, setTextToType] = useState(props.currentText.charAt(currentPos));
   const [remainingText, setRemainingText] = useState(props.currentText.substr(1,props.currentTextLength));
-  const [errors, setErrors] = useState(0);
 
   const resetToDefault = () => {
     setCurrentPos(0);
@@ -21,10 +21,10 @@ const Task = (props) => {
     const tmpRemaining = props.currentText.substr(currentPos+2,props.currentTextLength);
 
     //Update new values
-    setCurrentPos(currentPos+1);
-    setTypedText(typedText + key);
+    setCurrentPos(currentPos => currentPos+1);
+    setTypedText(typedText => typedText + key);
     setTextToType(props.currentText.charAt(currentPos+1));
-    setRemainingText(tmpRemaining);
+    setRemainingText(remainingText => tmpRemaining);
 
     if(currentPos+1===props.currentTextLength) { //Task complete, play feedback, start next task
       errors === 0 ? alert("Jättebra jobbat! Felfri!") : alert("Bra jobbat! Bara "+errors+" fel.");
@@ -34,7 +34,7 @@ const Task = (props) => {
     }
   }
 
-  const handleWrongInput = () => setErrors(errors + 1)
+  const handleWrongInput = () => setErrors(errors => errors + 1)
 
   const handleKey = e => {
     if(e.which !== 0 && !(e.key==="Control") && !(e.key==="Meta") && !(e.key==="Shift") && !(e.key==="Alt")) { //igore modifiers for now, probably bad code
@@ -45,12 +45,7 @@ const Task = (props) => {
   return (
     <Fragment>
       <h2>Testing role="application"</h2>
-      <p>CurrentPos {currentPos}</p>
       <p>Errors {errors}</p>
-      <p>TypedText {typedText}</p>
-      <p>TextToType {textToType}</p>
-      <p>remainingText {remainingText}</p>
-      
       <TypingInput handleKey={handleKey} valueToType={textToType}>
           <span className="typing-text-input__typed-value">
               {typedText}

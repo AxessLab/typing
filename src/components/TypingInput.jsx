@@ -14,13 +14,13 @@ const TypingInput = (props) => {
   return (
     <div 
       className="typing-text-input" 
-      role="application" 
+      role="application"
       ref={inputEl} 
       tabIndex="0" 
       onKeyUp={handleKey}
       aria-label={'Type the text ' + props.valueToType}>
-        {props.children}
-      </div>
+          {props.children}
+    </div>
   );
 }
 
