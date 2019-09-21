@@ -1,80 +1,102 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useCallback } from 'react';
 import './Task.scss';
+import TypingInput from './TypingInput';
+import AudioManager from './AudioManager';
 
-class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.input = React.createRef();
-    this.currentPosition = 0;
-    this.errors=0;
-    this.state = { 
-      typedValue : "",
-      valueToType: props.currentText.charAt(this.currentPosition), 
-      doneText : "",
-      remainingText : props.currentText.substr(1,this.props.currentTextLength),
-    } 
+const Task = (props) => {
+  const [currentPos, setCurrentPos] = useState(0);
+  const [errors, setErrors] = useState(0);
+  const [typedText, setTypedText] = useState('');
+  const [textToType, setTextToType] = useState(props.currentText.charAt(currentPos));
+  const [remainingText, setRemainingText] = useState(props.currentText.substr(1,props.currentTextLength));
+  const [playURL, setPlayURL] = useState(['']);
+  const [playURLIndex, setPlayURLIndex] = useState(0);
+
+  const audioEnded = useCallback (() => {
+    console.log("Typing: audioEnded callback.");
+    if(setPlayURL.length>playURLIndex) {
+      setPlayURLIndex(playURLIndex => playURLIndex +1);
+    }
+    else {
+      console.log("Typing: all queued audio files have finished,");
+      setPlayURLIndex(0);
+    }
+  },
+  [], // Tells React to memoize regardless of arguments.
+  );
+
+  const resetToDefault = () => {
+    setCurrentPos(0);
+    setErrors(0);
+    setTypedText('');
+    setTextToType(props.currentText.charAt(0));
+    setRemainingText(props.currentText.substr(1,props.currentTextLength));
+    setPlayURL(['']);
+    setPlayURLIndex(0);
   }
 
-  componentDidMount() {
-    this.input.current.focus();
-  }
+  const handleCorrectInput = (key) => {
+    const tmpRemaining = props.currentText.substr(currentPos+2,props.currentTextLength);
 
-  handleKey = e => {
-    console.log("Pressed: "+e.key+" = "+this.props.currentText.charAt(this.currentPosition)+"?");
-    if(e.which !== 0 && !(e.key==="Control") && !(e.key==="Meta") && !(e.key==="Shift") && !(e.key==="Alt")) { //igore modifiers for now, probably bad code
-      if(e.key=== this.props.currentText.charAt(this.currentPosition)) { //Correct, play feedback (maybe), update progress and move to the next letter
-        this.currentPosition++;
-        this.setState({
-          typedValue: this.state.typedValue + e.key,
-          valueToType: this.props.currentText.charAt(this.currentPosition)
-        });
-        console.log("Current position: "+this.currentPosition+" length: "+this.props.currentTextLength);
-        if(this.currentPosition===this.props.currentTextLength) { //Task complete, play feedback, start next task
-          this.errors === 0 ? alert("Jättebra jobbat! Felfri!") :  alert("Bra jobbat! Bara "+this.errors+" fel.");
+    //Update new values
+    setCurrentPos(currentPos => currentPos+1);
+    setTypedText(typedText => typedText + key);
+    setTextToType(props.currentText.charAt(currentPos+1));
+    setRemainingText(remainingText => tmpRemaining);
+    setPlayURL(['']);
+    setPlayURLIndex(0);
 
-          //Resetting values
-          this.currentPosition=0; 
-          this.errors=0;
-          this.setState({typedValue: "",valueToType: this.props.currentText.charAt(this.currentPosition)});
-        }
-        //Update progress
-        const tmpDone = this.props.currentText.substr(0,this.currentPosition);
-        const tmpRemaining = this.props.currentText.substr(this.currentPosition+1,this.props.currentTextLength);
-        this.setState({ 
-          doneText: tmpDone, 
-          remainingText: tmpRemaining});
-      }
-      else { //Incorrect
-        this.errors++;
+    //play feedback
+    setPlayURLIndex(0);
+    setPlayURL(['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE']);
 
-        //todo: Play error audio feedback
-      }
+    if(currentPos+1===props.currentTextLength) { //Task complete, play feedback, start next task
+      errors === 0 ? alert("Jättebra jobbat! Felfri!") : alert("Bra jobbat! Bara "+errors+" fel.");
+
+      //todo: Instead of resetting values, go to summary of exercise
+      resetToDefault();
     }
   }
 
-  render() {
-    return (
-      <Fragment>
-        <h2>Testing role="application"</h2>
-        <div 
-          className="typing-text-input" 
-          role="application" 
-          ref={this.input} 
-          tabIndex="0" 
-          onKeyUp={this.handleKey}
-          aria-label={'Type the text ' + this.state.valueToType}>
-            <span className="typing-text-input__typed-value">
-                {this.state.typedValue}
-            </span>
-            <span 
-              className="typing-text-input__value-to-type">
-                {this.state.valueToType}
-            </span>
-            <span>{this.state.remainingText}</span>
-        </div>
-      </Fragment>
-    );
-  }
-}
+  const handleWrongInput = (key) => { 
+    //play feedback
+    setPlayURLIndex(0);
+    //addAudioToPlay //does not work for some reason
+    setPlayURL(['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
+                  'https://webbkonversation.se/audio/buzzer.wav']);
 
+    setErrors(errors => errors + 1);
+  }
+  
+  const addAudioToPlay = (url) => { //does not work for some reason
+    setPlayURL(playURL.concat(url));
+    console.log('playurl: '+playURL);
+    
+  }
+
+  const handleKey = e => {
+    if(e.which !== 0 && !(e.key==="Control") && !(e.key==="Meta") && !(e.key==="Shift") && !(e.key==="Alt")) { //igore modifiers for now, probably bad code
+      //Check is correct key is typed or not
+      e.key.toLowerCase() === props.currentText.charAt(currentPos) ? handleCorrectInput(e.key) : handleWrongInput(e.key);
+    }
+  }
+
+  return (
+    <Fragment>
+      <h2>Testing role="application"</h2>
+      <p>Errors {errors}</p>
+      <TypingInput handleKey={handleKey} valueToType={textToType}>
+          <span className="typing-text-input__typed-value">
+              {typedText}
+          </span>
+          <span 
+            className="typing-text-input__value-to-type">
+              {textToType}
+          </span>
+          <span>{remainingText}</span>
+      </TypingInput>
+      <AudioManager playURL={playURL} playURLIndex={playURLIndex} onEnded={audioEnded}/>
+    </Fragment>
+  );
+}
 export default Task;
