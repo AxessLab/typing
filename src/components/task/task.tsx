@@ -20,8 +20,7 @@ const Task = (props) => {
     completed
   } = props;
 
-  const handleKey = (e : any) => {
-    
+  const handleKey = (e : any) => {   
     if(e.which !== 0 && !(e.key==="Control") && !(e.key==="Meta") && !(e.key==="Shift") && !(e.key==="Alt")) { //igore modifiers for now, probably bad code
       //Check is correct key is typed or not
       const correctKeyPressed =  e.key.toLowerCase() === task.text.charAt(currentPos);
@@ -35,12 +34,12 @@ const Task = (props) => {
   }
   return (
     <>
-    <div className="game">
-      <div className="type-here">
-        <h2>Typing in the Dark</h2>
-        <TaskInput handleKey={handleKey} />
+      <div className="row flex-center pad-top-60-m pad-top-30">
+        <div className="type-here col-4-6">
+          <h2>Typing in the Dark</h2>
+          <TaskInput handleKey={handleKey} />
+        </div>
       </div>
-    </div>
     </>
   );
 }
