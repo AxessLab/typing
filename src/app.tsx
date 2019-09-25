@@ -1,9 +1,9 @@
 import React from 'react';
-import Task from './task';
+import Task from './components/task';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import './Game.scss';
+import './app.scss';
 
-const Game = () => {
+const App : React.FC = () => {
   return (
     <Router>
       <Route 
@@ -14,4 +14,4 @@ const Game = () => {
   );
 }
 
-export default Game;
+export default App;
