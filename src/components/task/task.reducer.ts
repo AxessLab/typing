@@ -26,7 +26,10 @@ export default (state: TaskState = initialState, action): TaskState => {
     case ACTION_TYPES.FETCH_TASK:
       return {
         ...state,
-        entity: action.payload.data
+        entity: {
+          ...state.entity,
+          text: action.payload.data
+        }
       };
     case ACTION_TYPES.CORRECT_INPUT:
       return {
@@ -57,12 +60,12 @@ export default (state: TaskState = initialState, action): TaskState => {
 
 // Actions
 
-export const getTask = () => {
+export const getTask = (task : string) => {
   return {
     type: ACTION_TYPES.FETCH_TASK,
     payload: {
       completed: false,
-      text: 'test'
+      text: task
     }
   };
 };

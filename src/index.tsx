@@ -21,7 +21,7 @@ const rootEl = document.getElementById('root');
 const render = ( Component : React.FC) =>
   ReactDOM.render(
     <Provider store={store}>
-      <div>
+      <div className="container">
         {/* If this slows down the app in dev disable it and enable when required  */}
         {devTools}
         <Component />
