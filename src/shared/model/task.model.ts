@@ -1,9 +1,11 @@
 export interface ITask {
   completed?: boolean;
-  text?: string
+  text?: string,
+  correctInput?: boolean;
 }
 
 export const defaultValue: Readonly<ITask> = {
   completed: false,
-  text: 'fjfj'
+  text: 'fjfj',
+  correctInput: false
 };

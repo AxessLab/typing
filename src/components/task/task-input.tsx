@@ -17,7 +17,7 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   useEffect(() => {
     if(inputEl && inputEl.current) {
       inputEl.current.focus();
-    } 
+    }
   })
 
   const handleKey = event => {
