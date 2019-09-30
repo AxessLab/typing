@@ -34,25 +34,20 @@ export default (state: AudioState = initialState, action): AudioState => {
 };
 
 // Actions
-export const playAudio = (urls : string[]) => async (dispatch : Dispatch) => {
-  const result = await dispatch({
+export const playAudio = (urls: string[]) => ({
     type: ACTION_TYPES.PLAY,
     payload: urls
-  });
-  return result;
-};
+});
 
-export const onAudioEnded = () => async (dispatch : Dispatch,  getState : Function) => {
-  const playUrlIndex = getState().audio.currentIndex;
-  const playUrls = getState().audio.playUrls;
-  let index = 0;
-  
-  if(playUrls.length > playUrlIndex + 1) {
-    index = playUrlIndex + 1;
+export const onAudioEnded = () => (dispatch: Dispatch, getState: Function) => {
+  const { currentIndex, playUrls } = getState().audio;
+
+  if (currentIndex >= playUrls.length - 1) {
+    return null;
   }
-  const result = await dispatch({
+  
+  dispatch({
     type: ACTION_TYPES.ENDED,
-    payload: index
+    payload: currentIndex + 1
   });
-  return result;
 };

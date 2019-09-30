@@ -11,7 +11,6 @@ const Audio = (props): React.ReactElement => {
     playUrlsIndex,
     onAudioEnded
   } = props;
-  console.log(props);
   
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
@@ -26,7 +25,7 @@ const Audio = (props): React.ReactElement => {
         const promise = audio.current.play();
 
         if (promise !== undefined) {
-          promise.then(() => console.log('playing')).catch(error => console.log(error));
+          promise.then().catch(error => console.log(error));
         }
     }
     const listener = () => onAudioEnded();
@@ -37,7 +36,7 @@ const Audio = (props): React.ReactElement => {
       audio.current.removeEventListener('ended', listener);
     };
   }, [audio, playUrls, playUrlsIndex]);
-  
+
   return (
       <audio
         id="Player"
