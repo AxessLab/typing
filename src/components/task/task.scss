@@ -1,0 +1,28 @@
+.typing-text-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  width: 100%;
+  border-radius: 10px;
+  line-height: 1em;
+  font-size: 3em;
+  padding: 0 10px 0 10px;
+
+  &:focus {
+    box-shadow: 0 0 5px rgba(0, 133, 93, 1);
+    border: 1px solid rgba(0, 133, 93, 1);
+    outline: 0;
+  }
+
+  &__typed-value {
+    color: rgb(0, 133, 93);
+  }
+  
+  &__value-to-type {
+    padding: 10px 20px 10px 20px;
+    margin: 0 10px 0 10px;
+    border-radius: 10px;
+    background-color: #eee;
+  }
+}

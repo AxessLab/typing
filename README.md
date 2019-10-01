@@ -1,3 +1,7 @@
+# Typing in the dark
+
+Typing in the dark is an accessible open source keyboard usage practicing website.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
