@@ -8,8 +8,7 @@ export interface ITaskProps extends StateProps, RouteComponentProps<{ url: strin
 
 const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   const {
-    task,
-    currentPos
+    task
   } = props;
   
   const inputEl = useRef<HTMLDivElement>(null);
@@ -25,26 +24,27 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   }
 
   return (
-    <div 
-      className="typing-text-input" 
-      role="application"
-      ref={inputEl} 
-      tabIndex={0} 
-      onKeyUp={handleKey}>
-          <span className="typing-text-input__value-to-type" aria-live="polite">
-            {task.text.charAt(currentPos)}
-          </span>
-          <span>
-            {task.text.substr(currentPos+1, task.text.length)}
-          </span>
-    </div>
+    <>
+      <div 
+        className="task__input" 
+        role="application"
+        ref={inputEl} 
+        tabIndex={0} 
+        onKeyUp={handleKey}>
+          {
+            task.typedText.length ?
+            <span className="task__typed-text">
+              {task.typedText}
+            </span> : null
+          }
+      </div>
+    </>
   );
 }
 
 
 const mapStateToProps = ({ task }: IRootState, ownProps) => ({
   task: task.entity,
-  currentPos: task.currentPos,
   handleKey: ownProps.handleKey
 });
 

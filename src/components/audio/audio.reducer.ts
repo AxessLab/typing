@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { IRootState } from 'shared/reducers';
 
 export const ACTION_TYPES = {
   PLAY: 'audio/PLAY',

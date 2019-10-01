@@ -34,12 +34,21 @@ export default (state: TaskState = initialState, action): TaskState => {
     case ACTION_TYPES.CORRECT_INPUT:
       return {
         ...state,
-        currentPos: state.currentPos + 1
+        currentPos: state.currentPos + 1,
+        entity: {
+          ...state.entity,
+          correctInput: true,
+          typedText: action.payload
+        }
       };
     case ACTION_TYPES.WRONG_INPUT:
       return {
         ...state,
-        errors: state.errors + 1
+        errors: state.errors + 1,
+        entity: {
+          ...state.entity,
+          correctInput: false,
+        }
       };
     case ACTION_TYPES.COMPLETED:
       return {
@@ -70,9 +79,10 @@ export const getTask = (task : string) => {
   };
 };
 
-export const handleCorrectInput = () => async (dispatch : Dispatch) => {
+export const handleCorrectInput = (key : string) => async (dispatch : Dispatch) => {
   const result = await dispatch({
-    type: ACTION_TYPES.CORRECT_INPUT
+    type: ACTION_TYPES.CORRECT_INPUT,
+    payload: key
   });
   return result;
 };
