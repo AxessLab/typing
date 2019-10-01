@@ -1,5 +1,5 @@
-import { ITask, defaultValue } from '../../shared/model/task.model';
 import { Dispatch } from 'redux';
+import { ITask, defaultValue } from '../../shared/model/task.model';
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: 'task/FETCH_TASK_LIST',
@@ -10,18 +10,23 @@ export const ACTION_TYPES = {
   RESET: 'task/RESET'
 };
 
-const initialState = {
+export interface ITaskState {
+  entities: readonly ITask[],
+  entity: Readonly<ITask>,
+  currentPos: number,
+  errors: number
+}
+
+const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
   entity: defaultValue,
   currentPos: 0,
   errors: 0,
 };
 
-export type TaskState = Readonly<typeof initialState>;
-
 // Reducer
 
-export default (state: TaskState = initialState, action): TaskState => {
+export default (state: ITaskState = initialState, action): ITaskState => {
   switch (action.type) {
     case ACTION_TYPES.FETCH_TASK:
       return {
@@ -70,29 +75,30 @@ export const getTask = (task : string) => {
   };
 };
 
-export const handleCorrectInput = () => async (dispatch : Dispatch) => {
+export const handleCorrectInput = () => async (dispatch: Dispatch) => {
   const result = await dispatch({
     type: ACTION_TYPES.CORRECT_INPUT
   });
   return result;
 };
 
-export const handleWrongInput = () => async (dispatch : Dispatch) => {
+export const handleWrongInput = () => async (dispatch: Dispatch) => {
   const result = await dispatch({
     type: ACTION_TYPES.WRONG_INPUT
   });
   return result;
 };
 
-export const completed = (task : ITask) => async (dispatch : Dispatch, getState : Function) => {
+export const completed = (task: ITask) => async (dispatch: Dispatch, getState: Function) => {
   //todo: Should not be an alert only
   const errors = getState().task.errors;
   errors === 0 ? alert("Jättebra jobbat! Felfri!") : alert("Bra jobbat! Bara "+errors+" fel.");
-  
+
   const result = await dispatch({
     type: ACTION_TYPES.COMPLETED,
     payload: task.completed
-  })
+  });
+
   dispatch(reset());
   return result;
 };

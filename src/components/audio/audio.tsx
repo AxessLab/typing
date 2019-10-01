@@ -1,17 +1,32 @@
-import React, { useRef, useEffect  } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import { IRootState } from '../../shared/reducers';
 import { onAudioEnded } from './audio.reducer';
 
+const mapStateToProps = ({ audio }: IRootState) => ({
+  playUrls: audio.playUrls,
+  playUrlsIndex: audio.currentIndex
+});
+
+const mapDispatchToProps = {
+  onAudioEnded
+};
+
+// TODO: Check what all these keywords do...
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+// Combine state and dispatch props
 type IAudioProps = StateProps & DispatchProps;
 
-const Audio = (props): React.ReactElement => {
+const Audio: React.FunctionComponent<IAudioProps> = (props: React.PropsWithChildren<IAudioProps>): React.ReactElement => {
   const {
     playUrls,
     playUrlsIndex,
     onAudioEnded
   } = props;
-  
+
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   const incompatibilityMessage = props.children || (
@@ -49,19 +64,4 @@ const Audio = (props): React.ReactElement => {
   );
 }
 
-const mapStateToProps = ({ audio }: IRootState) => ({
-  playUrls: audio.playUrls,
-  playUrlsIndex: audio.currentIndex 
-});
-
-const mapDispatchToProps = {
-  onAudioEnded
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Audio);
+export default connect(mapStateToProps, mapDispatchToProps)(Audio);

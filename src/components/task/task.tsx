@@ -12,6 +12,23 @@ import AudioManager from '../audio/audio';
 
 import './task.scss';
 
+const mapStateToProps = ({ task }: IRootState) => ({
+  task: task.entity,
+  currentPos: task.currentPos
+});
+
+const mapDispatchToProps = {
+  getTask,
+  handleCorrectInput,
+  handleWrongInput,
+  completed,
+  playAudio
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+
 export interface ITaskProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 const Task = (props) => {
@@ -27,7 +44,7 @@ const Task = (props) => {
   const handleKey = (event: React.KeyboardEvent) => {
     // Igore modifiers for now
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
-      
+
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
@@ -46,7 +63,7 @@ const Task = (props) => {
           ]
         );
       }
-      
+
       if (currentPos+1 === task.text.length && correctKeyPressed) {
         task.completed = !task.completed;
         completed(task);
@@ -67,23 +84,4 @@ const Task = (props) => {
   );
 }
 
-const mapStateToProps = ({ task }: IRootState) => ({
-  task: task.entity,
-  currentPos: task.currentPos
-});
-
-const mapDispatchToProps = {
-  getTask,
-  handleCorrectInput,
-  handleWrongInput,
-  completed,
-  playAudio
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Task);
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

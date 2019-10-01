@@ -1,11 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import reducer, { IRootState } from '../shared/reducers';
+
+import rootReducer, { IRootState } from '../shared/reducers';
+
 import DevTools from './devtools';
 
-const defaultMiddlewares = [
-  thunkMiddleware
-];
+const defaultMiddlewares = [thunkMiddleware];
+
 const composedMiddlewares = middlewares =>
   process.env.NODE_ENV === 'development'
     ? compose(
@@ -14,6 +15,6 @@ const composedMiddlewares = middlewares =>
       )
     : compose(applyMiddleware(...defaultMiddlewares, ...middlewares));
 
-const initialize = (initialState?: IRootState, middlewares = []) => createStore(reducer, initialState, composedMiddlewares(middlewares));
+const initialize = (initialState?: IRootState, middlewares = []) => createStore(rootReducer, initialState, composedMiddlewares(middlewares));
 
 export default initialize;

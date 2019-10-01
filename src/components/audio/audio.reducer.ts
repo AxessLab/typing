@@ -5,16 +5,19 @@ export const ACTION_TYPES = {
   ENDED: 'audio/ENDED'
 };
 
-const initialState = {
+export interface IAudioState {
+  playUrls: string[],
+  currentIndex: number
+}
+
+const initialState: IAudioState = {
   playUrls: [],
   currentIndex: 0
 };
 
-export type AudioState = Readonly<typeof initialState>;
-
 // Reducer
 
-export default (state: AudioState = initialState, action): AudioState => {
+export default (state: IAudioState = initialState, action): IAudioState => {
   switch (action.type) {
     case ACTION_TYPES.PLAY:
       return {
@@ -44,7 +47,7 @@ export const onAudioEnded = () => (dispatch: Dispatch, getState: Function) => {
   if (currentIndex >= playUrls.length - 1) {
     return null;
   }
-  
+
   dispatch({
     type: ACTION_TYPES.ENDED,
     payload: currentIndex + 1

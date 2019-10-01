@@ -1,36 +1,25 @@
+import './index.scss'; // Render styles and place in static folder
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import initStore from './config/store';
-import './index.scss';
-import DevTools from './config/devtools';
-import AppComponent from './app';
 import * as serviceWorker from './serviceWorker';
+import DevTools from './config/devtools'; // When environment is 'development'
 
-if (process.env.NODE_ENV !== 'production') {
-  var axe = require('react-axe');
-  axe(React, ReactDOM, 1000);
-}  
+import App from './app';
 
-const store = initStore();
-const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
+if (process.env.NODE_ENV === 'development') {
+  require('react-axe')(React, ReactDOM, 1000);
+}
 
-const rootEl = document.getElementById('root');
+ReactDOM.render(
+  <>
+    {/* If this slows down the app in dev disable it and enable when required */}
+    { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
+    <App />
+  </>,
+  document.getElementById('root')
+);
 
-
-const render = ( Component : React.FC) =>
-  ReactDOM.render(
-    <Provider store={store}>
-      <div className="container">
-        {/* If this slows down the app in dev disable it and enable when required  */}
-        {devTools}
-        <Component />
-      </div>
-    </Provider>,
-    rootEl
-  );
-
-render(AppComponent);
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
