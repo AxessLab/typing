@@ -17,6 +17,8 @@ export interface ITaskProps extends StateProps, DispatchProps, RouteComponentPro
 const Task = (props) => {
   const {
     currentPos,
+    correctInput,
+    wrongInput,
     task,
     handleCorrectInput,
     handleWrongInput,
@@ -32,14 +34,14 @@ const Task = (props) => {
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
       if (correctKeyPressed) {
-        handleCorrectInput();
+        handleCorrectInput(event.key);
         playAudio(
           ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
             '/assets/correct.mp3'
           ]
         );
       } else {
-        handleWrongInput();
+        handleWrongInput(event.key);
         playAudio(
           ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
             '/assets/wrongsound.wav'
@@ -47,7 +49,7 @@ const Task = (props) => {
         );
       }
       
-      if (currentPos+1 === task.text.length && correctKeyPressed) {
+      if (currentPos + 1 === task.text.length && correctKeyPressed) {
         task.completed = !task.completed;
         completed(task);
       }
@@ -56,11 +58,23 @@ const Task = (props) => {
 
   return (
     <>
-      <div className="row flex-center pad-top-60-m pad-top-30">
-        <div className="type-here col-4-6">
-          <h2>Typing in the Dark</h2>
-          <TaskInput handleKey={handleKey} />
-          <AudioManager />
+      <div className="task pad-top-60">
+        <div className="flex-m flex-wrap-m">
+          <div className="col-12">
+            <h1>Typing in the Dark</h1>  
+          </div>
+          <div className={"col-2 task__value-to-type " + (correctInput ? 'correct' : '') + (wrongInput ? 'wrong' : '')} aria-live="polite">
+            <span>
+              {task.text.charAt(currentPos)}
+            </span>
+          </div>
+          <div className="col-10 task__remaining-text">
+            {task.text.substr(currentPos + 1, task.text.length)}
+          </div>
+          <div className="col-12 col-2-m pad-top-30">
+            <TaskInput handleKey={handleKey} />
+            <AudioManager />
+          </div>
         </div>
       </div>
     </>
@@ -69,7 +83,9 @@ const Task = (props) => {
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
-  currentPos: task.currentPos
+  currentPos: task.currentPos,
+  correctInput: task.correctInput,
+  wrongInput: task.wrongInput
 });
 
 const mapDispatchToProps = {
