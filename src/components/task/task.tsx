@@ -17,6 +17,8 @@ export interface ITaskProps extends StateProps, DispatchProps, RouteComponentPro
 const Task = (props) => {
   const {
     currentPos,
+    correctInput,
+    wrongInput,
     task,
     handleCorrectInput,
     handleWrongInput,
@@ -39,7 +41,7 @@ const Task = (props) => {
           ]
         );
       } else {
-        handleWrongInput();
+        handleWrongInput(event.key);
         playAudio(
           ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
             '/assets/wrongsound.wav'
@@ -61,7 +63,7 @@ const Task = (props) => {
           <div className="col-12">
             <h1>Typing in the Dark</h1>  
           </div>
-          <div className="col-2 task__value-to-type" aria-live="polite">
+          <div className={"col-2 task__value-to-type " + (correctInput ? 'correct' : '') + (wrongInput ? 'wrong' : '')} aria-live="polite">
             <span>
               {task.text.charAt(currentPos)}
             </span>
@@ -81,7 +83,9 @@ const Task = (props) => {
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
-  currentPos: task.currentPos
+  currentPos: task.currentPos,
+  correctInput: task.correctInput,
+  wrongInput: task.wrongInput
 });
 
 const mapDispatchToProps = {

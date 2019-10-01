@@ -8,7 +8,9 @@ export interface ITaskProps extends StateProps, RouteComponentProps<{ url: strin
 
 const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   const {
-    task
+    task,
+    correctInput,
+    wrongInput
   } = props;
   
   const inputEl = useRef<HTMLDivElement>(null);
@@ -32,10 +34,9 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         tabIndex={0} 
         onKeyUp={handleKey}>
           {
-            task.typedText.length ?
-            <span className="task__typed-text">
+            <span className={"task__typed-text " +  (correctInput ? 'correct' : '') + (wrongInput ? 'wrong' : '')}>
               {task.typedText}
-            </span> : null
+            </span>
           }
       </div>
     </>
@@ -45,7 +46,9 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
 
 const mapStateToProps = ({ task }: IRootState, ownProps) => ({
   task: task.entity,
-  handleKey: ownProps.handleKey
+  handleKey: ownProps.handleKey,
+  correctInput: task.correctInput,
+  wrongInput: task.wrongInput
 });
 
 

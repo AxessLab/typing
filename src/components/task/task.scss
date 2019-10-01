@@ -5,6 +5,12 @@
 
   &__value-to-type {    
     text-align: center;
+    &.correct {
+      color: #4add8c;
+    }
+    &.wrong {
+      color: #ff6347;
+    }
   }
   &__value-to-type:after {
     content: " ";
@@ -31,13 +37,11 @@
   }
 
   &__typed-text {
-    visibility: visible;
-    animation: cssAnimation 0s 3s forwards;
-  }
-}
-
-@keyframes cssAnimation {
-  to {
-    visibility: hidden;
+    &.correct {
+      color: #4add8c;
+    }
+    &.wrong {
+      color: #ff6347;
+    }
   }
 }
