@@ -1,6 +1,4 @@
 import { Dispatch } from 'redux';
-import { IRootState } from 'shared/reducers';
-import { tsPropertySignature } from '@babel/types';
 
 export const ACTION_TYPES = {
   PLAY: 'audio/PLAY',

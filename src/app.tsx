@@ -7,12 +7,12 @@ import './app.scss';
 const App : React.FC = () => {
   return (
     <Router>
-      <Route 
-        exact path='/' 
+      <Route
+        exact path='/'
         render={props => <Task {...props} />}
       />
-      <Route 
-        exact path='/Summary' 
+      <Route
+        exact path='/summary'
         render={props => <Summary {...props} />}
       />
     </Router>

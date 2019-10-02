@@ -15,7 +15,6 @@ const initialState = {
   entity: defaultValue,
   currentPos: 0,
   errors: 0,
-  taskDone: false
 };
 
 export type TaskState = Readonly<typeof initialState>;
@@ -87,12 +86,11 @@ export const handleWrongInput = () => async (dispatch : Dispatch) => {
 
 export const completed = (task : ITask) => async (dispatch : Dispatch, getState : Function) => {
   const result = await dispatch({
-    type: ACTION_TYPES.COMPLETED,
-     payload: task.completed
+    type: ACTION_TYPES.COMPLETED
   })
-  
+
   //dispatch(reset());
-  
+
   return result;
 };
 
