@@ -1,9 +1,11 @@
 import { Dispatch } from 'redux';
 import { IRootState } from 'shared/reducers';
+import { tsPropertySignature } from '@babel/types';
 
 export const ACTION_TYPES = {
   PLAY: 'audio/PLAY',
-  ENDED: 'audio/ENDED'
+  ENDED: 'audio/ENDED',
+  DONE: 'audio/DONE'
 };
 
 const initialState = {
@@ -28,6 +30,12 @@ export default (state: AudioState = initialState, action): AudioState => {
         ...state,
         currentIndex: action.payload
       };
+    case ACTION_TYPES.DONE:
+      return {
+        ...state,
+        playUrls: [],
+        currentIndex: -1
+      };
     default:
       return state;
   }
@@ -42,12 +50,16 @@ export const playAudio = (urls: string[]) => ({
 export const onAudioEnded = () => (dispatch: Dispatch, getState: Function) => {
   const { currentIndex, playUrls } = getState().audio;
 
-  if (currentIndex >= playUrls.length - 1) {
-    return null;
-  }
-  
   dispatch({
     type: ACTION_TYPES.ENDED,
     payload: currentIndex + 1
   });
+
+  if (currentIndex >= playUrls.length - 1) {
+    dispatch({
+      type: ACTION_TYPES.DONE,
+      payload: -1
+    });
+  }
+
 };

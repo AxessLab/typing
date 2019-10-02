@@ -15,6 +15,7 @@ const initialState = {
   entity: defaultValue,
   currentPos: 0,
   errors: 0,
+  taskDone: false
 };
 
 export type TaskState = Readonly<typeof initialState>;
@@ -46,7 +47,7 @@ export default (state: TaskState = initialState, action): TaskState => {
         ...state,
         entity: {
           ...state.entity,
-          completed: action.payload.data
+          completed: true //action.payload.data
         }
       };
     case ACTION_TYPES.RESET:
@@ -85,15 +86,13 @@ export const handleWrongInput = () => async (dispatch : Dispatch) => {
 };
 
 export const completed = (task : ITask) => async (dispatch : Dispatch, getState : Function) => {
-  //todo: Should not be an alert only
-  const errors = getState().task.errors;
-  errors === 0 ? alert("Jättebra jobbat! Felfri!") : alert("Bra jobbat! Bara "+errors+" fel.");
-  
   const result = await dispatch({
     type: ACTION_TYPES.COMPLETED,
-    payload: task.completed
+     payload: task.completed
   })
-  dispatch(reset());
+  
+  //dispatch(reset());
+  
   return result;
 };
 

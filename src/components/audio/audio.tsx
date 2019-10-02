@@ -1,9 +1,11 @@
 import React, { useRef, useEffect  } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
+import { RouteComponentProps } from 'react-router-dom';
 import { onAudioEnded } from './audio.reducer';
+import task from 'components/task/task';
 
-type IAudioProps = StateProps & DispatchProps;
+type IAudioProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
 const Audio = (props): React.ReactElement => {
   const {
@@ -19,22 +21,26 @@ const Audio = (props): React.ReactElement => {
   );
 
   useEffect(() => { //update and load new audio when changed, this probably prevents adding audio files one at a time
-    if (audio && audio.current && playUrls.length) {
-        audio.current.pause();
-        audio.current.load();
-        const promise = audio.current.play();
-
-        if (promise !== undefined) {
-          promise.then().catch(error => console.log(error));
-        }
+    //console.log("audio-useEffect taskCompleted: "+props.taskCompleted+" index: "+playUrlsIndex);
+    if(props.taskCompleted && playUrlsIndex==-1) {
+      //props.history.push('/summary');
     }
-    const listener = () => onAudioEnded();
-    // When the file has finished playing to the end
-    audio.current.addEventListener('ended', listener);
+    if (audio && audio.current && playUrls.length && playUrlsIndex>=0) {
+          audio.current.pause();
+          audio.current.load();
+          const promise = audio.current.play();
 
-    return () => {
-      audio.current.removeEventListener('ended', listener);
-    };
+          if (promise !== undefined) {
+            promise.then().catch(error => console.log(error));
+          }
+      }
+      const listener = () => onAudioEnded();
+      // When the file has finished playing to the end
+      audio.current.addEventListener('ended', listener);
+
+      return () => {
+        audio.current.removeEventListener('ended', listener);
+      };
   }, [audio, playUrls, playUrlsIndex]);
 
   return (
@@ -49,9 +55,11 @@ const Audio = (props): React.ReactElement => {
   );
 }
 
-const mapStateToProps = ({ audio }: IRootState) => ({
+const mapStateToProps = ({ task, audio }: IRootState) => ({
+  taskCompleted: task.entity.completed,
+  taskDone: task.taskDone,
   playUrls: audio.playUrls,
-  playUrlsIndex: audio.currentIndex 
+  playUrlsIndex: audio.currentIndex
 });
 
 const mapDispatchToProps = {

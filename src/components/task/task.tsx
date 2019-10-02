@@ -11,6 +11,7 @@ import TaskInput from './task-input';
 import AudioManager from '../audio/audio';
 
 import './task.scss';
+import audio from '../audio/audio';
 
 export interface ITaskProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -21,8 +22,8 @@ const Task = (props) => {
     handleCorrectInput,
     handleWrongInput,
     completed,
-    playAudio
-  } = props;
+    taskDone,
+    playAudio  } = props;
 
   const handleKey = (event: React.KeyboardEvent) => {
     // Igore modifiers for now
@@ -50,6 +51,7 @@ const Task = (props) => {
       if (currentPos+1 === task.text.length && correctKeyPressed) {
         task.completed = !task.completed;
         completed(task);
+        props.history.push('/summary');
       }
     }
   }
@@ -69,7 +71,8 @@ const Task = (props) => {
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
-  currentPos: task.currentPos
+  currentPos: task.currentPos,
+  taskDone: task.taskDone
 });
 
 const mapDispatchToProps = {
@@ -77,7 +80,7 @@ const mapDispatchToProps = {
   handleCorrectInput,
   handleWrongInput,
   completed,
-  playAudio
+  playAudio,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
