@@ -7,5 +7,10 @@ export interface IRootState {
   readonly audio: IAudioState;
 }
 
+export interface IAction {
+  type: string,
+  payload?: any
+}
+
 // Export root reducer
 export default combineReducers<IRootState>({ task, audio });
