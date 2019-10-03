@@ -12,6 +12,24 @@ import AudioManager from '../audio/audio';
 
 import './task.scss';
 
+const mapStateToProps = ({ task }: IRootState) => ({
+  task: task.entity,
+  currentPos: task.currentPos,
+  correctInput: task.correctInput,
+  wrongInput: task.wrongInput
+});
+
+const mapDispatchToProps = {
+  getTask,
+  handleCorrectInput,
+  handleWrongInput,
+  completed,
+  playAudio,
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
 export interface ITaskProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 const Task = (props) => {
@@ -23,13 +41,12 @@ const Task = (props) => {
     handleCorrectInput,
     handleWrongInput,
     completed,
-    playAudio
-  } = props;
+    playAudio  } = props;
 
   const handleKey = (event: React.KeyboardEvent) => {
     // Igore modifiers for now
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
-      
+
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
@@ -48,10 +65,10 @@ const Task = (props) => {
           ]
         );
       }
-      
+
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
-        task.completed = !task.completed;
         completed(task);
+        props.history.push('/summary');
       }
     }
   }
@@ -61,9 +78,9 @@ const Task = (props) => {
       <div className="task pad-top-60">
         <div className="flex-m flex-wrap-m">
           <div className="col-12">
-            <h1>Typing in the Dark</h1>  
+            <h1>Typing in the Dark</h1>
           </div>
-          <div className={"col-2 task__value-to-type " + (correctInput ? 'correct' : '') + (wrongInput ? 'wrong' : '')} aria-live="polite">
+          <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
             <span>
               {task.text.charAt(currentPos)}
             </span>
@@ -81,25 +98,4 @@ const Task = (props) => {
   );
 }
 
-const mapStateToProps = ({ task }: IRootState) => ({
-  task: task.entity,
-  currentPos: task.currentPos,
-  correctInput: task.correctInput,
-  wrongInput: task.wrongInput
-});
-
-const mapDispatchToProps = {
-  getTask,
-  handleCorrectInput,
-  handleWrongInput,
-  completed,
-  playAudio
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Task);
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

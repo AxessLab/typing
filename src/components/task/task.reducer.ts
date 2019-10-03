@@ -1,5 +1,6 @@
-import { ITask, defaultValue } from '../../shared/model/task.model';
 import { Dispatch } from 'redux';
+import { IAction } from '../../shared/reducers';
+import { ITask, defaultValue } from '../../shared/model/task.model';
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: 'task/FETCH_TASK_LIST',
@@ -11,7 +12,16 @@ export const ACTION_TYPES = {
   RESET: 'task/RESET'
 };
 
-const initialState = {
+export interface ITaskState {
+  entities: readonly ITask[],
+  entity: Readonly<ITask>,
+  currentPos: number,
+  correctInput: boolean,
+  wrongInput: boolean
+  errors: number
+}
+
+const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
   entity: defaultValue,
   currentPos: 0,
@@ -20,11 +30,9 @@ const initialState = {
   errors: 0,
 };
 
-export type TaskState = Readonly<typeof initialState>;
-
 // Reducer
 
-export default (state: TaskState = initialState, action): TaskState => {
+export default (state: ITaskState = initialState, action: IAction): ITaskState => {
   switch (action.type) {
     case ACTION_TYPES.FETCH_TASK:
       return {
@@ -71,7 +79,7 @@ export default (state: TaskState = initialState, action): TaskState => {
         ...state,
         entity: {
           ...state.entity,
-          completed: action.payload.data
+          completed: true //action.payload.data
         }
       };
     case ACTION_TYPES.RESET:
@@ -85,7 +93,7 @@ export default (state: TaskState = initialState, action): TaskState => {
 
 // Actions
 
-export const getTask = (task : string) => {
+export const getTask = (task: string): IAction => {
   return {
     type: ACTION_TYPES.FETCH_TASK,
     payload: {
@@ -95,43 +103,41 @@ export const getTask = (task : string) => {
   };
 };
 
-export const handleCorrectInput = (key : string) => async (dispatch : Dispatch) => {
+export const handleCorrectInput = (key: string) => async (dispatch: Dispatch): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.CORRECT_INPUT,
     payload: key
   });
+
   setTimeout(() => {
     dispatch(next())
   }, 250);
+
   return result;
 };
 
-export const handleWrongInput = (key : string) => async (dispatch : Dispatch) => {
+export const handleWrongInput = (key: string) => async (dispatch: Dispatch): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.WRONG_INPUT,
     payload: key
   });
+
   return result;
 };
 
-export const completed = (task : ITask) => async (dispatch : Dispatch, getState : Function) => {
-  //todo: Should not be an alert only
-  const errors = getState().task.errors;
-  errors === 0 ? alert("Jättebra jobbat! Felfri!") : alert("Bra jobbat! Bara "+errors+" fel.");
-  
+export const completed = (task: ITask) => async (dispatch: Dispatch, getState: Function): Promise<IAction> => {
   const result = await dispatch({
-    type: ACTION_TYPES.COMPLETED,
-    payload: task.completed
+    type: ACTION_TYPES.COMPLETED
   })
-  dispatch(reset());
+
   return result;
 };
 
 
-export const next = () => ({
+export const next = (): IAction => ({
   type: ACTION_TYPES.NEXT
 });
 
-export const reset = () => ({
+export const reset = (): IAction => ({
   type: ACTION_TYPES.RESET
 });

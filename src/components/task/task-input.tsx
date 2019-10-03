@@ -34,7 +34,7 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         tabIndex={0} 
         onKeyUp={handleKey}>
           {
-            <span className={"task__typed-text " +  (correctInput ? 'correct' : '') + (wrongInput ? 'wrong' : '')}>
+            <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
               {task.typedText}
             </span>
           }
