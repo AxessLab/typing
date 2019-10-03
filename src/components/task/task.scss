@@ -5,10 +5,10 @@
 
   &__value-to-type {    
     text-align: center;
-    &.correct {
+    &--correct {
       color: #4add8c;
     }
-    &.wrong {
+    &--wrong {
       color: #ff6347;
     }
   }
@@ -37,10 +37,10 @@
   }
 
   &__typed-text {
-    &.correct {
+    &--correct {
       color: #4add8c;
     }
-    &.wrong {
+    &--wrong {
       color: #ff6347;
     }
   }
