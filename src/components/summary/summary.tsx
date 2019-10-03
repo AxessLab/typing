@@ -27,12 +27,14 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
         '/assets/done.mp3']);
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
       }
-      const perfect = "Resultat.%20J%E4ttebra%20jobbat!%20Felfri!";
-      playAudio(  [
+      else {
+        const perfect = "Resultat.%20J%E4ttebra%20jobbat!%20Felfri!";
+        playAudio(  [
         'http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + perfect + 
-        '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-        '/assets/done.mp3']);
-      setFeedbackText("Jättebra jobbat! Felfri!");
+            '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
+            '/assets/done.mp3']);
+        setFeedbackText("Jättebra jobbat! Felfri!");
+      }
     }, [feedbackText, playAudio, taskErrors]);
 
     return (
