@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { IRootState } from '../../shared/reducers';
+import { IRootState, ITTSPlattform } from '../../shared/reducers';
 
 import { playAudio } from '../audio/audio.reducer';
 
-import AudioManager from '../audio/audio';
+import AudioManager, { speak, TTS_PLATTFORM } from '../audio/audio';
 
 import './summary.scss';
 
@@ -19,23 +19,39 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
 
     const [feedbackText, setFeedbackText] = useState('');
 
+    const textToSpeak: ITTSPlattform = { 
+        type: TTS_PLATTFORM.MARY, 
+        lang: 'sv-SE',
+        text: ''
+       };
+
     useEffect(() => {
       if (taskErrors > 0) {
-        const wellDone = "Resultat.%20Bra%20jobbat!%20Du%20hade%20bara%20" + taskErrors + "%20fel!";
-        playAudio(  ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + wellDone + 
-        '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-        '/assets/done.mp3']);
+        textToSpeak.text = "Resultat. Bra jobbat! Du hade bara " + taskErrors + " fel.";
+        speak(textToSpeak).then((data) => { 
+            if(data) {
+              console.log(data);
+                playAudio([data, '/assets/done.mp3']);
+            }
+            else {
+                playAudio(['/assets/done.mp3']);
+            }
+        });
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
       }
       else {
-        const perfect = "Resultat.%20J%E4ttebra%20jobbat!%20Felfri!";
-        playAudio(  [
-        'http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + perfect + 
-            '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/done.mp3']);
+        textToSpeak.text = "Resultat. Jättebra jobbat! Felfri.";
+        speak(textToSpeak).then((data) => {
+            if(data) {
+               playAudio([data, '/assets/done.mp3']);     
+            }
+            else {
+                playAudio(['/assets/done.mp3']);
+            }
+        });
         setFeedbackText("Jättebra jobbat! Felfri!");
       }
-    }, [feedbackText, playAudio, taskErrors]);
+    }, [feedbackText, playAudio, taskErrors, textToSpeak]);
 
     return (
     <>
