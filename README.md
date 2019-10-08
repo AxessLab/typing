@@ -16,7 +16,7 @@ In the project directory, you can run and try the app locally:
 
 
 ## Contributing
-If Typing in the dark sparks your interest, don't hestitate to send a pull request, file a bug, or just ask a question. We promise we'll be nice. Just don't forget to check out our [CONTRIBUTING](./github/CONTRIBUTING.md) doc - it includes a few technical details to get you started.
+If Typing in the dark sparks your interest, don't hestitate to send a pull request, file a bug, or just ask a question. We promise we'll be nice. Just don't forget to check out our [CONTRIBUTING](./.github/CONTRIBUTING.md) doc - it includes a few technical details to get you started.
 
 ### Good First Issues
 To help you get your feet wet and get you familiar with our contribution process, we have a list of [good first issues](https://github.com/AxessLab/typing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) that contain bugs which have a relatively limited scope. This is a great place to get started.
