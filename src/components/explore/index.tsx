@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Task from './task';
+import Explore from './explore';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <Route path={`${match.url}`} component={Task} />
+      <Route path={`${match.url}`} component={Explore} />
     </Switch>
   </>
 );

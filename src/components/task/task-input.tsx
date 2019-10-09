@@ -5,6 +5,15 @@ import { RouteComponentProps } from 'react-router-dom';
 
 export interface ITaskProps extends StateProps, RouteComponentProps<{ url: string }> {}
 
+const mapStateToProps = ({ task }: IRootState, ownProps) => ({
+  task: task.entity,
+  handleKey: ownProps.handleKey,
+  correctInput: task.correctInput,
+  wrongInput: task.wrongInput
+});
+
+
+type StateProps = ReturnType<typeof mapStateToProps>;
 
 const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   const {
@@ -32,7 +41,7 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         role="application"
         ref={inputEl} 
         tabIndex={0} 
-        onKeyUp={handleKey}>
+        onKeyDown={handleKey}>
           {
             <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
               {task.typedText}
@@ -44,14 +53,5 @@ const TaskInput : React.FC<ITaskProps> = (props : ITaskProps) => {
 }
 
 
-const mapStateToProps = ({ task }: IRootState, ownProps) => ({
-  task: task.entity,
-  handleKey: ownProps.handleKey,
-  correctInput: task.correctInput,
-  wrongInput: task.wrongInput
-});
-
-
-type StateProps = ReturnType<typeof mapStateToProps>;
 
 export default connect(mapStateToProps)(TaskInput);

@@ -33,6 +33,8 @@ type DispatchProps = typeof mapDispatchToProps;
 export interface ITaskProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 const Task = (props) => {
+  const explore = props.match.params.explore === undefined ? false : true;
+  
   const {
     currentPos,
     correctInput,
@@ -50,25 +52,30 @@ const Task = (props) => {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
-      if (correctKeyPressed) {
-        handleCorrectInput(event.key);
-        playAudio(
-          ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/correct.mp3'
-          ]
-        );
-      } else {
-        handleWrongInput(event.key);
-        playAudio(
-          ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/wrongsound.wav'
-          ]
-        );
+      if(explore) {
+        if (event.keyCode > 65 && event.keyCode < 90) playAudio(['/assets/correct.mp3']);
       }
-
-      if (currentPos + 1 === task.text.length && correctKeyPressed) {
-        completed(task);
-        props.history.push('/summary');
+      else {
+        if (correctKeyPressed) {
+          handleCorrectInput(event.key);
+          playAudio(
+            ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
+              '/assets/correct.mp3'
+            ]
+          );
+        } else {
+          handleWrongInput(event.key);
+          playAudio(
+            ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
+              '/assets/wrongsound.wav'
+            ]
+          );
+        }
+  
+        if (currentPos + 1 === task.text.length && correctKeyPressed) {
+          completed(task);
+          props.history.push('/summary');
+        }
       }
     }
   }
@@ -80,14 +87,19 @@ const Task = (props) => {
           <div className="col-12">
             <h1>Typing in the Dark</h1>
           </div>
-          <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
-            <span>
-              {task.text.charAt(currentPos)}
-            </span>
-          </div>
-          <div className="col-10 task__remaining-text">
-            {task.text.substr(currentPos + 1, task.text.length)}
-          </div>
+          { !explore ? (
+              <>
+                <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
+                  <span>
+                    {task.text.charAt(currentPos)}
+                  </span>
+                </div>
+                <div className="col-10 task__remaining-text">
+                  {task.text.substr(currentPos + 1, task.text.length)}
+                </div>
+              </>
+            ) : ''
+          }
           <div className="col-12 col-2-m pad-top-30">
             <TaskInput handleKey={handleKey} />
             <AudioManager />

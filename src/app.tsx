@@ -1,14 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import Explore from './components/explore';
 import Task from './components/task';
 import Summary from './components/summary';
 
 const App: React.FC = (): React.ReactElement => {
   return (
     <Router>
-      <Route exact path='/' render={props => <Task {...props} />} />
-      <Route exact path='/summary' render={props => <Summary {...props} />} />
+      <Switch>
+        <Route path='/task' render={props => <Task {...props} />} />
+        <Route path='/summary' render={props => <Summary {...props} />} />
+        <Route path='/' render={props => <Explore {...props} />} />
+      </Switch>
     </Router>
   );
 }
