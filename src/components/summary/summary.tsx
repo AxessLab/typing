@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { IRootState, ITTSPlattform } from '../../shared/reducers';
+import { IRootState } from '../../shared/reducers';
 
-import { playAudio } from '../audio/audio.reducer';
-
-import AudioManager, { speak, TTS_PLATTFORM } from '../audio/audio';
+import { playAudioAsync } from '../audioasync/audioasync';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 
 import './summary.scss';
 
-type ISummmaryProps = StateProps & DispatchProps;
+type ISummmaryProps = StateProps;
 
 const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
     const {
-      taskErrors,
-      playAudio,
+      taskErrors
     } = props;
 
     const [feedbackText, setFeedbackText] = useState('');
 
-    const textToSpeak: ITTSPlattform = { 
-        type: TTS_PLATTFORM.MARY, 
+    const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+
+    const textToSpeak: ITTS = { 
+        type: TTS_PLATTFORM.WEBSPEECH, 
         lang: 'sv-SE',
         text: ''
        };
 
     useEffect(() => {
+      //console.log('Summary::UseEffect runs twice');
       if (taskErrors > 0) {
         textToSpeak.text = "Resultat. Bra jobbat! Du hade bara " + taskErrors + " fel.";
         speak(textToSpeak).then((data) => { 
             if(data) {
-              console.log(data);
-                playAudio([data, '/assets/done.mp3']);
+                playAudioAsync(audio, data).then( data => {
+                  playAudioAsync(audio, '/assets/done.mp3');
+                });
             }
             else {
-                playAudio(['/assets/done.mp3']);
+                playAudioAsync(audio, '/assets/done.mp3');
             }
         });
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
@@ -43,15 +45,17 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
         textToSpeak.text = "Resultat. Jättebra jobbat! Felfri.";
         speak(textToSpeak).then((data) => {
             if(data) {
-               playAudio([data, '/assets/done.mp3']);     
+               playAudioAsync(audio,data).then( data => {
+                  playAudioAsync(audio,'/assets/done.mp3');     
+               });
             }
             else {
-                playAudio(['/assets/done.mp3']);
+                playAudioAsync(audio,'/assets/done.mp3');
             }
         });
         setFeedbackText("Jättebra jobbat! Felfri!");
       }
-    }, [feedbackText, playAudio, taskErrors, textToSpeak]);
+    }, [feedbackText, taskErrors, textToSpeak]);
 
     return (
     <>
@@ -59,7 +63,10 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
         <div className="summary__status">
           <h2>Resultat</h2>
             <p>{feedbackText}</p>
-            <AudioManager />
+            <audio id="Player"
+                ref={audio}
+                src=""
+                autoPlay></audio>
         </div>
       </div>
     </>
@@ -71,14 +78,8 @@ const mapStateToProps = ({ task }: IRootState) => ({
 });
 
 
-const mapDispatchToProps = {
-  playAudio
-};
-
 type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Summmary);

@@ -12,11 +12,5 @@ export interface IAction {
   payload?: any
 }
 
-export interface ITTSPlattform {
-  type: string,
-  text: string,
-  lang: string
-}
-
 // Export root reducer
 export default combineReducers<IRootState>({ task, audio });

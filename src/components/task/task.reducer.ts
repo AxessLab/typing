@@ -71,7 +71,7 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
         correctInput: false,
         entity: {
           ...state.entity,
-          typedText: ''
+        typedText: ''
         }
       };
     case ACTION_TYPES.COMPLETED:
