@@ -1,12 +1,17 @@
 // Import Base & Modules
+@import "./base-variables";
+
+// Import Base & Modules
 @import "~@getbase/base/scss/index";
 @import "~@getbase/buttons/scss/index";
 @import "~@getbase/containers/scss/index";
 @import "~@getbase/grid/scss/index";
-@import "~@getbase/layout-helpers/scss/index";
-@import "~@getbase/layout-spacers/scss/index";
 @import "~@getbase/typography/scss/index";
 
+// Base Typography and Layout Helpers
+@import "~@getbase/typography-helpers/scss/index";
+@import "~@getbase/layout-helpers/scss/index";
+@import "~@getbase/layout-spacers/scss/index";
 
 body {
   margin: 0;

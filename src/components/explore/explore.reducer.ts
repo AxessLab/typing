@@ -3,6 +3,7 @@ import { IAction } from '../../shared/reducers';
 
 export const ACTION_TYPES = {
   COMPLETED: 'explore/COMPLETED',
+  INCREASE_TYPE: 'explore/INCREASE_TYPE',
   STOP_ANIMATE: 'explore/STOP_ANIMATE',
   START_ANIMATE: 'explore/START_ANIMATE',
   RESET: 'explore/RESET',
@@ -10,12 +11,14 @@ export const ACTION_TYPES = {
 
 export interface IExploreState {
   completed: boolean,
-  isAnimating: boolean
+  isAnimating: boolean,
+  typeCount: number
 }
 
 const initialState: IExploreState = {
   completed: false,
   isAnimating: false,
+  typeCount: 0
 };
 
 // Reducer
@@ -31,6 +34,11 @@ export default (state: IExploreState = initialState, action: IAction): IExploreS
       return {
         ...state,
         isAnimating: true //action.payload.data
+      };
+    case ACTION_TYPES.INCREASE_TYPE:
+      return {
+        ...state,
+        typeCount: state.typeCount + 1
       };
     case ACTION_TYPES.STOP_ANIMATE:
       return {
@@ -64,6 +72,13 @@ export const startAnimate = () => async (dispatch: Dispatch): Promise<IAction> =
   return result;
 };
 
+export const increaseType = () => async (dispatch: Dispatch): Promise<IAction> => {
+  const result = await dispatch({
+    type: ACTION_TYPES.INCREASE_TYPE
+  })
+
+  return result;
+};
 
 export const stopAnimate = () => async (dispatch: Dispatch): Promise<IAction> => {
   const result = await dispatch({
