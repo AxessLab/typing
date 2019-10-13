@@ -51,7 +51,8 @@ const Task = (props) => {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
-      //select voice
+      //select voices
+      //GOOGLE / Mary / WEBSPEECH
       const textToSpeak: ITTS = { 
         type: TTS_PLATTFORM.WEBSPEECH, 
         lang: 'sv-SE',
@@ -77,59 +78,30 @@ const Task = (props) => {
         handleCorrectInput(event.key);
         let startTime = Date.now();
         speak(textToSpeak).then( data => { 
-          if(data) {
-            playAudioAsync(audio, data).then( data => { 
-              playAudioAsync(audio, 'assets/correct.mp3').then( data => {
-                if(currentPos<task.text.length-1) {
-                  speak(nextTextToSpeak).then( data => { 
-                    playAudioAsync(audio, data).then( data => {
-                      let endTime = Date.now();
-                      let timeDiff = endTime - startTime; //in ms
-                      console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
-                      +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
-                    });
-                  });
-                }
-              });
-            });
-          }
-          else {
+          playAudioAsync(audio, data).then( data => { 
             playAudioAsync(audio, 'assets/correct.mp3').then( data => {
               if(currentPos<task.text.length-1) {
                 speak(nextTextToSpeak).then( data => { 
-                  if(data) {
-                    playAudioAsync(audio, data).then( data => {
-                      let endTime = Date.now();
-                      let timeDiff = endTime - startTime; //in ms
-                      console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
-                      +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
-                    });
-                  }
-                  else {
+                  playAudioAsync(audio, data).then( data => {
                     let endTime = Date.now();
                     let timeDiff = endTime - startTime; //in ms
                     console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
-                      +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
-                  }
+                    +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
+                  });
                 });
               }
             });
-          }
+          });
         });
       }
       else {
-          handleWrongInput(event.key);
+        handleWrongInput(event.key);
           speak(textToSpeak).then( data => { 
-            if(data) {
               playAudioAsync( audio, data ).then( data => { 
                 playAudioAsync(audio, '/assets/wrongsound.wav'); 
               });
-            }
-            else {
-              playAudioAsync(audio, '/assets/wrongsound.wav');
-            }
-          });
-        }
+         });
+      }
     }
   }
 

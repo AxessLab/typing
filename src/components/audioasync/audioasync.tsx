@@ -1,5 +1,5 @@
-export const playAudioAsync = async (audio, url: string) => {
-    if(url==null || url==='' || audio==null || audio.current==null) { 
+export const playAudioAsync = async (audio, url: string):Promise<string> => {
+    if(url == null || url === '' || audio == null || audio.current == null) { 
         return Promise.resolve('');
     }
     else {

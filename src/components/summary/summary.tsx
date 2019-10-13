@@ -19,6 +19,8 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
 
     const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
+    //selecy voices
+    //GOOGLE / MARY / WEBSPEECH
     const textToSpeak: ITTS = { 
         type: TTS_PLATTFORM.WEBSPEECH, 
         lang: 'sv-SE',
@@ -26,32 +28,22 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
        };
 
     useEffect(() => {
-      //console.log('Summary::UseEffect runs twice');
-      if (taskErrors > 0) {
+      //console.log('Summary::UseEffect runs twice, for some reason....');
+      if ( taskErrors > 0 ) {
         textToSpeak.text = "Resultat. Bra jobbat! Du hade bara " + taskErrors + " fel.";
         speak(textToSpeak).then((data) => { 
-            if(data) {
-                playAudioAsync(audio, data).then( data => {
-                  playAudioAsync(audio, '/assets/done.mp3');
-                });
-            }
-            else {
-                playAudioAsync(audio, '/assets/done.mp3');
-            }
+            playAudioAsync(audio, data).then( data => {
+              playAudioAsync(audio, '/assets/done.mp3');
+            });
         });
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
       }
       else {
         textToSpeak.text = "Resultat. Jättebra jobbat! Felfri.";
         speak(textToSpeak).then((data) => {
-            if(data) {
-               playAudioAsync(audio,data).then( data => {
-                  playAudioAsync(audio,'/assets/done.mp3');     
-               });
-            }
-            else {
-                playAudioAsync(audio,'/assets/done.mp3');
-            }
+          playAudioAsync(audio,data).then( data => {
+            playAudioAsync(audio,'/assets/done.mp3');     
+          });
         });
         setFeedbackText("Jättebra jobbat! Felfri!");
       }
