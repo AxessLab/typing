@@ -119,6 +119,7 @@ const Task = (props): React.ReactElement => {
       </div>
       <div className="col-12 col-2-m pad-top-30">
         <div
+          contentEditable
           className="task__input"
           role="application"
           ref={inputElement}

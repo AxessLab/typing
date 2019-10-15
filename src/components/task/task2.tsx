@@ -120,7 +120,6 @@ const Task = (props): React.ReactElement => {
       <div className="col-12 col-2-m pad-top-30">
         <div
           className="task__input"
-          role="application"
           ref={inputElement}
           tabIndex={0}
           onKeyUp={handleKey}>
