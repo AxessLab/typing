@@ -35,4 +35,14 @@ code {
 
 .button {
   border-radius: 3px;
+
+  &:hover {
+    border: 1px solid $base-button-color;
+  }
+
+  &:focus {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    outline: none;
+    border: 2px solid $base-button-color;
+  }
 }
