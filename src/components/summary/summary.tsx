@@ -22,7 +22,7 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
     //selecy voices
     //GOOGLE / MARY / WEBSPEECH
     const textToSpeak: ITTS = { 
-        type: TTS_PLATTFORM.WEBSPEECH, 
+        type: TTS_PLATTFORM.GOOGLE, 
         lang: 'sv-SE',
         text: ''
        };

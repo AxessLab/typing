@@ -1,12 +1,17 @@
 // Import Base & Modules
+@import "./base-variables";
+
+// Import Base & Modules
 @import "~@getbase/base/scss/index";
 @import "~@getbase/buttons/scss/index";
 @import "~@getbase/containers/scss/index";
 @import "~@getbase/grid/scss/index";
-@import "~@getbase/layout-helpers/scss/index";
-@import "~@getbase/layout-spacers/scss/index";
 @import "~@getbase/typography/scss/index";
 
+// Base Typography and Layout Helpers
+@import "~@getbase/typography-helpers/scss/index";
+@import "~@getbase/layout-helpers/scss/index";
+@import "~@getbase/layout-spacers/scss/index";
 
 body {
   margin: 0;
@@ -19,11 +24,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5 {
   color: white;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.button {
+  border-radius: 3px;
 }

@@ -111,23 +111,30 @@ const Task = (props): React.ReactElement => {
 
   return (
     <>
-      <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
-        <span>{ task.text.charAt(currentPos) }</span>
-      </div>
-      <div className="col-10 task__remaining-text">
-        { task.text.substr(currentPos + 1, task.text.length) }
-      </div>
-      <div className="col-12 col-2-m pad-top-30">
-        <div
-          className="task__input"
-          ref={inputElement}
-          tabIndex={0}
-          onKeyUp={handleKey}>
-            <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
-              { task.typedText }
-            </span>
+      <div className="task pad-top-60">
+        <div className="flex-m flex-wrap-m">
+          <div className="col-12">
+            <h1>Typing in the Dark</h1>
+          </div>
+          <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
+            <span>{ task.text.charAt(currentPos) }</span>
+          </div>
+          <div className="col-10 task__remaining-text">
+            { task.text.substr(currentPos + 1, task.text.length) }
+          </div>
+          <div className="col-12 col-2-m pad-top-30">
+            <div
+              className="task__input"
+              ref={inputElement}
+              tabIndex={0}
+              onKeyUp={handleKey}>
+                <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
+                  { task.typedText }
+                </span>
+            </div>
+            <audio id="Player" ref={audio} src="" autoPlay />
+          </div>
         </div>
-        <audio id="Player" ref={audio} src="" autoPlay />
       </div>
     </>
   );
