@@ -7,9 +7,9 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 
-import { getTtsUrl } from '../../config/services';
-import { playAudio } from '../audio/audio.reducer';
-import AudioManager from '../audio/audio';
+import { playAudioAsync } from '../audioasync/audioasync';
+import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
+
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
@@ -21,7 +21,6 @@ const mapStateToProps = ({ task }: IRootState) => ({
 const mapDispatchToProps = {
   handleCorrectInput,
   handleWrongInput,
-  playAudio,
   completed
 };
 
@@ -38,10 +37,11 @@ const Task = (props): React.ReactElement => {
     task, currentPos,
     handleCorrectInput, handleWrongInput,
     correctInput, wrongInput,
-    playAudio, completed, history
+    completed, history
   } = props;
 
   const inputElement = useRef<HTMLDivElement>(null);
+  const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
@@ -55,17 +55,56 @@ const Task = (props): React.ReactElement => {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
-      if (correctKeyPressed) {
-        handleCorrectInput(event.key);
-        playAudio([getTtsUrl(event.key), '/assets/correct.mp3']);
-      } else {
-        handleWrongInput(event.key);
-        playAudio([getTtsUrl(event.key), '/assets/wrongsound.wav']);
+      // Select voices
+      // GOOGLE / Mary / WEBSPEECH
+      const textToSpeak: ITTS = {
+        type: TTS_PLATTFORM.WEBSPEECH,
+        lang: 'sv-SE',
+        text: event.key,
+      };
+
+      const nextTextToSpeak: ITTS = {
+        type: TTS_PLATTFORM.WEBSPEECH,
+        lang: 'sv-SE',
+        text: ''
+      }
+
+      if(currentPos < task.text.length - 1) {
+        nextTextToSpeak.text = task.text[currentPos + 1];
       }
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completed(task);
         history.push('/summary');
+      }
+
+      if (correctKeyPressed) {
+        handleCorrectInput(event.key);
+        let startTime = Date.now();
+        //speak(textToSpeak).then( data => {
+          //playAudioAsync(audio, data).then( data => {
+            playAudioAsync(audio, 'assets/correct.mp3').then( data => {
+              if(currentPos < task.text.length - 1) {
+                speak(nextTextToSpeak).then( data => {
+                  playAudioAsync(audio, data).then( data => {
+                    let endTime = Date.now();
+                    let timeDiff = endTime - startTime; //in ms
+                    console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
+                    +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
+                  });
+                });
+              }
+            });
+          //});
+        //});
+      }
+      else {
+        handleWrongInput(event.key);
+          speak(textToSpeak).then( data => {
+              playAudioAsync( audio, data ).then( data => {
+                playAudioAsync(audio, '/assets/wrongsound.wav');
+              });
+         });
       }
     }
   }
@@ -87,7 +126,7 @@ const Task = (props): React.ReactElement => {
           onKeyUp={handleKey}>
             <input type="text" className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} placeholder={task.typedText} />
         </div>
-        <AudioManager />
+        <audio id="Player" ref={audio} src="" autoPlay />
       </div>
     </>
   );
