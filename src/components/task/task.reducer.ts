@@ -27,7 +27,7 @@ const initialState: ITaskState = {
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
-  errors: 0,
+  errors: 0
 };
 
 // Reducer

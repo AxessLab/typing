@@ -85,9 +85,7 @@ const Task = (props): React.ReactElement => {
           ref={inputElement}
           tabIndex={0}
           onKeyUp={handleKey}>
-            <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
-              { task.typedText }
-            </span>
+            <input type="text" className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} placeholder={task.typedText} />
         </div>
         <AudioManager />
       </div>
