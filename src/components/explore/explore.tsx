@@ -126,19 +126,28 @@ const Explore = (props) => {
   return (
     <>
       <div className="container pad-top-60 text-center">
-        <h1>Träna din ninja</h1>
-        <p>Tryck på olika knappar på tangentbordet</p>
-            <div className="flex-m flex-wrap-m flex-center">
-              {!explore.completed ?
-                <>
-                  <div className="col-12 col-3-l pad-top-60">
-                    <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
-                    <audio id="Player" ref={audio} src="" autoPlay />
-                  </div>
-                </>
-                :
-                <>
-                  <div className="explore__menu flex flex-center pad-top-10">      
+          {!explore.completed ?
+            <>
+              <h1>Träna din ninja</h1>
+              <p>Tryck på olika knappar på tangentbordet</p>
+              <div className="flex-m flex-wrap-m flex-center">
+                <div className="col-12 col-3-l pad-top-60">
+                  <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
+                  <audio id="Player" ref={audio} src="" autoPlay />
+                </div>
+              </div>
+            </>
+            :
+            <>
+              <div className="explore__menu pad-top-10">  
+                <h1>Redo</h1>
+                <p>Bra jobbat! XX har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.</p>
+                <div className="flex-m flex-wrap-m flex-center">
+                  <div className="col-12 col-3-l">
+                    <img
+                      src={charId === "1" ? logo1 : logo2} 
+                      alt={'character image'}
+                    />
                     <ul
                       tabIndex={-1} 
                       role="menu">
@@ -154,17 +163,18 @@ const Explore = (props) => {
                         </li>
                     </ul>
                   </div>
-                </>
-              }
-            </div>
-          <audio
-            ref={audioEl}
-            src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
-            autoPlay={true}
-            loop
-          >
-            Your browser does not support the audio element.
-          </audio>
+                </div>
+              </div>
+            </>
+          }
+        <audio
+          ref={audioEl}
+          src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+          autoPlay={true}
+          loop
+        >
+          Your browser does not support the audio element.
+        </audio>
       </div> 
     </>
   );

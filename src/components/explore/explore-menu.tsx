@@ -43,12 +43,12 @@ const ExploreMenu : React.FC<ITaskProps> = (props : ITaskProps) => {
               onKeyUp={handleKey}>
                 <li role="none">
                     <Link role="menuitem" to="/explore/1">
-                      <img src={logo1} className="menu"/>
+                      <img src={logo1} alt="Fosuari character" className="menu"/>
                     </Link>
                 </li>
                 <li role="none">
                     <Link role="menuitem" to="/explore/2">  
-                      <img src={logo2} className="pad-top-20 menu"/>
+                      <img src={logo2} alt="Onzua character" className="pad-top-20 menu"/>
                     </Link>
                 </li>
             </ul>
