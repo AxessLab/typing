@@ -27,15 +27,11 @@ speech
     onvoiceschanged: voices => {
       voices.forEach(voice => { 
         if( voice.lang === 'sv-SE' || voice.lang === 'sv_SE') {
-          console.log('Using swedish webspeech voice: '+voice.name);
           speech.setVoice(voice.name);
           isWebspeechLoaded = true;
       }});
     }
   }
-})
-.then( data =>  {
-    //console.log("Speech is ready");
 })
 .catch(e => {
   console.error("An error occured while initializing : ", e);
@@ -76,26 +72,11 @@ const webSpeech = async (text: string): Promise<string>  => {
     return new Promise((resolve,reject) => { 
         speech.speak({
         text: text,
-        queue: false,
-        listeners: {
-            onstart: () => {
-                //console.log("Start utterance");
-            },
-            onend: () => {
-                //console.log("End utterance");
-            },
-            onresume: () => {
-                //console.log("Resume utterance");
-            },
-            onboundary: event => {
-                //console.log(event.name + " boundary reached after " + event.elapsedTime + " milliseconds.");
-            }
-        }
-    }).then(data => { 
-        resolve('webSpeech done');
+        queue: false
     }).catch(e => {
-      console.log("webSpeech, an error occurred :", e);
+      console.error("webSpeech, an error occurred :", e);
       reject('webSpeech error: '+e);
     });
+    resolve('webspeech done')
     });
 }

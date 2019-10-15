@@ -40,7 +40,7 @@ const Task = (props) => {
     handleCorrectInput,
     handleWrongInput,
     completed
-    } = props;
+  } = props;
 
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   
@@ -65,7 +65,7 @@ const Task = (props) => {
         text: ''
       }
 
-      if(currentPos<task.text.length-1) {
+      if(currentPos < task.text.length-1) {
         nextTextToSpeak.text = task.text[currentPos+1];
       }
 
