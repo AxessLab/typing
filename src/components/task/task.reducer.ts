@@ -27,7 +27,7 @@ const initialState: ITaskState = {
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
-  errors: 0,
+  errors: 0
 };
 
 // Reducer
@@ -71,7 +71,7 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
         correctInput: false,
         entity: {
           ...state.entity,
-          typedText: ''
+        typedText: ''
         }
       };
     case ACTION_TYPES.COMPLETED:

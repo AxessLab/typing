@@ -4,14 +4,12 @@ import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { completed, startAnimate, stopAnimate, increaseType, reset } from './explore.reducer';
-import { playAudio } from '../audio/audio.reducer';
 
-
-import AudioManager from '../audio/audio';
 import ExploreInput from './explore-input';
 
+import { playAudioAsync } from '../audioasync/audioasync';
+
 import './explore.scss';
-import audio from '../audio/audio';
 
 import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
@@ -23,7 +21,6 @@ const mapStateToProps = ({ explore }: IRootState) => ({
 
 const mapDispatchToProps = {
   completed,
-  playAudio,
   increaseType,
   startAnimate,
   stopAnimate,
@@ -44,7 +41,6 @@ export interface IExploreProps extends StateProps, DispatchProps, RouteComponent
 const Explore = (props) => {
   const {
     explore,
-    playAudio,
     completed, 
     increaseType,
     startAnimate,
@@ -58,6 +54,7 @@ const Explore = (props) => {
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
+  const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   
   useEffect(() => {
@@ -90,13 +87,13 @@ const Explore = (props) => {
   }, [explore.typeCount, audioEl, timeCount, completed]);
 
   const getKeyRow = (key : number) => {
-    if(key === 81 || key === 87) {
+    if([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(test => test === key)) {
       return KEYROWS.ROW_ONE;
     }
-    else if(key === 65 || key === 83) {
+    else if([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(test => test === key)) {
       return KEYROWS.ROW_ZERO
     }
-    else if(key === 90 || key === 88) {
+    else if([90, 88, 67, 86, 66, 78, 77, 188, 190].some(test => test === key)) {
       return KEYROWS.ROW_MINUS_ONE
     }
     return null;
@@ -109,13 +106,13 @@ const Explore = (props) => {
         const key = getKeyRow(event.keyCode);
         switch (key) {
           case KEYROWS.ROW_ONE:
-            playAudio(['/assets/30248__streety__sword7.flac']);
+              playAudioAsync(audio, '/assets/131142__flameeagle__block.mp3');
             break;
           case KEYROWS.ROW_ZERO:
-            playAudio(['/assets/30248__streety__sword7.flac']);
+            playAudioAsync(audio, '/assets/471147__worldmaxter__sword-slide.wav');
             break;
           case KEYROWS.ROW_MINUS_ONE:
-            playAudio(['/assets/30248__streety__sword7.flac']);
+            playAudioAsync(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
             break;
         }
         startAnimate();
@@ -137,7 +134,7 @@ const Explore = (props) => {
               {!explore.completed ?
                 <>
                   <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
-                  <AudioManager />
+                  <audio id="Player" ref={audio} src="" autoPlay />
                 </>
                 :
                 <>
@@ -158,7 +155,7 @@ const Explore = (props) => {
                         <li role="none">
                           <Link 
                             role="menuitem" 
-                            to="/task" 
+                            to="/" 
                             className="button"
                           >
                             Gå till nästa övning

@@ -33,7 +33,6 @@ interface IOwnProps {
 export type IProps = IStateProps & IDispatchProps & IOwnProps;
 
 const Task = (props): React.ReactElement => {
-  
   const {
     task, currentPos,
     handleCorrectInput, handleWrongInput,
@@ -59,13 +58,13 @@ const Task = (props): React.ReactElement => {
       // Select voices
       // GOOGLE / Mary / WEBSPEECH
       const textToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
+        type: TTS_PLATTFORM.WEBSPEECH,
         lang: 'sv-SE',
         text: event.key,
       };
 
       const nextTextToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
+        type: TTS_PLATTFORM.WEBSPEECH,
         lang: 'sv-SE',
         text: ''
       }
@@ -130,9 +129,7 @@ const Task = (props): React.ReactElement => {
               ref={inputElement}
               tabIndex={0}
               onKeyUp={handleKey}>
-                <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
-                  { task.typedText }
-                </span>
+                <input type="text" className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} placeholder={task.typedText} />
             </div>
             <audio id="Player" ref={audio} src="" autoPlay />
           </div>
