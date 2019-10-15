@@ -13,6 +13,10 @@ import ExploreInput from './explore-input';
 import './explore.scss';
 import audio from '../audio/audio';
 
+import logo1 from '../../static/images/Fosauri.svg';
+import logo2 from '../../static/images/Onzua.svg';
+
+
 const mapStateToProps = ({ explore }: IRootState) => ({
   explore: explore
 });
@@ -24,6 +28,12 @@ const mapDispatchToProps = {
   startAnimate,
   stopAnimate,
   reset
+};
+
+export const KEYROWS = {
+  ROW_ONE: 'ROW_ONE',
+  ROW_ZERO: 'ROW_ZERO',
+  ROW_MINUS_ONE: 'ROW_MINUS_ONE'
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -38,7 +48,8 @@ const Explore = (props) => {
     completed, 
     increaseType,
     startAnimate,
-    stopAnimate
+    stopAnimate,
+    reset
   } = props;
 
   const [timeCount, setTimeCount] = useState(0);
@@ -48,6 +59,7 @@ const Explore = (props) => {
 
   const audioEl = useRef<HTMLAudioElement>(null);
 
+  
   useEffect(() => {
     let interval = null;
 
@@ -77,17 +89,42 @@ const Explore = (props) => {
   
   }, [explore.typeCount, audioEl, timeCount, completed]);
 
+  const getKeyRow = (key : number) => {
+    if(key === 81 || key === 87) {
+      return KEYROWS.ROW_ONE;
+    }
+    else if(key === 65 || key === 83) {
+      return KEYROWS.ROW_ZERO
+    }
+    else if(key === 90 || key === 88) {
+      return KEYROWS.ROW_MINUS_ONE
+    }
+    return null;
+  }
+
   const handleKey = (event: React.KeyboardEvent) => {
     increaseType();
     // Igore modifiers for now
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
-        
-
-        if (event.keyCode > 65 && event.keyCode < 90) {
-          startAnimate();
-          playAudio(['/assets/30248__streety__sword7.flac']);
+        const key = getKeyRow(event.keyCode);
+        switch (key) {
+          case KEYROWS.ROW_ONE:
+            playAudio(['/assets/30248__streety__sword7.flac']);
+            break;
+          case KEYROWS.ROW_ZERO:
+            playAudio(['/assets/30248__streety__sword7.flac']);
+            break;
+          case KEYROWS.ROW_MINUS_ONE:
+            playAudio(['/assets/30248__streety__sword7.flac']);
+            break;
         }
+        startAnimate();
     }
+  }
+
+  const handleReset = () => {
+    reset();
+    props.history.push('/explore');
   }
 
   return (
@@ -110,13 +147,13 @@ const Explore = (props) => {
                       role="menu"
                       onKeyUp={handleKey}>
                         <li role="none">
-                          <Link 
+                          <button 
                             role="menuitem" 
-                            to="/explore" 
+                            onClick={handleReset} 
                             className="button"
                           >
                             Öva lite till
-                          </Link>
+                          </button>
                         </li>
                         <li role="none">
                           <Link 

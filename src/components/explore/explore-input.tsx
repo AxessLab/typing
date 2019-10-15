@@ -34,12 +34,12 @@ const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
 
   const inputEl = useRef<HTMLDivElement>(null);
   const logo = charId === 1 ? logo1 : logo2;
-
+  
   useEffect(() => {
     if(inputEl && inputEl.current) {
       inputEl.current.focus();
     }
-  })
+  }, [charId])
 
   const handleKey = event => {
     props.handleKey(event);
