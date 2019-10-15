@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { getTask, handleCorrectInput, handleWrongInput, completed } from './task.reducer';
-
-import { playAudio } from '../audio/audio.reducer';
+import { getTask, handleCorrectInput, handleWrongInput, completed, next } from './task.reducer';
 
 import TaskInput from './task-input';
-import AudioManager from '../audio/audio';
+import { playAudioAsync } from '../audioasync/audioasync';
+
+import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
 
 import './task.scss';
 
@@ -16,15 +16,14 @@ const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   correctInput: task.correctInput,
-  wrongInput: task.wrongInput
-});
+  wrongInput: task.wrongInput,
+  });
 
 const mapDispatchToProps = {
   getTask,
   handleCorrectInput,
   handleWrongInput,
   completed,
-  playAudio,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -40,9 +39,11 @@ const Task = (props) => {
     task,
     handleCorrectInput,
     handleWrongInput,
-    completed,
-    playAudio  } = props;
+    completed
+  } = props;
 
+  const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  
   const handleKey = (event: React.KeyboardEvent) => {
     // Igore modifiers for now
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
@@ -50,25 +51,56 @@ const Task = (props) => {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
-      if (correctKeyPressed) {
-        handleCorrectInput(event.key);
-        playAudio(
-          ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/correct.mp3'
-          ]
-        );
-      } else {
-        handleWrongInput(event.key);
-        playAudio(
-          ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT='+event.key+'%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/wrongsound.wav'
-          ]
-        );
+      //select voices
+      //GOOGLE / Mary / WEBSPEECH
+      const textToSpeak: ITTS = { 
+        type: TTS_PLATTFORM.WEBSPEECH, 
+        lang: 'sv-SE',
+        text: event.key,
+      };
+
+      const nextTextToSpeak: ITTS = {
+        type: TTS_PLATTFORM.WEBSPEECH,
+        lang: 'sv-SE',
+        text: ''
+      }
+
+      if(currentPos < task.text.length-1) {
+        nextTextToSpeak.text = task.text[currentPos+1];
       }
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completed(task);
         props.history.push('/summary');
+      }
+
+      if (correctKeyPressed) {
+        handleCorrectInput(event.key);
+        let startTime = Date.now();
+        ///speak(textToSpeak).then( data => { 
+          //playAudioAsync(audio, data).then( data => {
+            playAudioAsync(audio, 'assets/correct.mp3').then( data => {
+              if(currentPos<task.text.length-1) {
+                speak(nextTextToSpeak).then( data => { 
+                  playAudioAsync(audio, data).then( data => {
+                    let endTime = Date.now();
+                    let timeDiff = endTime - startTime; //in ms
+                    console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
+                    +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
+                  });
+                });
+              }
+            });
+          //});
+        //});
+      }
+      else {
+        handleWrongInput(event.key);
+          speak(textToSpeak).then( data => { 
+              playAudioAsync( audio, data ).then( data => { 
+                playAudioAsync(audio, '/assets/wrongsound.wav'); 
+              });
+         });
       }
     }
   }
@@ -90,7 +122,10 @@ const Task = (props) => {
           </div>
           <div className="col-12 col-2-m pad-top-30">
             <TaskInput handleKey={handleKey} />
-            <AudioManager />
+            <audio id="Player"
+                ref={audio}
+                src=""
+                autoPlay></audio>
           </div>
         </div>
       </div>

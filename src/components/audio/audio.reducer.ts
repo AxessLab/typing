@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { IAction } from '../../shared/reducers';
 
 export const ACTION_TYPES = {
   PLAY: 'audio/PLAY',
@@ -7,19 +6,16 @@ export const ACTION_TYPES = {
   DONE: 'audio/DONE'
 };
 
-export interface IAudioState {
-  playUrls: string[],
-  currentIndex: number
-}
-
-const initialState: IAudioState = {
+const initialState = {
   playUrls: [],
   currentIndex: 0
 };
 
+export type IAudioState = Readonly<typeof initialState>;
+
 // Reducer
 
-export default (state: IAudioState = initialState, action: IAction): IAudioState => {
+export default (state: IAudioState = initialState, action): IAudioState => {
   switch (action.type) {
     case ACTION_TYPES.PLAY:
       return {
@@ -44,7 +40,7 @@ export default (state: IAudioState = initialState, action: IAction): IAudioState
 };
 
 // Actions
-export const playAudio = (urls: string[]): IAction => ({
+export const playAudio = (urls: string[]) => ({
     type: ACTION_TYPES.PLAY,
     payload: urls
 });

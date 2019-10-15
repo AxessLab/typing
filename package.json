@@ -31,8 +31,9 @@
     "redux-devtools-dock-monitor": "^1.1.3",
     "redux-devtools-log-monitor": "^1.4.0",
     "redux-thunk": "^2.3.0",
+    "speak-tts": "^2.0.8",
     "typescript": "^3.6.4"
-  },
+ },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

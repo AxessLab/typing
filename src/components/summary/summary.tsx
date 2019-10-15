@@ -1,41 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { IRootState } from '../../shared/reducers';
 
-import { playAudio } from '../audio/audio.reducer';
-
-import AudioManager from '../audio/audio';
+import { playAudioAsync } from '../audioasync/audioasync';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 
 import './summary.scss';
 
-type ISummmaryProps = StateProps & DispatchProps;
+type ISummmaryProps = StateProps;
 
 const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
     const {
-      taskErrors,
-      playAudio,
+      taskErrors
     } = props;
 
     const [feedbackText, setFeedbackText] = useState('');
 
+    const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+
+    //selecy voices
+    //GOOGLE / MARY / WEBSPEECH
+    const textToSpeak: ITTS = { 
+        type: TTS_PLATTFORM.WEBSPEECH, 
+        lang: 'sv-SE',
+        text: ''
+       };
+
     useEffect(() => {
-      if (taskErrors > 0) {
-        const wellDone = "Resultat.%20Bra%20jobbat!%20Du%20hade%20bara%20" + taskErrors + "%20fel!";
-        playAudio(  ['http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + wellDone + 
-        '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-        '/assets/done.mp3']);
+      //console.log('Summary::UseEffect runs twice, for some reason....');
+      if ( taskErrors > 0 ) {
+        textToSpeak.text = "Resultat. Bra jobbat! Du hade bara " + taskErrors + " fel.";
+        speak(textToSpeak).then((data) => { 
+            playAudioAsync(audio, data).then( data => {
+              playAudioAsync(audio, '/assets/done.mp3');
+            });
+        });
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
       }
       else {
-        const perfect = "Resultat.%20J%E4ttebra%20jobbat!%20Felfri!";
-        playAudio(  [
-        'http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + perfect + 
-            '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE',
-            '/assets/done.mp3']);
+        textToSpeak.text = "Resultat. Jättebra jobbat! Felfri.";
+        speak(textToSpeak).then((data) => {
+          playAudioAsync(audio,data).then( data => {
+            playAudioAsync(audio,'/assets/done.mp3');     
+          });
+        });
         setFeedbackText("Jättebra jobbat! Felfri!");
       }
-    }, [feedbackText, playAudio, taskErrors]);
+    }, [feedbackText, taskErrors, textToSpeak]);
 
     return (
     <>
@@ -43,7 +55,10 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
         <div className="summary__status">
           <h2>Resultat</h2>
             <p>{feedbackText}</p>
-            <AudioManager />
+            <audio id="Player"
+                ref={audio}
+                src=""
+                autoPlay></audio>
         </div>
       </div>
     </>
@@ -55,14 +70,8 @@ const mapStateToProps = ({ task }: IRootState) => ({
 });
 
 
-const mapDispatchToProps = {
-  playAudio
-};
-
 type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Summmary);

@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
+import React, { useRef, useEffect } from 'react';
 
 import { IRootState } from '../../shared/reducers';
 import { onAudioEnded } from './audio.reducer';
@@ -33,9 +33,9 @@ const Audio: React.FC<IAudioProps> = (props: React.PropsWithChildren<IAudioProps
   const incompatibilityMessage = props.children || (
     <p>Your browser does not support the <code>audio</code> element.</p>
   );
-
-  useEffect(() => { //update and load new audio when changed, this probably prevents adding audio files one at a time
-    const currentAudio: React.MutableRefObject<HTMLMediaElement | null> = audio;
+ 
+useEffect(() => { //update and load new audio when changed, this probably prevents adding audio files one at a time
+  const currentAudio: React.MutableRefObject<HTMLMediaElement | null> = audio;
 
     if (audio && audio.current && playUrls.length && playUrlsIndex >= 0) {
           audio.current.pause();
@@ -47,6 +47,7 @@ const Audio: React.FC<IAudioProps> = (props: React.PropsWithChildren<IAudioProps
           }
       }
       const listener = () => onAudioEnded();
+
       // When the file has finished playing to the end
       currentAudio.current.addEventListener('ended', listener);
 
@@ -59,10 +60,10 @@ const Audio: React.FC<IAudioProps> = (props: React.PropsWithChildren<IAudioProps
       <audio
         id="Player"
         ref={audio}
-        src={playUrls[playUrlsIndex]}>
+        src={playUrls[playUrlsIndex]}
         autoPlay
       >
-        {incompatibilityMessage}
+      {incompatibilityMessage}
       </audio>
   );
 }
