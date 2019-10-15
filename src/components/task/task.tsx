@@ -77,8 +77,8 @@ const Task = (props) => {
       if (correctKeyPressed) {
         handleCorrectInput(event.key);
         let startTime = Date.now();
-        speak(textToSpeak).then( data => { 
-          playAudioAsync(audio, data).then( data => { 
+        ///speak(textToSpeak).then( data => { 
+          //playAudioAsync(audio, data).then( data => {
             playAudioAsync(audio, 'assets/correct.mp3').then( data => {
               if(currentPos<task.text.length-1) {
                 speak(nextTextToSpeak).then( data => { 
@@ -91,8 +91,8 @@ const Task = (props) => {
                 });
               }
             });
-          });
-        });
+          //});
+        //});
       }
       else {
         handleWrongInput(event.key);
