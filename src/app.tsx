@@ -11,7 +11,7 @@ const App: React.FC = (): React.ReactElement => {
       <Switch>
         <Route path='/task' render={props => <Task {...props} />} />
         <Route path='/summary' render={props => <Summary {...props} />} />
-        <Route path='/' render={props => <Explore {...props} />} />
+        <Route path='/explore' render={props => <Explore {...props} />} />
       </Switch>
     </Router>
   );

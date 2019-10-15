@@ -38,24 +38,17 @@ const Explore = (props) => {
     completed, 
     increaseType,
     startAnimate,
-    stopAnimate,
-    match,
-    reset
+    stopAnimate
   } = props;
 
-  const [startExplore, setStartExplore] = useState(false);
   const [timeCount, setTimeCount] = useState(0);
   const timeForExercise = 50;
   const maxInputs = 5;
-
+  const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if(!startExplore) {
-      return;
-    }
-
     let interval = null;
 
     if(audioEl && audio) {
@@ -82,48 +75,60 @@ const Explore = (props) => {
     
     return () => clearInterval(interval);
   
-  }, [startExplore, explore.typeCount, audioEl, timeCount, completed]);
+  }, [explore.typeCount, audioEl, timeCount, completed]);
 
   const handleKey = (event: React.KeyboardEvent) => {
     increaseType();
     // Igore modifiers for now
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
+        
+
         if (event.keyCode > 65 && event.keyCode < 90) {
           startAnimate();
           playAudio(['/assets/30248__streety__sword7.flac']);
         }
     }
   }
-  
-  const resetExplore = () => {
-    setTimeCount(0);
-    reset();
-  }
-
-  const onStartExplore = (event) => {
-    setStartExplore(true);
-  }
 
   return (
     <>
       <div className="container pad-top-60 text-center">
         <h1>Träna din ninja</h1>
-        {!startExplore ? 
-          <button onClick={onStartExplore} className="button">Starta</button> 
-          : 
-          <>
-            <p>Tryck på olika knappar på tangentbordet</p>
+        <p>Tryck på olika knappar på tangentbordet</p>
             <div className="flex-m flex-wrap-m flex-center-m pad-top-60">
               <div className="col-4 pad-top-30">
               {!explore.completed ?
                 <>
-                  <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} />
+                  <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
                   <AudioManager />
                 </>
                 :
                 <>
-                  <button onClick={resetExplore} className="button">Öva lite till</button>
-                  <Link to={`${match.url}task`} className="button">Gå till nästa övning</Link>
+                  <div className="explore__menu flex flex-space-between">      
+                    <ul
+                      tabIndex={-1} 
+                      role="menu"
+                      onKeyUp={handleKey}>
+                        <li role="none">
+                          <Link 
+                            role="menuitem" 
+                            to="/explore" 
+                            className="button"
+                          >
+                            Öva lite till
+                          </Link>
+                        </li>
+                        <li role="none">
+                          <Link 
+                            role="menuitem" 
+                            to="/task" 
+                            className="button"
+                          >
+                            Gå till nästa övning
+                          </Link>
+                        </li>
+                    </ul>
+                  </div>
                 </>
               }
               </div>
@@ -135,8 +140,6 @@ const Explore = (props) => {
             loop>
             Your browser does not support the audio element.
           </audio>
-        </>
-      }
       </div> 
     </>
   );

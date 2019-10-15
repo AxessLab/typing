@@ -5,7 +5,7 @@ import LogMonitor from 'redux-devtools-log-monitor';
 
 // Toggle devTools with Ctrl + H, change position with Ctrl + Q
 export default createDevTools(
-  <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q" defaultIsVisible={true}>
+  <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q" defaultIsVisible={false}>
     <LogMonitor />
   </DockMonitor>
 );

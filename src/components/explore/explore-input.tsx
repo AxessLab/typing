@@ -4,7 +4,8 @@ import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
 //Images
-import { ReactComponent as CharacterIcon } from '../../static/images/Fosauri.svg';
+import logo1 from '../../static/images/Fosauri.svg';
+import logo2 from '../../static/images/Onzua.svg';
 
 import { completed } from './explore.reducer';
 
@@ -12,7 +13,8 @@ import { completed } from './explore.reducer';
 const mapStateToProps = ({ explore } : IRootState, ownProps) => ({
   isAnimating: explore.isAnimating,
   handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation
+  handleAnimation: ownProps.handleAnimation,
+  charId: ownProps.charId
 });
 
 const mapDispatchToProps = {
@@ -26,11 +28,13 @@ export interface ITaskProps extends StateProps, DispatchProps, RouteComponentPro
 
 const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   const { 
-    isAnimating
+    isAnimating,
+    charId
   } = props;
 
   const inputEl = useRef<HTMLDivElement>(null);
-  
+  const logo = charId === 1 ? logo1 : logo2;
+
   useEffect(() => {
     if(inputEl && inputEl.current) {
       inputEl.current.focus();
@@ -52,7 +56,9 @@ const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         ref={inputEl} 
         tabIndex={0} 
         onKeyDown={handleKey}>
-          <CharacterIcon 
+          <img
+            src={logo} 
+            alt={'logo' + charId} 
             onAnimationEnd={handleAnimation}
             className={(isAnimating ? 'explore__character-large' : '')}
           />
