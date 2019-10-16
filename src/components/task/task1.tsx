@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 
-import { playAudioAsync } from '../audioasync/audioasync';
+import { playAudio } from '../audio/audio';
 import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
 
 
@@ -82,11 +82,11 @@ const Task = (props): React.ReactElement => {
         handleCorrectInput(event.key);
         let startTime = Date.now();
         //speak(textToSpeak).then( data => {
-          //playAudioAsync(audio, data).then( data => {
-            playAudioAsync(audio, 'assets/correct.mp3').then( data => {
+          //playAudio(audio, data).then( data => {
+            playAudio(audio, 'assets/correct.mp3').then( data => {
               if(currentPos < task.text.length - 1) {
                 speak(nextTextToSpeak).then( data => {
-                  playAudioAsync(audio, data).then( data => {
+                  playAudio(audio, data).then( data => {
                     let endTime = Date.now();
                     let timeDiff = endTime - startTime; //in ms
                     console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
@@ -101,8 +101,8 @@ const Task = (props): React.ReactElement => {
       else {
         handleWrongInput(event.key);
           speak(textToSpeak).then( data => {
-              playAudioAsync( audio, data ).then( data => {
-                playAudioAsync(audio, '/assets/wrongsound.wav');
+              playAudio( audio, data ).then( data => {
+                playAudio(audio, '/assets/wrongsound.wav');
               });
          });
       }

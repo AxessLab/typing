@@ -7,7 +7,7 @@ import { completed, startAnimate, stopAnimate, increaseType, reset } from './exp
 
 import ExploreInput from './explore-input';
 
-import { playAudioAsync } from '../audioasync/audioasync';
+import { playAudio } from '../audio/audio';
 
 import './explore.scss';
 
@@ -41,7 +41,7 @@ export interface IExploreProps extends StateProps, DispatchProps, RouteComponent
 const Explore = (props) => {
   const {
     explore,
-    completed, 
+    completed,
     increaseType,
     startAnimate,
     stopAnimate,
@@ -55,7 +55,7 @@ const Explore = (props) => {
 
   const audioEl = useRef<HTMLAudioElement>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
-  
+
   useEffect(() => {
     let interval = null;
 
@@ -65,7 +65,7 @@ const Explore = (props) => {
       if(!isPlaying) {
         audioEl.current.volume = 0.1;
         const promise = audioEl.current.play();
-  
+
         if (promise !== undefined) {
           promise.catch(error => console.log("Audio error", error));
         }
@@ -80,9 +80,9 @@ const Explore = (props) => {
         setTimeCount(0);
       }, 1000);
     }
-    
+
     return () => clearInterval(interval);
-  
+
   }, [explore.typeCount, audioEl, timeCount, completed]);
 
   const getKeyRow = (key : number) => {
@@ -105,13 +105,13 @@ const Explore = (props) => {
         const key = getKeyRow(event.keyCode);
         switch (key) {
           case KEYROWS.ROW_ONE:
-              playAudioAsync(audio, '/assets/131142__flameeagle__block.mp3');
+              playAudio(audio, '/assets/131142__flameeagle__block.mp3');
             break;
           case KEYROWS.ROW_ZERO:
-            playAudioAsync(audio, '/assets/471147__worldmaxter__sword-slide.wav');
+            playAudio(audio, '/assets/471147__worldmaxter__sword-slide.wav');
             break;
           case KEYROWS.ROW_MINUS_ONE:
-            playAudioAsync(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
+            playAudio(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
             break;
         }
         startAnimate();
@@ -139,17 +139,17 @@ const Explore = (props) => {
             </>
             :
             <>
-              <div className="explore__menu pad-top-10">  
+              <div className="explore__menu pad-top-10">
                 <h1>Redo</h1>
                 <p>Bra jobbat! XX har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.</p>
                 <div className="flex-m flex-wrap-m flex-center">
                   <div className="col-12 col-3-l">
                     <img
-                      src={charId === "1" ? logo1 : logo2} 
+                      src={charId === "1" ? logo1 : logo2}
                       alt={'character figure'}
                     />
                     <ul
-                      tabIndex={-1} 
+                      tabIndex={-1}
                       role="menu">
                         <li role="none">
                           <button role="menuitem" onClick={handleReset} className="button">
@@ -175,7 +175,7 @@ const Explore = (props) => {
         >
           Your browser does not support the audio element.
         </audio>
-      </div> 
+      </div>
     </>
   );
 }

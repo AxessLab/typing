@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 
-import { playAudioAsync } from '../audioasync/audioasync';
+import { playAudio } from '../audio/audio';
 import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
 
 
@@ -26,23 +26,23 @@ const mapDispatchToProps = {
 
 type IStateProps = ReturnType<typeof mapStateToProps>;
 type IDispatchProps = typeof mapDispatchToProps;
-interface IOwnProps {
-  history: RouteComponentProps<{ url: string }>['history']
-}
 
-export type IProps = IStateProps & IDispatchProps & IOwnProps;
+export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
 
-const Task = (props): React.ReactElement => {
-  
+const Task = (props) => {
+
   const {
-    task, currentPos,
-    handleCorrectInput, handleWrongInput,
-    correctInput, wrongInput,
-    completed, history
+    task,
+    currentPos,
+    handleCorrectInput,
+    handleWrongInput,
+    correctInput,
+    wrongInput,
+    completed
   } = props;
 
-  const inputElement = useRef<HTMLDivElement>(null);
-  const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const inputElement = useRef<HTMLDivElement | null>(null);
+  const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
@@ -76,69 +76,65 @@ const Task = (props): React.ReactElement => {
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completed(task);
-        history.push('/summary');
+        props.history.push('/summary');
       }
 
       if (correctKeyPressed) {
         handleCorrectInput(event.key);
         let startTime = Date.now();
-        //speak(textToSpeak).then( data => {
-          //playAudioAsync(audio, data).then( data => {
-            playAudioAsync(audio, 'assets/correct.mp3').then( data => {
-              if(currentPos < task.text.length - 1) {
-                speak(nextTextToSpeak).then( data => {
-                  playAudioAsync(audio, data).then( data => {
-                    let endTime = Date.now();
-                    let timeDiff = endTime - startTime; //in ms
-                    console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
-                    +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
-                  });
-                });
-              }
-            });
-          //});
-        //});
-      }
-      else {
-        handleWrongInput(event.key);
-          speak(textToSpeak).then( data => {
-              playAudioAsync( audio, data ).then( data => {
-                playAudioAsync(audio, '/assets/wrongsound.wav');
+
+        playAudio(audioElement, 'assets/correct.mp3').then(() => {
+          if(currentPos < task.text.length - 1) {
+
+            speak(nextTextToSpeak).then(data => {
+              playAudio(audioElement, data).then(() => {
+                let endTime = Date.now();
+                let timeDiff = endTime - startTime; //in ms
+                console.log("Correct feedback using " + textToSpeak.type + " for character to write and "
+                + nextTextToSpeak.type + " for next character took " + timeDiff + 'ms');
               });
+            });
+          }
+        });
+      } else {
+        handleWrongInput(event.key);
+
+          speak(textToSpeak).then(data => {
+            playAudio(audioElement, data).then(() => {
+              playAudio(audioElement, '/assets/wrongsound.wav');
+            });
          });
       }
     }
   }
 
   return (
-    <>
-      <div className="task pad-top-60">
-        <div className="flex-m flex-wrap-m">
-          <div className="col-12">
-            <h1>Typing in the Dark</h1>
+    <div className="task pad-top-60">
+      <div className="flex-m flex-wrap-m">
+        <div className="col-12">
+          <h1>Typing in the Dark</h1>
+        </div>
+        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
+          <span>{ task.text.charAt(currentPos) }</span>
+        </div>
+        <div className="col-10 task__remaining-text">
+          { task.text.substr(currentPos + 1, task.text.length) }
+        </div>
+        <div className="col-12 col-2-m pad-top-30">
+          <div
+            className="task__input"
+            role="application"
+            ref={inputElement}
+            tabIndex={0}
+            onKeyUp={handleKey}>
+              <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
+                { task.typedText }
+              </span>
           </div>
-          <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
-            <span>{ task.text.charAt(currentPos) }</span>
-          </div>
-          <div className="col-10 task__remaining-text">
-            { task.text.substr(currentPos + 1, task.text.length) }
-          </div>
-          <div className="col-12 col-2-m pad-top-30">
-            <div
-              className="task__input"
-              role="application"
-              ref={inputElement}
-              tabIndex={0}
-              onKeyUp={handleKey}>
-                <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
-                  { task.typedText }
-                </span>
-            </div>
-            <audio id="Player" ref={audio} src="" autoPlay />
-          </div>
+          <audio id="Player" ref={audioElement} src="" autoPlay />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
