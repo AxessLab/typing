@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps, Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ const ExploreMenu : React.FC<ITaskProps> = (props : ITaskProps) => {
 
   const handleKey = (event : React.KeyboardEvent) => {
     //props.handleKey(event);
-    if(event.keyCode === 38 || event.keyCode == 40) {
+    if(event.keyCode === 38 || event.keyCode === 40) {
       //todo: keyboard navigation in menu
     }
   }
@@ -43,12 +43,12 @@ const ExploreMenu : React.FC<ITaskProps> = (props : ITaskProps) => {
               onKeyUp={handleKey}>
                 <li role="none">
                     <Link role="menuitem" to="/explore/1">
-                      <img src={logo1} className="menu"/>
+                      <img src={logo1} alt="Fosuari character" className="menu"/>
                     </Link>
                 </li>
                 <li role="none">
                     <Link role="menuitem" to="/explore/2">  
-                      <img src={logo2} className="pad-top-20 menu"/>
+                      <img src={logo2} alt="Onzua character" className="pad-top-20 menu"/>
                     </Link>
                 </li>
             </ul>

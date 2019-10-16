@@ -55,7 +55,6 @@ const Explore = (props) => {
 
   const audioEl = useRef<HTMLAudioElement>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
-
   
   useEffect(() => {
     let interval = null;
@@ -127,53 +126,55 @@ const Explore = (props) => {
   return (
     <>
       <div className="container pad-top-60 text-center">
-        <h1>Träna din ninja</h1>
-        <p>Tryck på olika knappar på tangentbordet</p>
-            <div className="flex-m flex-wrap-m flex-center-m pad-top-60">
-              <div className="col-4 pad-top-30">
-              {!explore.completed ?
-                <>
+          {!explore.completed ?
+            <>
+              <h1>Träna din ninja</h1>
+              <p>Tryck på olika knappar på tangentbordet</p>
+              <div className="flex-m flex-wrap-m flex-center">
+                <div className="col-12 col-3-l pad-top-60">
                   <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
                   <audio id="Player" ref={audio} src="" autoPlay />
-                </>
-                :
-                <>
-                  <div className="explore__menu flex flex-space-between">      
+                </div>
+              </div>
+            </>
+            :
+            <>
+              <div className="explore__menu pad-top-10">  
+                <h1>Redo</h1>
+                <p>Bra jobbat! XX har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.</p>
+                <div className="flex-m flex-wrap-m flex-center">
+                  <div className="col-12 col-3-l">
+                    <img
+                      src={charId === "1" ? logo1 : logo2} 
+                      alt={'character figure'}
+                    />
                     <ul
                       tabIndex={-1} 
-                      role="menu"
-                      onKeyUp={handleKey}>
+                      role="menu">
                         <li role="none">
-                          <button 
-                            role="menuitem" 
-                            onClick={handleReset} 
-                            className="button"
-                          >
+                          <button role="menuitem" onClick={handleReset} className="button">
                             Öva lite till
                           </button>
                         </li>
                         <li role="none">
-                          <Link 
-                            role="menuitem" 
-                            to="/" 
-                            className="button"
-                          >
+                          <Link role="menuitem" to="/" className="button">
                             Gå till nästa övning
                           </Link>
                         </li>
                     </ul>
                   </div>
-                </>
-              }
+                </div>
               </div>
-            </div>
-          <audio
-            ref={audioEl}
-            src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
-            autoPlay={true}
-            loop>
-            Your browser does not support the audio element.
-          </audio>
+            </>
+          }
+        <audio
+          ref={audioEl}
+          src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+          autoPlay={true}
+          loop
+        >
+          Your browser does not support the audio element.
+        </audio>
       </div> 
     </>
   );

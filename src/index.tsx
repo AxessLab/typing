@@ -1,26 +1,26 @@
 import './index.scss'; // Render styles and place in static folder
-
 import * as serviceWorker from './serviceWorker';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import initStore from './config/store';
-
+import { Provider } from 'react-redux';
 import DevTools from './config/devtools'; // When environment is 'development'
-
 import App from './app';
 
 if (process.env.NODE_ENV === 'development') {
   require('react-axe')(React, ReactDOM, 1000);
 }
+const store = initStore();
 
 ReactDOM.render(
   <>
-    {/* If this slows down the app in dev disable it and enable when required */}
-    { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
-    <div className="container">
-      <App store={initStore()} />
-    </div>
+    <Provider store={store}>
+      {/* If this slows down the app in dev disable it and enable when required */}
+      { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
+      <div className="container">
+        <App />
+      </div>
+    </Provider>
   </>,
   document.getElementById('root')
 );

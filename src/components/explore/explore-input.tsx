@@ -33,21 +33,21 @@ const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
   } = props;
 
   const inputEl = useRef<HTMLDivElement>(null);
-  const logo = charId === 1 ? logo1 : logo2;
   
   useEffect(() => {
     if(inputEl && inputEl.current) {
       inputEl.current.focus();
     }
-  }, [charId])
+  })
 
   const handleKey = event => {
     props.handleKey(event);
   }
 
-  const handleAnimation = event => {
+  const handleAnimation = () => {
     props.handleAnimation();
   }
+
   return (
     <>
       <div 
@@ -56,17 +56,16 @@ const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         ref={inputEl} 
         tabIndex={0} 
         onKeyDown={handleKey}>
-          <img
-            src={logo} 
-            alt={'logo' + charId} 
-            onAnimationEnd={handleAnimation}
-            className={(isAnimating ? 'explore__character-large' : '')}
-          />
+            <img
+              src={charId === "1" ? logo1 : logo2} 
+              alt={'character figure'} 
+              onAnimationEnd={handleAnimation}
+              className={(isAnimating ? 'explore__character-large' : '')}
+            />
       </div>
     </>
   );
 }
-
 
 
 export default connect(mapStateToProps)(ExploreInput);
