@@ -5,7 +5,9 @@ let isWebspeechLoaded = false;
 export interface ITTS {
     lang: string,
     text: string,
-    type: string
+    type: string,
+    rate: string,
+    pitch: string
 }
 
 export const TTS_PLATTFORM = {
@@ -38,32 +40,33 @@ speech
 });
 
 export const speak = async (tts: ITTS):Promise<string> =>  {
-        let requestURL: string = '';
-        switch( tts.type ) {
-        case TTS_PLATTFORM.GOOGLE:
-            requestURL = 'https://webbkonversation.se/googleCloudTTS.php?tts_txt='+encodeURIComponent(tts.text);
-            return Promise.resolve(requestURL);
-        case TTS_PLATTFORM.MARY:
-            requestURL = 'http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' +
-            encodeURIComponent(tts.text) +
-            '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE';
-            return Promise.resolve(requestURL);
-        case TTS_PLATTFORM.WEBSPEECH:
-            if( isWebspeechLoaded ) {
-                //speech.cancel();
-                await webSpeech(tts.text).then( data => { 
-                    return Promise.resolve(requestURL); 
-                }); 
-            }
-            else {
-                return Promise.reject('Webspeech not ready');
-            }
-            break;
-        default:
-            requestURL = '/assets/error' + tts.lang + '.mp3';
-            return Promise.resolve(requestURL);
+    let requestURL: string = '';
+    switch( tts.type ) {
+    case TTS_PLATTFORM.GOOGLE:
+        requestURL = 'https://webbkonversation.se/googleCloudTTS.php?tts_txt='+encodeURIComponent(tts.text)+'&tts_rate='+
+            encodeURIComponent(tts.rate)+'&tts_pitch='+tts.pitch;
+        return Promise.resolve(requestURL);
+    case TTS_PLATTFORM.MARY:
+        requestURL = 'http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' +
+        encodeURIComponent(tts.text) +
+        '%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE';
+        return Promise.resolve(requestURL);
+    case TTS_PLATTFORM.WEBSPEECH:
+        if( isWebspeechLoaded ) {
+            //speech.cancel();
+            await webSpeech(tts.text).then( data => { 
+                return Promise.resolve(requestURL); 
+            }); 
         }
+        else {
+            return Promise.reject('Webspeech not ready');
+        }
+        break;
+    default:
+        requestURL = '/assets/error' + tts.lang + '.mp3';
+        return Promise.resolve(requestURL);
     }
+}
 
 /*TODO: Check browser support
   const text = speech.hasBrowserSupport();_*/

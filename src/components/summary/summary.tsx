@@ -22,29 +22,32 @@ const Summmary = (props: React.PropsWithChildren<ISummmaryProps>) => {
     //selecy voices
     //GOOGLE / MARY / WEBSPEECH
     const textToSpeak: ITTS = { 
-        type: TTS_PLATTFORM.WEBSPEECH, 
+        type: TTS_PLATTFORM.GOOGLE, 
         lang: 'sv-SE',
-        text: ''
+        text: '',
+        rate: '1.00',
+        pitch: '0.00'
        };
 
     useEffect(() => {
-      //console.log('Summary::UseEffect runs twice, for some reason....');
+      console.log('Summary::UseEffect runs twice, for some reason....');
       if ( taskErrors > 0 ) {
         textToSpeak.text = "Resultat. Bra jobbat! Du hade bara " + taskErrors + " fel.";
-        speak(textToSpeak).then((data) => { 
-            playAudioAsync(audio, data).then( data => {
-              playAudioAsync(audio, '/assets/done.mp3');
-            });
-        });
+        speak(textToSpeak).then(data => { 
+            playAudioAsync(audio, data, 1).then( data => {
+              playAudioAsync(audio, '/assets/done.mp3', 1).catch(e => { /*console.error('playAudioAsync error: '+e)*/; });
+            }).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });
+        }).catch(e => { /*console.error('speak error: '+e);*/ });
         setFeedbackText("Bra Jobbat! Du hade bara " + taskErrors + " fel!");
       }
       else {
         textToSpeak.text = "Resultat. Jättebra jobbat! Felfri.";
-        speak(textToSpeak).then((data) => {
-          playAudioAsync(audio,data).then( data => {
-            playAudioAsync(audio,'/assets/done.mp3');     
-          });
-        });
+        speak(textToSpeak).then(data => {
+          playAudioAsync(audio, data, 1).then( data => {
+          playAudioAsync(audio, '/assets/done.mp3', 1).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });     
+          }).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });
+          //);
+        }).catch(e => { /*console.error('speak error: '+e);*/ });
         setFeedbackText("Jättebra jobbat! Felfri!");
       }
     }, [feedbackText, taskErrors, textToSpeak]);

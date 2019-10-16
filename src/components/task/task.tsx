@@ -54,15 +54,19 @@ const Task = (props) => {
       //select voices
       //GOOGLE / Mary / WEBSPEECH
       const textToSpeak: ITTS = { 
-        type: TTS_PLATTFORM.WEBSPEECH, 
+        type: TTS_PLATTFORM.GOOGLE, 
         lang: 'sv-SE',
         text: event.key,
+        rate: '2.00',
+        pitch: '0.00'
       };
 
       const nextTextToSpeak: ITTS = {
-        type: TTS_PLATTFORM.WEBSPEECH,
+        type: TTS_PLATTFORM.GOOGLE,
         lang: 'sv-SE',
-        text: ''
+        text: '',
+        rate: '2.00',
+        pitch: '0.00'
       }
 
       if(currentPos < task.text.length-1) {
@@ -79,28 +83,29 @@ const Task = (props) => {
         let startTime = Date.now();
         ///speak(textToSpeak).then( data => { 
           //playAudioAsync(audio, data).then( data => {
-            playAudioAsync(audio, 'assets/correct.mp3').then( data => {
+            playAudioAsync(audio, 'assets/correct.mp3', 2).then( data => {
               if(currentPos<task.text.length-1) {
                 speak(nextTextToSpeak).then( data => { 
-                  playAudioAsync(audio, data).then( data => {
+                  playAudioAsync(audio, data, 2).then( data => {
                     let endTime = Date.now();
                     let timeDiff = endTime - startTime; //in ms
-                    console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
-                    +nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
-                  });
-                });
+                    //leaving this in code for now, since benchmarking is ongoing
+                    //console.log("Correct feedback using "+textToSpeak.type+" for character to write and "
+                    //+nextTextToSpeak.type+" for next character took "+timeDiff+'ms');
+                  }).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });
+                }).catch(e => { /*console.error('speak error: '+e);*/ });
               }
-            });
+            }).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });
           //});
         //});
       }
       else {
         handleWrongInput(event.key);
           speak(textToSpeak).then( data => { 
-              playAudioAsync( audio, data ).then( data => { 
-                playAudioAsync(audio, '/assets/wrongsound.wav'); 
-              });
-         });
+              playAudioAsync( audio, data, 2 ).then( data => { 
+                playAudioAsync(audio, '/assets/wrongsound.mp3', 2).catch(e => { /*console.log('playAudioAsync error: '+e);*/ });
+              }).catch(e => { /*console.error('playAudioAsync error: '+e);*/ });
+         }).catch(e => { /*console.error('speak error: '+e);*/ });
       }
     }
   }
