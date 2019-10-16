@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps, Link } from 'react-router-dom';
@@ -25,7 +25,7 @@ const ExploreMenu : React.FC<ITaskProps> = (props : ITaskProps) => {
 
   const handleKey = (event : React.KeyboardEvent) => {
     //props.handleKey(event);
-    if(event.keyCode === 38 || event.keyCode == 40) {
+    if(event.keyCode === 38 || event.keyCode === 40) {
       //todo: keyboard navigation in menu
     }
   }

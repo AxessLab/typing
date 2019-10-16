@@ -146,7 +146,7 @@ const Explore = (props) => {
                   <div className="col-12 col-3-l">
                     <img
                       src={charId === "1" ? logo1 : logo2} 
-                      alt={'character image'}
+                      alt={'character figure'}
                     />
                     <ul
                       tabIndex={-1} 

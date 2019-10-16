@@ -58,7 +58,7 @@ const ExploreInput : React.FC<ITaskProps> = (props : ITaskProps) => {
         onKeyDown={handleKey}>
             <img
               src={charId === "1" ? logo1 : logo2} 
-              alt={'character image'} 
+              alt={'character figure'} 
               onAnimationEnd={handleAnimation}
               className={(isAnimating ? 'explore__character-large' : '')}
             />

@@ -1,8 +1,6 @@
 import React from 'react';
 import Explore from './components/explore';
 
-import { Store, AnyAction } from 'redux';
-import { IRootState } from 'shared/reducers';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Task from './components/task/task';
