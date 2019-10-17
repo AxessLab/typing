@@ -84,17 +84,17 @@ const Task = props => {
 
       if (correctKeyPressed) {
         handleCorrectInput(event.key);
-        const startTime = Date.now();
+        // const startTime = Date.now();
 
         playAudio(audioElement, 'assets/correct.mp3', 2).then(() => {
           if (currentPos < task.text.length - 1) {
             speak(nextTextToSpeak).then(text => {
               playAudio(audioElement, text, 2).then(() => {
 
-                const endTime = Date.now();
-                const timeDiff = endTime - startTime;
+                // const endTime = Date.now();
+                // const timeDiff = endTime - startTime;
                 // Leaving this in code for now, since benchmarking is ongoing
-                console.log(`Correct feedback using ${textToSpeak.type} for character to write and ${nextTextToSpeak.type} for next character took ${timeDiff} ms.`);
+                // console.log(`Correct feedback using ${textToSpeak.type} for character to write and ${nextTextToSpeak.type} for next character took ${timeDiff} ms.`);
 
               }).catch(error => console.error('playAudio error', error));
             }).catch(error => console.error('speak error', error));
