@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 
-import { completed, startAnimate, stopAnimate, increaseType, reset } from './explore.reducer';
+import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 
 import ExploreInput from './explore-input';
 
@@ -23,8 +24,7 @@ const mapDispatchToProps = {
   completed,
   increaseType,
   startAnimate,
-  stopAnimate,
-  reset
+  stopAnimate
 };
 
 export const KEYROWS = {
@@ -44,17 +44,38 @@ const Explore = (props) => {
     completed,
     increaseType,
     startAnimate,
-    stopAnimate,
-    reset
+    stopAnimate
   } = props;
 
   const [timeCount, setTimeCount] = useState(0);
-  const timeForExercise = 50;
+  const [headerText, setHeaderText] = useState('');
+  const [introText, setIntroText] = useState('');
+
+  const timeForExercise = 60;
   const maxInputs = 5;
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+
+  let textToSpeak: ITTS = {
+    type: TTS_PLATTFORM.GOOGLE,
+    lang: 'sv-SE',
+    text: ''
+  };
+  
+  useEffect(() => {
+    setHeaderText('Träna din ninja');
+    setIntroText('Tryck på olika knappar på tangentbordet');
+  }, []);
+
+  useEffect(() => {
+    textToSpeak.text = headerText + ' ' + introText;
+    speak(textToSpeak).then((text) => {
+      playAudio(audioElementIntro, text);
+    });
+  }, [headerText, introText, textToSpeak]);
 
   useEffect(() => {
     let interval = null;
@@ -73,6 +94,10 @@ const Explore = (props) => {
     }
 
     if(timeCount > timeForExercise || explore.typeCount > maxInputs) {
+      const characterName = charId === "1" ? "Fosauri" : "Onzua";
+      setHeaderText('Redo');
+      setIntroText('Bra jobbat! ' + characterName + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
+      
       completed();
     }
     else {
@@ -83,7 +108,7 @@ const Explore = (props) => {
 
     return () => clearInterval(interval);
 
-  }, [explore.typeCount, audioEl, timeCount, completed]);
+  }, [explore.typeCount, audioEl, timeCount, completed, charId]);
 
   const getKeyRow = (key : number) => {
     if([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(test => test === key)) {
@@ -118,55 +143,44 @@ const Explore = (props) => {
     }
   }
 
-  const handleReset = () => {
-    reset();
-    props.history.push('/explore');
-  }
-
   return (
     <>
       <div className="container pad-top-60 text-center">
-          {!explore.completed ?
-            <>
-              <h1>Träna din ninja</h1>
-              <p>Tryck på olika knappar på tangentbordet</p>
+        <h1>{headerText}</h1>
+        <p>{introText}</p>
+        <audio id="intro-audio" ref={audioElementIntro} src="" />
+        {!explore.completed ?
+          <>
+            <div className="flex-m flex-wrap-m flex-center">
+              <div className="col-12 col-3-l pad-top-60">
+                <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
+                <audio id="Player" ref={audio} src="" autoPlay />
+              </div>
+            </div>
+          </>
+          :
+          <>
+            <div className="explore__menu pad-top-10">
               <div className="flex-m flex-wrap-m flex-center">
-                <div className="col-12 col-3-l pad-top-60">
-                  <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
-                  <audio id="Player" ref={audio} src="" autoPlay />
+                <div className="col-12 col-3-l">
+                  <img
+                    src={charId === "1" ? logo1 : logo2}
+                    alt={'character figure'}
+                  />
+                  <ul
+                    tabIndex={-1}
+                    role="menu">
+                      <li role="none">
+                        <Link role="menuitem" to="/task" className="button">
+                          Gå till nästa övning
+                        </Link>
+                      </li>
+                  </ul>
                 </div>
               </div>
-            </>
-            :
-            <>
-              <div className="explore__menu pad-top-10">
-                <h1>Redo</h1>
-                <p>Bra jobbat! XX har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.</p>
-                <div className="flex-m flex-wrap-m flex-center">
-                  <div className="col-12 col-3-l">
-                    <img
-                      src={charId === "1" ? logo1 : logo2}
-                      alt={'character figure'}
-                    />
-                    <ul
-                      tabIndex={-1}
-                      role="menu">
-                        <li role="none">
-                          <button role="menuitem" onClick={handleReset} className="button">
-                            Öva lite till
-                          </button>
-                        </li>
-                        <li role="none">
-                          <Link role="menuitem" to="/" className="button">
-                            Gå till nästa övning
-                          </Link>
-                        </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </>
-          }
+            </div>
+          </>
+        }
         <audio
           ref={audioEl}
           src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
