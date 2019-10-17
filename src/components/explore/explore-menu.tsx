@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 
-//Images
+// Images
 import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
@@ -16,7 +16,7 @@ const ExploreMenu = () => {
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 38 || event.keyCode === 40) {
-      //TODO: Keyboard navigation in menu
+      // TODO: Keyboard navigation in menu
     }
   }
   
@@ -24,7 +24,9 @@ const ExploreMenu = () => {
     const textToSpeak: ITTS = {
       type: TTS_PLATTFORM.GOOGLE,
       lang: 'sv-SE',  
-      text: headerText + ' ' + introText
+      text: headerText + ' ' + introText,
+      pitch: '',
+      rate: ''
     };
 
     speak(textToSpeak).then((text) => {
