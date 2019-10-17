@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
-//Images
+// Images
 import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
@@ -29,34 +29,31 @@ export type ITaskProps = StateProps & DispatchProps & RouteComponentProps<{ url:
 const ExploreInput = (props: ITaskProps) => {
   const {
     isAnimating,
+    handleKey,
     handleAnimation,
     charId
   } = props;
 
-  const inputEl = useRef<HTMLDivElement | null>(null);
+  const inputElement = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if(inputEl && inputEl.current) {
-      inputEl.current.focus();
+    if (inputElement && inputElement.current) {
+      inputElement.current.focus();
     }
   })
-
-  const handleKey = (event: React.KeyboardEvent) => {
-    props.handleKey(event);
-  }
 
   return (
     <div
       className="explore__input"
       role="application"
-      ref={inputEl}
+      ref={inputElement}
       tabIndex={0}
       onKeyDown={handleKey}>
         <img
-          src={charId === "1" ? logo1 : logo2}
-          alt={'character figure'}
+          src={charId === '1' ? logo1 : logo2}
+          alt="character figure"
           onAnimationEnd={handleAnimation}
-          className={(isAnimating ? 'explore__character-large' : '')}
+          className={isAnimating ? 'explore__character-large' : ''}
         />
     </div>
   );

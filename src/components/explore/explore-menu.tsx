@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps, Link } from 'react-router-dom';
 
-//Images
+// Images
 import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
@@ -21,7 +21,7 @@ const ExploreMenu = (props: ITaskProps) => {
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 38 || event.keyCode === 40) {
-      //TODO: Keyboard navigation in menu
+      // TODO: Keyboard navigation in menu
     }
   }
 

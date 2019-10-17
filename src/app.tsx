@@ -10,18 +10,18 @@ import Task3 from './components/task/task3';
 
 import Summary from './components/summary';
 
-const App: React.FC = () : React.ReactElement => {
+const App = () => {
   return (
-      <Router>
-        <Switch>
-          <Route path='/explore' render={props => <Explore {...props} />} />
-          <Route exact path='/' render={props => <Task {...props} />} />
-          <Route exact path='/1' render={props => <Task1 {...props} />} />
-          <Route exact path='/2' render={props => <Task2 {...props} />} />
-          <Route exact path='/3' render={props => <Task3 {...props} />} />
-          <Route exact path="/summary" render={props => <Summary {...props} />} />
-        </Switch>
-      </Router>
+    <Router>
+      <Switch>
+        <Route path='/explore' render={props => <Explore {...props} />} />
+        <Route exact path='/' render={props => <Task {...props} />} />
+        <Route exact path='/1' render={props => <Task1 {...props} />} />
+        <Route exact path='/2' render={props => <Task2 {...props} />} />
+        <Route exact path='/3' render={props => <Task3 {...props} />} />
+        <Route exact path="/summary" render={props => <Summary {...props} />} />
+      </Switch>
+    </Router>
   );
 }
 

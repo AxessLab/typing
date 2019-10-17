@@ -29,8 +29,7 @@ type IDispatchProps = typeof mapDispatchToProps;
 
 export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
 
-const Task = (props) => {
-
+const Task = props => {
   const {
     task,
     currentPos,
@@ -62,15 +61,19 @@ const Task = (props) => {
         type: TTS_PLATTFORM.GOOGLE,
         lang: 'sv-SE',
         text: event.key,
+        rate: '2.00',
+        pitch: '0.00'
       };
 
       const nextTextToSpeak: ITTS = {
         type: TTS_PLATTFORM.GOOGLE,
         lang: 'sv-SE',
-        text: ''
+        text: '',
+        rate: '2.00',
+        pitch: '0.00'
       }
 
-      if(currentPos < task.text.length - 1) {
+      if (currentPos < task.text.length - 1) {
         nextTextToSpeak.text = task.text[currentPos + 1];
       }
 
@@ -81,29 +84,31 @@ const Task = (props) => {
 
       if (correctKeyPressed) {
         handleCorrectInput(event.key);
-        let startTime = Date.now();
+        // const startTime = Date.now();
 
-        playAudio(audioElement, 'assets/correct.mp3').then(() => {
-          if(currentPos < task.text.length - 1) {
+        playAudio(audioElement, 'assets/correct.mp3', 2).then(() => {
+          if (currentPos < task.text.length - 1) {
+            speak(nextTextToSpeak).then(text => {
+              playAudio(audioElement, text, 2).then(() => {
 
-            speak(nextTextToSpeak).then(data => {
-              playAudio(audioElement, data).then(() => {
-                let endTime = Date.now();
-                let timeDiff = endTime - startTime; //in ms
-                console.log("Correct feedback using " + textToSpeak.type + " for character to write and "
-                + nextTextToSpeak.type + " for next character took " + timeDiff + 'ms');
-              });
-            });
+                // const endTime = Date.now();
+                // const timeDiff = endTime - startTime;
+                // Leaving this in code for now, since benchmarking is ongoing
+                // console.log(`Correct feedback using ${textToSpeak.type} for character to write and ${nextTextToSpeak.type} for next character took ${timeDiff} ms.`);
+
+              }).catch(error => console.error('playAudio error', error));
+            }).catch(error => console.error('speak error', error));
           }
-        });
+        }).catch(error => console.error('playAudio error', error));
       } else {
         handleWrongInput(event.key);
 
-          speak(textToSpeak).then(data => {
-            playAudio(audioElement, data).then(() => {
-              playAudio(audioElement, '/assets/wrongsound.wav');
-            });
-         });
+        speak(textToSpeak).then(text => {
+          playAudio(audioElement, text, 2).then(() => {
+            playAudio(audioElement, '/assets/wrongsound.mp3', 2)
+              .catch(error => console.error('playAudio error', error));
+          }).catch(error => console.error('playAudio error', error));
+         }).catch(error => console.error('speak error', error));
       }
     }
   }
@@ -131,7 +136,7 @@ const Task = (props) => {
                 { task.typedText }
               </span>
           </div>
-          <audio id="Player" ref={audioElement} src="" autoPlay />
+          <audio id="player" ref={audioElement} src="" autoPlay />
         </div>
       </div>
     </div>
