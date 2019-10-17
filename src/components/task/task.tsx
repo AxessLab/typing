@@ -119,7 +119,7 @@ const Task = props => {
         <div className="col-12">
           <h1>Typing in the Dark</h1>
         </div>
-        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
+        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
           <span>{ task.text.charAt(currentPos) }</span>
         </div>
         <div className="col-10 task__remaining-text">
