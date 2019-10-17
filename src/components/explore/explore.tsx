@@ -53,14 +53,13 @@ const Explore = (props) => {
   const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
 
   const timeForExercise = 60;
-  const maxInputs = 30;
+  const maxInputs = 20;
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  
   useEffect(() => {
     const textToSpeak: ITTS = {
       type: TTS_PLATTFORM.GOOGLE,
