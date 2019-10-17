@@ -52,7 +52,7 @@ const Explore = (props) => {
   const [introText, setIntroText] = useState('');
 
   const timeForExercise = 60;
-  const maxInputs = 5;
+  const maxInputs = 50;
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
