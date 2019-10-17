@@ -88,8 +88,8 @@ const Task = props => {
 
         playAudio(audioElement, 'assets/correct.mp3', 2).then(() => {
           if (currentPos < task.text.length - 1) {
-            speak(nextTextToSpeak).then(text => {
-              playAudio(audioElement, text, 2).then(() => {
+            speak(nextTextToSpeak).then(url => {
+              playAudio(audioElement, url, 2).then(() => {
 
                 // const endTime = Date.now();
                 // const timeDiff = endTime - startTime;

@@ -19,19 +19,17 @@ const ExploreMenu = () => {
       // TODO: Keyboard navigation in menu
     }
   }
-  
+
   useEffect(() => {
     const textToSpeak: ITTS = {
       type: TTS_PLATTFORM.GOOGLE,
-      lang: 'sv-SE',  
+      lang: 'sv-SE',
       text: headerText + ' ' + introText,
       pitch: '',
       rate: ''
     };
 
-    speak(textToSpeak).then((text) => {
-      playAudio(audioElementIntro, text);
-    });
+    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
   return (

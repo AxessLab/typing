@@ -16,7 +16,7 @@ import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
 
-const mapStateToProps = ( state: IRootState) => ({
+const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
   game: state.game
 });
@@ -37,9 +37,9 @@ export const KEYROWS = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export interface IExploreProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export type IExploreProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
-const Explore = (props) => {
+const Explore = props => {
   const {
     explore,
     completed,
@@ -69,9 +69,7 @@ const Explore = (props) => {
       rate: ''
     };
 
-    speak(textToSpeak).then((text) => {
-      playAudio(audioElementIntro, text);
-    });
+    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
   useEffect(() => {
@@ -91,10 +89,10 @@ const Explore = (props) => {
     }
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
-      const characterName = charId === "1" ? "Fosauri" : "Onzua";
+      const characterName = charId === '1' ? 'Fosauri' : 'Onzua';
       setHeaderText('Redo');
       setIntroText('Bra jobbat! ' + characterName + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
-      
+
       completed();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -109,10 +107,10 @@ const Explore = (props) => {
       return KEYROWS.ROW_ONE;
     }
     else if ([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(x => x === key)) {
-      return KEYROWS.ROW_ZERO
+      return KEYROWS.ROW_ZERO;
     }
     else if ([90, 88, 67, 86, 66, 78, 77, 188, 190].some(x => x === key)) {
-      return KEYROWS.ROW_MINUS_ONE
+      return KEYROWS.ROW_MINUS_ONE;
     }
     return null;
   }
@@ -145,7 +143,7 @@ const Explore = (props) => {
         <div className="flex-m flex-wrap-m flex-center">
           <div className="col-12 col-3-l pad-top-60">
             <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
-            <audio id="Player" ref={audio} src="" autoPlay />
+            <audio id="player" ref={audio} src="" autoPlay />
           </div>
         </div>
         :
