@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { IRootState } from '../../shared/reducers';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 
@@ -10,18 +8,9 @@ import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
 
-const mapStateToProps = ({ explore }: IRootState, ownProps) => ({
-  handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation
-});
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-export type ITaskProps = StateProps & RouteComponentProps<{ url: string }>;
-
-const ExploreMenu = (props: ITaskProps) => {
-  const [headerText, setHeaderText] = useState('');
-  const [introText, setIntroText] = useState('');
+const ExploreMenu = () => {
+  const [headerText, setHeaderText] = useState('Välj ninja');
+  const [introText, setIntroText] = useState('Tryck pil ned eller upp för att navigera. Välj genom att trycka på enter.');
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
@@ -35,11 +24,6 @@ const ExploreMenu = (props: ITaskProps) => {
       //TODO: Keyboard navigation in menu
     }
   }
-
-  useEffect(() => {
-    setHeaderText('Välj ninja');
-    setIntroText('Tryck pil ned eller upp för att navigera. Välj genom att trycka på enter.');
-  }, []);
 
   useEffect(() => {
     textToSpeak.text = headerText + ' ' + introText;
@@ -76,4 +60,4 @@ const ExploreMenu = (props: ITaskProps) => {
   );
 }
 
-export default connect(mapStateToProps)(ExploreMenu);
+export default ExploreMenu;

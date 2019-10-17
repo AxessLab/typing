@@ -48,8 +48,8 @@ const Explore = (props) => {
   } = props;
 
   const [timeCount, setTimeCount] = useState(0);
-  const [headerText, setHeaderText] = useState('');
-  const [introText, setIntroText] = useState('');
+  const [headerText, setHeaderText] = useState('Träna din ninja');
+  const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
 
   const timeForExercise = 60;
   const maxInputs = 50;
@@ -59,16 +59,11 @@ const Explore = (props) => {
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  let textToSpeak: ITTS = {
+  const textToSpeak: ITTS = {
     type: TTS_PLATTFORM.GOOGLE,
     lang: 'sv-SE',
     text: ''
   };
-  
-  useEffect(() => {
-    setHeaderText('Träna din ninja');
-    setIntroText('Tryck på olika knappar på tangentbordet');
-  }, []);
 
   useEffect(() => {
     textToSpeak.text = headerText + ' ' + introText;
