@@ -3,7 +3,7 @@
   font-weight: 600;
   line-height: 2em;
 
-  &__value-to-type {    
+  &__value-to-type {
     text-align: center;
     &--correct {
       color: #4add8c;
@@ -22,13 +22,13 @@
     letter-spacing: 0.5em;
     color: #aaaaaa;
   }
-  
+
   &__input {
     border: 1px solid white;
     width: 100%;
-    height: 2em; 
+    height: 2em;
     text-align: center;
-    
+
     &:focus {
       box-shadow: 0 0 10px rgba(255, 255, 255, 1);
       border: 2px solid rgba(255, 255, 255, 1);

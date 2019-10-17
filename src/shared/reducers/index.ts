@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import task, { ITaskState } from '../../components/task/task.reducer';
-import audio, { IAudioState } from '../../components/audio/audio.reducer';
+import explore, { IExploreState } from '../../components/explore/explore.reducer';
 
 export interface IRootState {
   readonly task: ITaskState;
-  readonly audio: IAudioState;
+  readonly explore: IExploreState;
 }
 
 export interface IAction {
@@ -13,4 +13,4 @@ export interface IAction {
 }
 
 // Export root reducer
-export default combineReducers<IRootState>({ task, audio });
+export default combineReducers<IRootState>({ task, explore });
