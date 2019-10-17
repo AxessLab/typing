@@ -1,23 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { IRootState } from '../../shared/reducers';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import React, { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { playAudio } from '../audio/audio';
 
 // Images
 import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
 
-const mapStateToProps = ({ explore }: IRootState, ownProps) => ({
-  handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation
-});
+const ExploreMenu = () => {
+  const headerText = 'Välj ninja';
+  const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-export type ITaskProps = StateProps & RouteComponentProps<{ url: string }>;
-
-const ExploreMenu = (props: ITaskProps) => {
+  const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 38 || event.keyCode === 40) {
@@ -25,10 +20,23 @@ const ExploreMenu = (props: ITaskProps) => {
     }
   }
 
+  useEffect(() => {
+    const textToSpeak: ITTS = {
+      type: TTS_PLATTFORM.GOOGLE,
+      lang: 'sv-SE',
+      text: headerText + ' ' + introText,
+      pitch: '',
+      rate: ''
+    };
+
+    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
+  }, [headerText, introText]);
+
   return (
     <div className="container pad-top-60 text-center">
-      <h1>Välj ninja</h1>
-      <p>Tryck pil ned eller upp för att navigera. Välj genom att trycka på enter.</p>
+      <h1>{headerText}</h1>
+      <p>{introText}</p>
+      <audio id="intro-audio" ref={audioElementIntro} src="" />
       <div className="flex-m flex-wrap-m flex-center-m pad-top-10">
         <div className="explore__menu col-2-l col-12 pad-top-30">
           <ul
@@ -52,4 +60,4 @@ const ExploreMenu = (props: ITaskProps) => {
   );
 }
 
-export default connect(mapStateToProps)(ExploreMenu);
+export default ExploreMenu;
