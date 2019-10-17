@@ -9,28 +9,28 @@ import logo2 from '../../static/images/Onzua.svg';
 
 
 const ExploreMenu = () => {
-  const [headerText, setHeaderText] = useState('Välj ninja');
-  const [introText, setIntroText] = useState('Tryck pil ned eller upp för att navigera. Välj genom att trycka på enter.');
+  const headerText = 'Välj ninja';
+  const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  let textToSpeak: ITTS = {
-    type: TTS_PLATTFORM.GOOGLE,
-    lang: 'sv-SE',  
-    text: ''
-  };
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 38 || event.keyCode === 40) {
       //TODO: Keyboard navigation in menu
     }
   }
-
+  
   useEffect(() => {
-    textToSpeak.text = headerText + ' ' + introText;
+    const textToSpeak: ITTS = {
+      type: TTS_PLATTFORM.GOOGLE,
+      lang: 'sv-SE',  
+      text: headerText + ' ' + introText
+    };
+
     speak(textToSpeak).then((text) => {
       playAudio(audioElementIntro, text);
     });
-  }, [headerText, introText, textToSpeak]);
+  }, [headerText, introText]);
 
   return (
     <div className="container pad-top-60 text-center">

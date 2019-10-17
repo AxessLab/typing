@@ -16,8 +16,9 @@ import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
 
-const mapStateToProps = ({ explore }: IRootState) => ({
-  explore: explore
+const mapStateToProps = ( state: IRootState) => ({
+  explore: state.explore,
+  game: state.game
 });
 
 const mapDispatchToProps = {
@@ -52,25 +53,25 @@ const Explore = (props) => {
   const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
 
   const timeForExercise = 60;
-  const maxInputs = 50;
+  const maxInputs = 30;
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const textToSpeak: ITTS = {
-    type: TTS_PLATTFORM.GOOGLE,
-    lang: 'sv-SE',
-    text: ''
-  };
-
+  
   useEffect(() => {
-    textToSpeak.text = headerText + ' ' + introText;
+    const textToSpeak: ITTS = {
+      type: TTS_PLATTFORM.GOOGLE,
+      lang: 'sv-SE',
+      text: headerText + ' ' + introText
+    };
+
     speak(textToSpeak).then((text) => {
       playAudio(audioElementIntro, text);
     });
-  }, [headerText, introText, textToSpeak]);
+  }, [headerText, introText]);
 
   useEffect(() => {
     let interval = null;
