@@ -6,6 +6,6 @@ export interface ITask {
 
 export const defaultValue: Readonly<ITask> = {
   completed: false,
-  text: 'fjfj',
+  text: 'fjfjfjjfjjjfjjjfjjjf',
   typedText: ''
 };

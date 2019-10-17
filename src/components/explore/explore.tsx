@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
 
-import { completed, startAnimate, stopAnimate, increaseType, reset } from './explore.reducer';
+import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 
 import ExploreInput from './explore-input';
 
@@ -15,16 +16,16 @@ import logo1 from '../../static/images/Fosauri.svg';
 import logo2 from '../../static/images/Onzua.svg';
 
 
-const mapStateToProps = ({ explore }: IRootState) => ({
-  explore: explore
+const mapStateToProps = (state: IRootState) => ({
+  explore: state.explore,
+  game: state.game
 });
 
 const mapDispatchToProps = {
   completed,
   increaseType,
   startAnimate,
-  stopAnimate,
-  reset
+  stopAnimate
 };
 
 export const KEYROWS = {
@@ -36,25 +37,40 @@ export const KEYROWS = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export interface IExploreProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export type IExploreProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
-const Explore = (props) => {
+const Explore = props => {
   const {
     explore,
     completed,
     increaseType,
     startAnimate,
-    stopAnimate,
-    reset
+    stopAnimate
   } = props;
 
   const [timeCount, setTimeCount] = useState(0);
-  const timeForExercise = 50;
-  const maxInputs = 5;
+  const [headerText, setHeaderText] = useState('Träna din ninja');
+  const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
+
+  const timeForExercise = 60;
+  const maxInputs = 20;
   const charId = props.match.params.id;
 
   const audioEl = useRef<HTMLAudioElement | null>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+
+  useEffect(() => {
+    const textToSpeak: ITTS = {
+      type: TTS_PLATTFORM.GOOGLE,
+      lang: 'sv-SE',
+      text: headerText + ' ' + introText,
+      pitch: '',
+      rate: ''
+    };
+
+    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
+  }, [headerText, introText]);
 
   useEffect(() => {
     let interval = null;
@@ -73,6 +89,10 @@ const Explore = (props) => {
     }
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
+      const characterName = charId === '1' ? 'Fosauri' : 'Onzua';
+      setHeaderText('Redo');
+      setIntroText('Bra jobbat! ' + characterName + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
+
       completed();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -80,17 +100,17 @@ const Explore = (props) => {
 
     return () => clearInterval(interval);
 
-  }, [explore.typeCount, audioEl, timeCount, completed]);
+  }, [explore.typeCount, audioEl, timeCount, completed, charId]);
 
   const getKeyRow = (key : number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
       return KEYROWS.ROW_ONE;
     }
     else if ([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(x => x === key)) {
-      return KEYROWS.ROW_ZERO
+      return KEYROWS.ROW_ZERO;
     }
     else if ([90, 88, 67, 86, 66, 78, 77, 188, 190].some(x => x === key)) {
-      return KEYROWS.ROW_MINUS_ONE
+      return KEYROWS.ROW_MINUS_ONE;
     }
     return null;
   }
@@ -114,48 +134,38 @@ const Explore = (props) => {
     }
   }
 
-  const handleReset = () => {
-    reset();
-    props.history.push('/explore');
-  }
-
   return (
     <div className="container pad-top-60 text-center">
-      { !explore.completed ?
-        <>
-          <h1>Träna din ninja</h1>
-          <p>Tryck på olika knappar på tangentbordet</p>
-          <div className="flex-m flex-wrap-m flex-center">
-            <div className="col-12 col-3-l pad-top-60">
-              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
-              <audio id="player" ref={audio} src="" autoPlay />
-            </div>
+      <h1>{headerText}</h1>
+      <p>{introText}</p>
+      <audio id="intro-audio" ref={audioElementIntro} src="" />
+      {!explore.completed ?
+        <div className="flex-m flex-wrap-m flex-center">
+          <div className="col-12 col-3-l pad-top-60">
+            <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
+            <audio id="player" ref={audio} src="" autoPlay />
           </div>
-        </>
+        </div>
         :
-        <>
-          <div className="explore__menu pad-top-10">
-            <h1>Redo</h1>
-            <p>Bra jobbat! XX har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.</p>
-            <div className="flex-m flex-wrap-m flex-center">
-              <div className="col-12 col-3-l">
-                <img src={charId === "1" ? logo1 : logo2} alt={'character figure'} />
-                <ul tabIndex={-1} role="menu">
+        <div className="explore__menu pad-top-10">
+          <div className="flex-m flex-wrap-m flex-center">
+            <div className="col-12 col-3-l">
+              <img
+                src={charId === "1" ? logo1 : logo2}
+                alt={'character figure'}
+              />
+              <ul
+                tabIndex={-1}
+                role="menu">
                   <li role="none">
-                    <button role="menuitem" onClick={handleReset} className="button">
-                      Öva lite till
-                    </button>
-                  </li>
-                  <li role="none">
-                    <Link role="menuitem" to="/" className="button">
+                    <Link role="menuitem" to="/task" className="button">
                       Gå till nästa övning
                     </Link>
                   </li>
-                </ul>
-              </div>
+              </ul>
             </div>
           </div>
-        </>
+        </div>
       }
       <audio
         ref={audioEl}

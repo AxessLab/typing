@@ -35,8 +35,8 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
     if (taskErrors > 0) {
       textToSpeak.text = `Resultat. Bra jobbat! Du hade bara ${taskErrors} fel.`;
 
-      speak(textToSpeak).then(text => {
-        playAudio(audioElement, text).then(() => {
+      speak(textToSpeak).then(url => {
+        playAudio(audioElement, url).then(() => {
           playAudio(audioElement, '/assets/done.mp3')
             .catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('playAudio error', error));
@@ -47,8 +47,8 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
     else {
       textToSpeak.text = 'Resultat. Jättebra jobbat! Felfri.';
 
-      speak(textToSpeak).then(text => {
-        playAudio(audioElement, text).then(() => {
+      speak(textToSpeak).then(url => {
+        playAudio(audioElement, url).then(() => {
           playAudio(audioElement, '/assets/done.mp3')
             .catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('playAudio error', error));
