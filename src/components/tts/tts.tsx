@@ -4,11 +4,11 @@ let isWebspeechLoaded = false;
 
 export interface ITTS {
     lang: string,
-    text: string,
     type: string,
     rate: string,
     pitch: string
 }
+
 
 export const TTS_PLATTFORM = {
   GOOGLE: 'tts/GOOGLE',
@@ -16,6 +16,12 @@ export const TTS_PLATTFORM = {
   WEBSPEECH: 'tts/WEBSPEECH'
 }
 
+const defaultValue: ITTS = {
+  type: TTS_PLATTFORM.GOOGLE,
+  lang: 'sv-SE',
+  pitch: '',
+  rate: '1.0'
+};
 const speech = new Speech();
 
 speech.init({
@@ -35,20 +41,21 @@ speech.init({
   }
 }).catch(error => console.error('An error occured while initializing', error));
 
-export const speak = async (tts: ITTS): Promise<string> => {
+export const speak = async (text: string, tts: ITTS = defaultValue): Promise<string> => {
+  console.info(tts);
   let requestURL: string = '';
 
   switch (tts.type) {
     case TTS_PLATTFORM.GOOGLE:
-      requestURL = `https://webbkonversation.se/googleCloudTTS.php?tts_txt=${encodeURIComponent(tts.text)}&tts_rate=${encodeURIComponent(tts.rate)}&tts_pitch=${tts.pitch}`;
+      requestURL = `https://webbkonversation.se/googleCloudTTS.php?tts_txt=${encodeURIComponent(text)}&tts_rate=${encodeURIComponent(tts.rate)}&tts_pitch=${tts.pitch}`;
       return Promise.resolve(requestURL);
     case TTS_PLATTFORM.MARY:
-      requestURL = `http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=${encodeURIComponent(tts.text)}%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE`;
+      requestURL = `http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=${encodeURIComponent(text)}%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE`;
       return Promise.resolve(requestURL);
     case TTS_PLATTFORM.WEBSPEECH:
       if (isWebspeechLoaded) {
         //speech.cancel();
-        await webSpeech(tts.text).then(() => {
+        await webSpeech(text).then(() => {
           return Promise.resolve(requestURL);
         });
       } else {

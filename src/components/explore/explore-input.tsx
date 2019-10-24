@@ -2,9 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { completed } from './explore.reducer';
-
 
 const mapStateToProps = (state: IRootState, ownProps) => ({
   isAnimating: state.explore.isAnimating,
@@ -21,9 +19,9 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export type ITaskProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
-const ExploreInput = (props: ITaskProps) => {
+const ExploreInput = (props: IProps) => {
   const {
     isAnimating,
     handleKey,

@@ -60,22 +60,10 @@ const Task = props => {
       const textToSpeak: ITTS = {
         type: TTS_PLATTFORM.GOOGLE,
         lang: 'sv-SE',
-        text: event.key,
         rate: '2.00',
         pitch: '0.00'
       };
 
-      const nextTextToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
-        lang: 'sv-SE',
-        text: '',
-        rate: '2.00',
-        pitch: '0.00'
-      }
-
-      if (currentPos < task.text.length - 1) {
-        nextTextToSpeak.text = task.text[currentPos + 1];
-      }
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completed(task);
@@ -88,7 +76,7 @@ const Task = props => {
 
         playAudio(audioElement, 'assets/correct.mp3', 2).then(() => {
           if (currentPos < task.text.length - 1) {
-            speak(nextTextToSpeak).then(url => {
+            speak(task.text[currentPos + 1], textToSpeak).then(url => {
               playAudio(audioElement, url, 2).then(() => {
 
                 // const endTime = Date.now();
@@ -103,7 +91,7 @@ const Task = props => {
       } else {
         handleWrongInput(event.key);
 
-        speak(textToSpeak).then(text => {
+        speak(event.key, textToSpeak).then(text => {
           playAudio(audioElement, text, 2).then(() => {
             playAudio(audioElement, '/assets/wrongsound.mp3', 2)
               .catch(error => console.error('playAudio error', error));

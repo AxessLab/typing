@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak } from '../tts/tts';
 
 import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 
@@ -28,7 +28,7 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export type IExploreProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
 const Explore = props => {
   const {
@@ -59,15 +59,7 @@ const Explore = props => {
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
-    const textToSpeak: ITTS = {
-      type: TTS_PLATTFORM.GOOGLE,
-      lang: 'sv-SE',
-      text: headerText + ' ' + introText,
-      pitch: '',
-      rate: '1.0'
-    };
-
-    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
+    speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 import { IRootState } from 'shared/reducers';
 import { setCharacter } from 'shared/reducers/game-data';
@@ -17,11 +17,9 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export type ITaskProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
-//Continue here tomorrow
-
-const ExploreMenu = (props: ITaskProps) => {
+const ExploreMenu = (props: IProps) => {
   const {gameCharacters, setCharacter} = props;
   const headerText = 'Välj ninja';
   const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
@@ -43,15 +41,7 @@ const ExploreMenu = (props: ITaskProps) => {
   }, []);
 
   useEffect(() => {
-    const textToSpeak: ITTS = {
-      type: TTS_PLATTFORM.GOOGLE,
-      lang: 'sv-SE',
-      text: headerText + ' ' + introText,
-      pitch: '',
-      rate: ''
-    };
-
-    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
+    speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
   return (
