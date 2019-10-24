@@ -130,6 +130,7 @@ const Task = props => {
             <div
               className="task__input"
               ref={inputElement}
+              role="textbox"
               tabIndex={0}
               onKeyUp={handleKey}>
                 <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>

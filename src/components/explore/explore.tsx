@@ -12,13 +12,10 @@ import { playAudio } from '../audio/audio';
 
 import './explore.scss';
 
-import logo1 from '../../static/images/Fosauri.svg';
-import logo2 from '../../static/images/Onzua.svg';
-
-
 const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
-  game: state.game
+  gameCharacters: state.game.gameCharacters,
+  currentGameCharacter: state.game.currentGameCharacter
 });
 
 const mapDispatchToProps = {
@@ -26,12 +23,6 @@ const mapDispatchToProps = {
   increaseType,
   startAnimate,
   stopAnimate
-};
-
-export const KEYROWS = {
-  ROW_ONE: 'ROW_ONE',
-  ROW_ZERO: 'ROW_ZERO',
-  ROW_MINUS_ONE: 'ROW_MINUS_ONE'
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -45,16 +36,23 @@ const Explore = props => {
     completed,
     increaseType,
     startAnimate,
-    stopAnimate
+    stopAnimate,
+    gameCharacters,
+    currentGameCharacter
   } = props;
+
+  const KEYROWS = {
+    ROW_ONE: 'ROW_ONE',
+    ROW_ZERO: 'ROW_ZERO',
+    ROW_MINUS_ONE: 'ROW_MINUS_ONE'
+  };
 
   const [timeCount, setTimeCount] = useState(0);
   const [headerText, setHeaderText] = useState('Träna din ninja');
   const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
 
   const timeForExercise = 60;
-  const maxInputs = 20;
-  const charId = props.match.params.id;
+  const maxInputs = 50;
 
   const audioEl = useRef<HTMLAudioElement | null>(null);
   const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -66,7 +64,7 @@ const Explore = props => {
       lang: 'sv-SE',
       text: headerText + ' ' + introText,
       pitch: '',
-      rate: ''
+      rate: '1.0'
     };
 
     speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
@@ -75,7 +73,20 @@ const Explore = props => {
   useEffect(() => {
     let interval = null;
 
-    if (audioEl && audio) {
+    if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
+      setHeaderText('Redo');
+      setIntroText('Bra jobbat! ' + gameCharacters[currentGameCharacter].name + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
+      completed();
+    } else {
+      interval = setInterval(() => setTimeCount(0), 1000);
+    }
+
+    return () => clearInterval(interval);
+
+  }, [explore.typeCount, timeCount, completed, gameCharacters, currentGameCharacter]);
+
+  useEffect(() => {
+    if (audioEl && audioEl.current) {
       const isPlaying = !audioEl.current.paused;
 
       if (!isPlaying) {
@@ -87,20 +98,7 @@ const Explore = props => {
         }
       }
     }
-
-    if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
-      const characterName = charId === '1' ? 'Fosauri' : 'Onzua';
-      setHeaderText('Redo');
-      setIntroText('Bra jobbat! ' + characterName + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
-
-      completed();
-    } else {
-      interval = setInterval(() => setTimeCount(0), 1000);
-    }
-
-    return () => clearInterval(interval);
-
-  }, [explore.typeCount, audioEl, timeCount, completed, charId]);
+  }, [audioEl]);
 
   const getKeyRow = (key : number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
@@ -142,7 +140,7 @@ const Explore = props => {
       {!explore.completed ?
         <div className="flex-m flex-wrap-m flex-center">
           <div className="col-12 col-3-l pad-top-60">
-            <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} charId={charId} />
+            <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} />
             <audio id="player" ref={audio} src="" autoPlay />
           </div>
         </div>
@@ -151,8 +149,8 @@ const Explore = props => {
           <div className="flex-m flex-wrap-m flex-center">
             <div className="col-12 col-3-l">
               <img
-                src={charId === "1" ? logo1 : logo2}
-                alt={'character figure'}
+                src={gameCharacters[currentGameCharacter].image}
+                alt={gameCharacters[currentGameCharacter].name}
               />
               <ul
                 tabIndex={-1}

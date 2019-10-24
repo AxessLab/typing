@@ -3,18 +3,15 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
-// Images
-import logo1 from '../../static/images/Fosauri.svg';
-import logo2 from '../../static/images/Onzua.svg';
-
 import { completed } from './explore.reducer';
 
 
-const mapStateToProps = ({ explore }: IRootState, ownProps) => ({
-  isAnimating: explore.isAnimating,
+const mapStateToProps = (state: IRootState, ownProps) => ({
+  isAnimating: state.explore.isAnimating,
+  gameCharacters: state.game.gameCharacters,
+  currentGameCharacter: state.game.currentGameCharacter,
   handleKey: ownProps.handleKey,
   handleAnimation: ownProps.handleAnimation,
-  charId: ownProps.charId
 });
 
 const mapDispatchToProps = {
@@ -31,7 +28,8 @@ const ExploreInput = (props: ITaskProps) => {
     isAnimating,
     handleKey,
     handleAnimation,
-    charId
+    gameCharacters,
+    currentGameCharacter
   } = props;
 
   const inputElement = useRef<HTMLDivElement | null>(null);
@@ -50,8 +48,8 @@ const ExploreInput = (props: ITaskProps) => {
       tabIndex={0}
       onKeyDown={handleKey}>
         <img
-          src={charId === '1' ? logo1 : logo2}
-          alt="character figure"
+          src={gameCharacters[currentGameCharacter].image}
+          alt={gameCharacters[currentGameCharacter].name}
           onAnimationEnd={handleAnimation}
           className={isAnimating ? 'explore__character-large' : ''}
         />
