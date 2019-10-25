@@ -13,15 +13,13 @@ if (process.env.NODE_ENV === 'development') {
 const store = initStore();
 
 ReactDOM.render(
-  <>
-    <Provider store={store}>
-      {/* If this slows down the app in dev disable it and enable when required */}
-      { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
-      <div className="container">
-        <App />
-      </div>
-    </Provider>
-  </>,
+  <Provider store={store}>
+    {/* If this slows down the app in dev disable it and enable when required */}
+    { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
+    <div className="container">
+      <App />
+    </div>
+  </Provider>,
   document.getElementById('root')
 );
 
