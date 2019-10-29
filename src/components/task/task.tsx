@@ -1,32 +1,29 @@
 import './task.scss';
-​
 import React, { useRef/*, useEffect*/ } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
-​
-import { handleCorrectInput, handleWrongInput, completed, next } from './task.reducer';
-import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
-​
-​
+import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   correctInput: task.correctInput,
   wrongInput: task.wrongInput,
 });
-​
+
 const mapDispatchToProps = {
   handleCorrectInput,
   handleWrongInput,
   completed
 };
-​
+
 type IStateProps = ReturnType<typeof mapStateToProps>;
 type IDispatchProps = typeof mapDispatchToProps;
-​
+
 export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
-​
+
 const Task = props => {
   const {
     task,
@@ -37,26 +34,24 @@ const Task = props => {
     wrongInput,
     completed
   } = props;
-​
+
   const inputElement = useRef<HTMLDivElement | null>(null);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const correctAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const wrongAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
-​
+
   const handleKey = (event: React.KeyboardEvent): void => {
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
-​
       audioElement.current.pause();
       audioElement.current.setAttribute('src','');
       audioElement.current = new Audio();
       correctAudioElement.current.load();
       wrongAudioElement.current.load();
-​
+
       const startTime = Date.now();
-​
+
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
-​
       // Select voices
       // GOOGLE / Mary / WEBSPEECH
       const textToSpeak: ITTS = {
@@ -66,7 +61,7 @@ const Task = props => {
         rate: '2.00',
         pitch: '0.00'
       };
-​
+
       const nextTextToSpeak: ITTS = {
         type: TTS_PLATTFORM.GOOGLE,
         lang: 'sv-SE',
@@ -74,16 +69,16 @@ const Task = props => {
         rate: '2.00',
         pitch: '0.00'
       }
-​
+
       if (currentPos < task.text.length - 1) {
         nextTextToSpeak.text = task.text[currentPos + 1];
       }
-​
+
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completed(task);
         props.history.push('/summary');
       }
-​
+
       if (correctKeyPressed) {
         handleCorrectInput(event.key).then(() => {
           correctAudioElement.current.setAttribute('currentTime','0');
@@ -92,10 +87,10 @@ const Task = props => {
               speak(nextTextToSpeak).then(textURL => {
                 console.log('Speak done: '+textURL);
                 if(textURL !== '') {
-​
+
                   audioElement.current.pause();
                   audioElement.current.setAttribute('src','');
-                  audioElement.current = new Audio(textURL);
+                  audioElement.current = new Audio(textURL)
 
                   audioElement.current.play().then( data => {
                     const endTime = Date.now();
@@ -125,7 +120,7 @@ const Task = props => {
     }
   }
   }
-​
+
   return (
     <div className="task pad-top-60">
       <div className="flex-m flex-wrap-m">
@@ -159,5 +154,5 @@ const Task = props => {
     </div>
   );
 }
-​
+
 export default connect(mapStateToProps, mapDispatchToProps)(Task);
