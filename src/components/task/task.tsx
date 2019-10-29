@@ -92,14 +92,13 @@ const Task = props => {
             if(p !== undefined) {
               if (currentPos < task.text.length - 1) {
                 speak(nextTextToSpeak).then(textURL => {
-                  if(textURL !== '') {
-
+                  if (textURL !== '') {
                     audioElement.current.pause();
-                    audioElement.current.setAttribute('src','');
+                    audioElement.current.setAttribute('src', '');
                     audioElement.current = new Audio(textURL)
 
                     const promise = audioElement.current.play().then( data => {
-                      if(promise === undefined) {
+                      if (promise === undefined) {
                         console.error('Play correct text promise undefined');
                       }
                     }).catch(error => console.error('play error ', error));
@@ -121,7 +120,7 @@ const Task = props => {
               audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
               const p = audioElement.current.play().then(() => {
-                if(p !== undefined) {
+                if (p !== undefined) {
                   wrongAudioElement.current.setAttribute('currentTime', '0');
                   const promise = wrongAudioElement.current.play().catch(error => console.error('playAudio error', error));
                   if(promise === undefined) {
