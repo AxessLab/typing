@@ -31,12 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:focus': {
         border: '2px solid white'
       }
-    },
-    link: {
-      textDecoration: 'none',
-      '&:focus' : {
-        outline: 'none'
-      }
     }
   }),
 );
@@ -79,6 +73,13 @@ const ExploreMenu = (props: IProps) => {
     const id = e.currentTarget.dataset.id ? e.currentTarget.dataset.id : 0;
     speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url))
   }
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    const id = e.currentTarget.dataset.id ? e.currentTarget.dataset.id : 0;
+    setCharacter(id);
+    props.history.push('/explore/play');
+  }
   return (
     <div className={classes.root}>
       <Grid container alignItems="center" justify="center">
@@ -98,16 +99,15 @@ const ExploreMenu = (props: IProps) => {
                 <MenuItem
                   key={index}
                   className={classes.menuItem}
+                  onClick={handleClick}
                   data-id={character.id}
                   onFocus={handleFocus}
                 >
-                  <Link className={classes.link} to="/explore/play" onClick={() => setCharacter(index)}>
-                    <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
-                    <span>
-                      <Typography variant="h2">{character.name}</Typography>
-                      <Typography variant="body2">{character.description}</Typography>
-                    </span>
-                  </Link>
+                  <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
+                  <span>
+                    <Typography variant="h2">{character.name}</Typography>
+                    <Typography variant="body2">{character.description}</Typography>
+                  </span>
                 </MenuItem>
               ))}
             </MenuList>
