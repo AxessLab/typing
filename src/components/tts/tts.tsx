@@ -66,6 +66,7 @@ export const speak = async (text: string, tts: ITTS = defaultValue): Promise<str
       requestURL = `/assets/error${tts.lang}.mp3`;
       return Promise.resolve(requestURL);
   }
+  return Promise.reject('');
 }
 
 // TODO: Check browser support

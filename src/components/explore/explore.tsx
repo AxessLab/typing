@@ -3,14 +3,21 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
-
 import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
-
 import ExploreInput from './explore-input';
-
 import { playAudio } from '../audio/audio';
-
 import './explore.scss';
+import { Grid, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(8),
+      alignItems: 'center'
+    },
+  }),
+);
 
 const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
@@ -30,6 +37,7 @@ type DispatchProps = typeof mapDispatchToProps;
 export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
 const Explore = props => {
+  const classes = useStyles();
   const {
     explore,
     completed,
@@ -61,7 +69,7 @@ const Explore = props => {
   }, [headerText, introText]);
 
   useEffect(() => {
-    let interval = null;
+    let interval;
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
@@ -123,46 +131,40 @@ const Explore = props => {
   }
 
   return (
-    <div className="container pad-top-60 text-center">
-      <h1>{headerText}</h1>
-      <p>{introText}</p>
-      <audio id="intro-audio" ref={audioElementIntro} src="" />
-      {!explore.completed ?
-        <div className="flex-m flex-wrap-m flex-center">
-          <div className="col-12 col-3-l pad-top-60">
-            <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} />
-            <audio id="player" ref={audio} src="" autoPlay />
-          </div>
-        </div>
-        :
-        <div className="explore__menu pad-top-10">
-          <div className="flex-m flex-wrap-m flex-center">
-            <div className="col-12 col-3-l">
+    <div className={classes.root}>
+      <Grid container alignItems="center" justify="center" spacing={8}>
+        <Grid item xs={12}>
+          <Typography variant="h1" align="center">{headerText}</Typography>
+          <Typography variant="body1" align="center">{introText}</Typography>
+          <audio id="intro-audio" ref={audioElementIntro} src="" />
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          {!explore.completed ?
+            <>
+              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} />
+              <audio id="player" ref={audio} src="" autoPlay />
+            </>
+            :
+            <>
               <img
-                src={currentGameCharacter.image}
-                alt={currentGameCharacter.name}
+              src={currentGameCharacter.image}
+              alt={currentGameCharacter.name}
               />
-              <ul
-                tabIndex={-1}
-                role="menu">
-                  <li role="none">
-                    <Link role="menuitem" to="/task" className="button">
-                      Gå till nästa övning
-                    </Link>
-                  </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      }
-      <audio
-        ref={audioEl}
-        src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
-        autoPlay={true}
-        loop
-      >
-        Your browser does not support the audio element.
-      </audio>
+              <Link to="/task" className="button">
+                Gå till nästa övning
+              </Link>
+            </>
+          }
+        </Grid>
+        <audio
+          ref={audioEl}
+          src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+          autoPlay={true}
+          loop
+        >
+          Your browser does not support the audio element.
+        </audio>
+      </Grid>
     </div>
   );
 }

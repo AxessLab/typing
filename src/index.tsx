@@ -6,6 +6,7 @@ import initStore from './config/store';
 import { Provider } from 'react-redux';
 import DevTools from './config/devtools'; // When environment is 'development'
 import App from './app';
+import { Container } from '@material-ui/core';
 
 if (process.env.NODE_ENV === 'development') {
   require('react-axe')(React, ReactDOM, 1000);
@@ -16,9 +17,9 @@ ReactDOM.render(
   <Provider store={store}>
     {/* If this slows down the app in dev disable it and enable when required */}
     { process.env.NODE_ENV === 'development' ? <DevTools /> : null }
-    <div className="container">
+    <Container>
       <App />
-    </div>
+    </Container>
   </Provider>,
   document.getElementById('root')
 );
