@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 import { IRootState } from 'shared/reducers';
