@@ -56,7 +56,7 @@ export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: str
 
 const ExploreMenu = (props: IProps) => {
   const classes = useStyles();
-  const { gameCharacters, setCharacter} = props;
+  const { gameCharacters, setCharacter } = props;
   const headerText = 'Välj ninja';
   const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
@@ -65,7 +65,7 @@ const ExploreMenu = (props: IProps) => {
   const menuElement = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
-    if(menuElement && menuElement.current) {
+    if (menuElement && menuElement.current) {
       menuElement.current.focus();
     }
   });
