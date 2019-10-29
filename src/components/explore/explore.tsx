@@ -14,8 +14,7 @@ import './explore.scss';
 
 const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
-  gameCharacters: state.game.gameCharacters,
-  currentGameCharacter: state.game.currentGameCharacter
+  currentGameCharacter: state.game.gameCharacter
 });
 
 const mapDispatchToProps = {
@@ -37,7 +36,6 @@ const Explore = props => {
     increaseType,
     startAnimate,
     stopAnimate,
-    gameCharacters,
     currentGameCharacter
   } = props;
 
@@ -67,7 +65,7 @@ const Explore = props => {
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
-      setIntroText('Bra jobbat! ' + gameCharacters[currentGameCharacter].name + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
+      setIntroText('Bra jobbat! ' + currentGameCharacter.name + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
       completed();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -75,7 +73,7 @@ const Explore = props => {
 
     return () => clearInterval(interval);
 
-  }, [explore.typeCount, timeCount, completed, gameCharacters, currentGameCharacter]);
+  }, [explore.typeCount, timeCount, completed, currentGameCharacter]);
 
   useEffect(() => {
     if (audioEl && audioEl.current) {
@@ -141,8 +139,8 @@ const Explore = props => {
           <div className="flex-m flex-wrap-m flex-center">
             <div className="col-12 col-3-l">
               <img
-                src={gameCharacters[currentGameCharacter].image}
-                alt={gameCharacters[currentGameCharacter].name}
+                src={currentGameCharacter.image}
+                alt={currentGameCharacter.name}
               />
               <ul
                 tabIndex={-1}

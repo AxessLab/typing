@@ -6,8 +6,7 @@ import { completed } from './explore.reducer';
 
 const mapStateToProps = (state: IRootState, ownProps) => ({
   isAnimating: state.explore.isAnimating,
-  gameCharacters: state.game.gameCharacters,
-  currentGameCharacter: state.game.currentGameCharacter,
+  currentGameCharacter: state.game.gameCharacter,
   handleKey: ownProps.handleKey,
   handleAnimation: ownProps.handleAnimation,
 });
@@ -26,7 +25,6 @@ const ExploreInput = (props: IProps) => {
     isAnimating,
     handleKey,
     handleAnimation,
-    gameCharacters,
     currentGameCharacter
   } = props;
 
@@ -46,8 +44,8 @@ const ExploreInput = (props: IProps) => {
       tabIndex={0}
       onKeyDown={handleKey}>
         <img
-          src={gameCharacters[currentGameCharacter].image}
-          alt={gameCharacters[currentGameCharacter].name}
+          src={currentGameCharacter.image}
+          alt={currentGameCharacter.name}
           onAnimationEnd={handleAnimation}
           className={isAnimating ? 'explore__character-large' : ''}
         />

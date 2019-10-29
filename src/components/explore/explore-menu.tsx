@@ -44,6 +44,11 @@ const ExploreMenu = (props: IProps) => {
     speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
+  const handleFocus = (e: React.FocusEvent<HTMLLIElement>) => {
+    e.preventDefault();
+    const id = e.currentTarget.dataset.id;
+    speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url))
+  }
   return (
     <div className="container pad-top-60 text-center">
       <h1>{headerText}</h1>
@@ -57,7 +62,11 @@ const ExploreMenu = (props: IProps) => {
             ref={menuElement}
             onKeyUp={handleKey}>
               {gameCharacters.map((character, index) => (
-                <li key={character.id} role="none">
+                <li
+                  key={character.id}
+                  data-id={character.id}
+                  role="none"
+                  onFocus={handleFocus}>
                   <Link role="menuitem" to="/explore/play" onClick={() => setCharacter(index)}>
                     <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
                     <span>

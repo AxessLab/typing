@@ -7,8 +7,8 @@ export const ACTION_TYPES = {
 };
 
 export interface IGameState {
-  gameCharacters: readonly IGameCharacter[],
-  currentGameCharacter: number
+  gameCharacters: ReadonlyArray<IGameCharacter>
+  gameCharacter: IGameCharacter
 }
 
 interface IGameCharacter {
@@ -18,11 +18,11 @@ interface IGameCharacter {
   image: string
 }
 
-export const defaultValues: ReadonlyArray<IGameCharacter> = [
+const defaultCharacters: ReadonlyArray<IGameCharacter> = [
   {
     id: 0,
     name: 'Onzua',
-    description: 'Rosa med två långa armar och fyrkantif kropp. Snabb och når långt på tangenterna.',
+    description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
     image: logo1
   },
   {
@@ -34,8 +34,8 @@ export const defaultValues: ReadonlyArray<IGameCharacter> = [
 ]
 
 const initialState: IGameState = {
-  gameCharacters: defaultValues,
-  currentGameCharacter: 0
+  gameCharacters: defaultCharacters,
+  gameCharacter: defaultCharacters[0]
 }
 
 export default (state: IGameState = initialState, action: IAction): IGameState => {
@@ -43,7 +43,7 @@ export default (state: IGameState = initialState, action: IAction): IGameState =
     case ACTION_TYPES.SET_CHARACTER: {
       return {
         ...state,
-        currentGameCharacter: action.payload
+        gameCharacter: state.gameCharacters[action.payload]
       };
     }
     default:
