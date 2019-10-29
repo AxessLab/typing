@@ -1,5 +1,5 @@
 import './task.scss';
-import React, { useRef/*, useEffect*/ } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
@@ -85,11 +85,11 @@ const Task = props => {
           correctAudioElement.current.play().then(() => {
             if (currentPos < task.text.length - 1) {
               speak(nextTextToSpeak).then(textURL => {
-                console.log('Speak done: '+textURL);
-                if(textURL !== '') {
+                console.log('Speak done: ' + textURL);
+                if (textURL !== '') {
 
                   audioElement.current.pause();
-                  audioElement.current.setAttribute('src','');
+                  audioElement.current.setAttribute('src', '');
                   audioElement.current = new Audio(textURL)
 
                   audioElement.current.play().then( data => {
@@ -107,9 +107,9 @@ const Task = props => {
        } else {
         handleWrongInput(event.key);
         speak(textToSpeak).then(textURL => {
-            if(textURL !== '') {
+            if (textURL !== '') {
               audioElement.current.pause();
-              audioElement.current.setAttribute('src','');
+              audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
               audioElement.current.play().then(() => {
                 wrongAudioElement.current.setAttribute('currentTime', '0');
