@@ -8,7 +8,8 @@ import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 
 import { playAudio } from '../audio/audio';
-import { speak, ITTS, TTS_PLATTFORM, } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
+import { assetBaseUrl } from 'config/audio';
 
 
 const mapStateToProps = ({ task }: IRootState) => ({
@@ -55,22 +56,14 @@ const Task = props => {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
 
-      // Select voices
-      // GOOGLE / Mary / WEBSPEECH
       const textToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
-        lang: 'sv-SE',
         text: event.key,
-        rate: '2.00',
-        pitch: '0.00'
+        rate: 2
       };
 
       const nextTextToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
-        lang: 'sv-SE',
         text: '',
-        rate: '2.00',
-        pitch: '0.00'
+        rate: 2
       }
 
       if (currentPos < task.text.length - 1) {
@@ -94,7 +87,7 @@ const Task = props => {
                 // const endTime = Date.now();
                 // const timeDiff = endTime - startTime;
                 // Leaving this in code for now, since benchmarking is ongoing
-                // console.log(`Correct feedback using ${textToSpeak.type} for character to write and ${nextTextToSpeak.type} for next character took ${timeDiff} ms.`);
+                // console.log(`Correct feedback for character to write and next character, took ${timeDiff} ms.`);
 
               }).catch(error => console.error('playAudio error', error));
             }).catch(error => console.error('speak error', error));
@@ -105,7 +98,7 @@ const Task = props => {
 
         speak(textToSpeak).then(text => {
           playAudio(audioElement, text, 2).then(() => {
-            playAudio(audioElement, '/assets/wrongsound.mp3', 2)
+            playAudio(audioElement, assetBaseUrl + 'wrongsound.wav', 2)
               .catch(error => console.error('playAudio error', error));
           }).catch(error => console.error('playAudio error', error));
          }).catch(error => console.error('speak error', error));

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
+import { assetBaseUrl } from 'config/audio';
 
 import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 
@@ -62,11 +63,7 @@ const Explore = props => {
 
   useEffect(() => {
     const textToSpeak: ITTS = {
-      type: TTS_PLATTFORM.GOOGLE,
-      lang: 'sv-SE',
-      text: headerText + ' ' + introText,
-      pitch: '',
-      rate: ''
+      text: headerText + ' ' + introText
     };
 
     speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
@@ -121,13 +118,13 @@ const Explore = props => {
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
       switch (getKeyRow(event.keyCode)) {
         case KEYROWS.ROW_ONE:
-          playAudio(audio, '/assets/131142__flameeagle__block.mp3');
+          playAudio(audio, assetBaseUrl + '131142__flameeagle__block.mp3');
           break;
         case KEYROWS.ROW_ZERO:
-          playAudio(audio, '/assets/471147__worldmaxter__sword-slide.wav');
+          playAudio(audio, assetBaseUrl + '471147__worldmaxter__sword-slide.wav');
           break;
         case KEYROWS.ROW_MINUS_ONE:
-          playAudio(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
+          playAudio(audio, assetBaseUrl + '411462__thebuilder15__bubble-pop.wav');
           break;
       }
       startAnimate();
@@ -169,7 +166,7 @@ const Explore = props => {
       }
       <audio
         ref={audioEl}
-        src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+        src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.wav'}
         autoPlay={true}
         loop
       >

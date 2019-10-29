@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 
 // Images
@@ -22,11 +22,7 @@ const ExploreMenu = () => {
 
   useEffect(() => {
     const textToSpeak: ITTS = {
-      type: TTS_PLATTFORM.GOOGLE,
-      lang: 'sv-SE',
-      text: headerText + ' ' + introText,
-      pitch: '',
-      rate: ''
+      text: headerText + ' ' + introText
     };
 
     speak(textToSpeak).then(url => playAudio(audioElementIntro, url));

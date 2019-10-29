@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 
 import { playAudio } from '../audio/audio';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
+import { assetBaseUrl } from 'config/audio';
 
 import './summary.scss';
 
@@ -21,13 +22,8 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
   const [feedbackText, setFeedbackText] = useState('');
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  // GOOGLE / MARY / WEBSPEECH
   const textToSpeak: ITTS = {
-    type: TTS_PLATTFORM.GOOGLE,
-    lang: 'sv-SE',
-    text: '',
-    rate: '1.00',
-    pitch: '0.00'
+    text: ''
   };
 
   useEffect(() => {
@@ -37,7 +33,7 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
 
       speak(textToSpeak).then(url => {
         playAudio(audioElement, url).then(() => {
-          playAudio(audioElement, '/assets/done.mp3')
+          playAudio(audioElement, assetBaseUrl + 'done.mp3')
             .catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('playAudio error', error));
       }).catch(error => console.error('speak error', error));
@@ -49,7 +45,7 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
 
       speak(textToSpeak).then(url => {
         playAudio(audioElement, url).then(() => {
-          playAudio(audioElement, '/assets/done.mp3')
+          playAudio(audioElement, assetBaseUrl + 'done.mp3')
             .catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('playAudio error', error));
       }).catch(error => console.error('speak error', error));
