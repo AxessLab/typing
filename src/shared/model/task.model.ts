@@ -1,7 +1,7 @@
 export interface ITask {
   completed?: boolean;
-  text?: string,
-  typedText?: string
+  text?: string;
+  typedText?: string;
 }
 
 export const defaultValue: Readonly<ITask> = {

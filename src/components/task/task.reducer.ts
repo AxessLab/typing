@@ -13,12 +13,12 @@ export const ACTION_TYPES = {
 };
 
 export interface ITaskState {
-  entities: readonly ITask[],
-  entity: Readonly<ITask>,
-  currentPos: number,
-  correctInput: boolean,
-  wrongInput: boolean
-  errors: number
+  entities: readonly ITask[];
+  entity: Readonly<ITask>;
+  currentPos: number;
+  correctInput: boolean;
+  wrongInput: boolean;
+  errors: number;
 }
 
 const initialState: ITaskState = {
@@ -79,7 +79,7 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
         ...state,
         entity: {
           ...state.entity,
-          completed: true //action.payload.data
+          completed: true // action.payload.data
         }
       };
     case ACTION_TYPES.RESET:
@@ -93,25 +93,20 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
 
 // Actions
 
-export const getTask = (task: string): IAction => {
-  return {
-    type: ACTION_TYPES.FETCH_TASK,
-    payload: {
-      completed: false,
-      text: task
-    }
-  };
-};
+export const getTask = (task: string): IAction => ({
+  type: ACTION_TYPES.FETCH_TASK,
+  payload: {
+    completed: false,
+    text: task
+  }
+});
 
 export const handleCorrectInput = (key: string) => async (dispatch: Dispatch): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.CORRECT_INPUT,
     payload: key
   });
-
-  setTimeout(() => {
-    dispatch(next())
-  }, 250);
+  dispatch(next());
 
   return result;
 };
@@ -128,11 +123,10 @@ export const handleWrongInput = (key: string) => async (dispatch: Dispatch): Pro
 export const completed = (task: ITask) => async (dispatch: Dispatch, getState: Function): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.COMPLETED
-  })
+  });
 
   return result;
 };
-
 
 export const next = (): IAction => ({
   type: ACTION_TYPES.NEXT
