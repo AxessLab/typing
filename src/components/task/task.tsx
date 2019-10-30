@@ -5,8 +5,7 @@ import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 import { speak, ITTS } from '../tts/tts';
-import { assetBaseUrl } from 'config/audio';
-
+import { assetBaseUrl } from '../../config/audio';
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,

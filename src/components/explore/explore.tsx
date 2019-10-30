@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
-import { assetBaseUrl } from 'config/audio';
+import { assetBaseUrl } from '../../config/audio';
 
 import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 import ExploreInput from './explore-input';

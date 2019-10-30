@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { playAudio } from '../audio/audio';
 import { speak } from '../tts/tts';
-import { assetBaseUrl } from 'config/audio';
+import { assetBaseUrl } from '../../config/audio';
 
 import './summary.scss';
 

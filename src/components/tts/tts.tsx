@@ -1,14 +1,14 @@
 import Speech from 'speak-tts';
-import { ttsEndpointUrl } from 'config/audio';
+import { ttsEndpointUrl } from '../../config/audio';
 
 export interface ITTS {
-  platform?: 'GOOGLE' | 'WEBSPEECH',
-  encoding?: 'OPUS' | 'MP3' | 'PCM',
-  rate?: number,
-  pitch?: number,
-  language?: string,
-  voice?: string,
-  gender?: 'MALE' | 'FEMALE'
+  platform?: 'GOOGLE' | 'WEBSPEECH';
+  encoding?: 'OPUS' | 'MP3' | 'PCM';
+  rate?: number;
+  pitch?: number;
+  language?: string;
+  voice?: string;
+  gender?: 'MALE' | 'FEMALE';
 }
 
 const speech = new Speech();
@@ -31,8 +31,8 @@ speech.init({
   }
 }).catch(error => console.error('An error occured while initializing', error));
 
-export const speak = async (text: string = '', options: ITTS = {}): Promise<string> => {
-  const filteredOptions: ITTS & { text: string } = Object.assign({}, { text: text }, options);
+export const speak = async (text = '', options: ITTS = {}): Promise<string> => {
+  const filteredOptions: ITTS & { text: string } = { ...{ text }, ...options };
 
   // Remove bad parameters
   Object.keys(filteredOptions).forEach(key => {
@@ -63,9 +63,9 @@ export const speak = async (text: string = '', options: ITTS = {}): Promise<stri
 // const text = speech.hasBrowserSupport();
 
 const webSpeech = async (text: string): Promise<string> => new Promise((resolve, reject) => {
-  speech.speak({ text: text, queue: false }).catch(error => {
+  speech.speak({ text, queue: false }).catch(error => {
     console.error('Web speech error', error);
     reject(`Web speech error: ${error}`);
   });
-  resolve('Web speech done')
+  resolve('Web speech done');
 });
