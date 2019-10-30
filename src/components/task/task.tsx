@@ -78,10 +78,10 @@ const Task = props => {
 
       if (correctKeyPressed) {
         handleCorrectInput(event.key).then(() => {
-          if(correctAudioElement.current) {
+          if (correctAudioElement.current) {
             correctAudioElement.current.setAttribute('currentTime', '0');
             const p = correctAudioElement.current.play().then(() => {
-              if(p !== undefined) {
+              if (p !== undefined) {
                 if (currentPos < task.text.length - 1) {
                   speak(task.text[currentPos + 1], textToSpeak).then(textURL => {
                     if (textURL !== '' && audioElement.current) {
@@ -89,7 +89,7 @@ const Task = props => {
                       audioElement.current.setAttribute('src', '');
                       audioElement.current = new Audio(textURL)
 
-                      const promise = audioElement.current.play().then( data => {
+                      const promise = audioElement.current.play().then(data => {
                         if (promise === undefined) {
                           console.error('Play correct text promise undefined');
                         }
@@ -115,7 +115,7 @@ const Task = props => {
                 if (p !== undefined && wrongAudioElement.current) {
                   wrongAudioElement.current.setAttribute('currentTime', '0');
                   const promise = wrongAudioElement.current.play().catch(error => console.error('playAudio error', error));
-                  if(promise === undefined) {
+                  if (promise === undefined) {
                     console.error('Play wrong audio promise undefined');
                   }
                 }

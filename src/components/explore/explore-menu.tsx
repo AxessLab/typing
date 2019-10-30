@@ -68,15 +68,11 @@ const ExploreMenu = (props: IProps) => {
     speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
-  const handleFocus = (e: React.FocusEvent<HTMLLIElement>) => {
-    e.preventDefault();
-    const id = e.currentTarget.dataset.id ? e.currentTarget.dataset.id : 0;
+  const handleFocus = (id: number) => {
     speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url))
   }
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    const id = e.currentTarget.dataset.id ? e.currentTarget.dataset.id : 0;
+  const handleClick = (id: number) => {
     setCharacter(id);
     props.history.push('/explore/play');
   }
@@ -99,9 +95,9 @@ const ExploreMenu = (props: IProps) => {
                 <MenuItem
                   key={index}
                   className={classes.menuItem}
-                  onClick={handleClick}
+                  onClick={() => handleClick(character.id)}
                   data-id={character.id}
-                  onFocus={handleFocus}
+                  onFocus={() => handleFocus(character.id)}
                 >
                   <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
                   <span>

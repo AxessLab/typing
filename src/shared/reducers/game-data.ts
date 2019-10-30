@@ -22,13 +22,13 @@ const defaultCharacters: ReadonlyArray<IGameCharacter> = [
   {
     id: 0,
     name: 'Onzua',
-    description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
+    description: 'Gul med stora tänder, och tuppkam. Studsar snabbt med sin svans på tangenterna.',
     image: logo1
   },
   {
     id: 1,
     name: 'Fonsuai',
-    description: 'Gul med stora tänder, och tuppkam. Studsar snabbt med sin svans på tangenterna.',
+    description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
     image: logo2
   }
 ]
