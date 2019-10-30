@@ -7,15 +7,15 @@ export const ACTION_TYPES = {
 };
 
 export interface IGameState {
-  gameCharacters: ReadonlyArray<IGameCharacter>
-  gameCharacter: IGameCharacter
+  gameCharacters: ReadonlyArray<IGameCharacter>;
+  gameCharacter: IGameCharacter;
 }
 
 interface IGameCharacter {
-  id: number,
-  name: string,
-  description: string,
-  image: string
+  id: number;
+  name: string;
+  description: string;
+  image: string;
 }
 
 const defaultCharacters: ReadonlyArray<IGameCharacter> = [
@@ -31,12 +31,12 @@ const defaultCharacters: ReadonlyArray<IGameCharacter> = [
     description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
     image: logo2
   }
-]
+];
 
 const initialState: IGameState = {
   gameCharacters: defaultCharacters,
   gameCharacter: defaultCharacters[0]
-}
+};
 
 export default (state: IGameState = initialState, action: IAction): IGameState => {
   switch (action.type) {

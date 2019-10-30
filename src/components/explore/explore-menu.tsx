@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { playAudio } from '../audio/audio';
-import { IRootState } from 'shared/reducers';
-import { setCharacter } from 'shared/reducers/game-data';
+import { IRootState } from '../../shared/reducers';
+import { setCharacter } from '../../shared/reducers/game-data';
 import { Paper, MenuItem, MenuList, Typography, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       display: 'flex',
-      backgroundColor: 'rgba(255, 255, 255, 0)',
+      backgroundColor: 'rgba(255, 255, 255, 0)'
     },
     menuList: {
       '&:focus': {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
         border: '2px solid white'
       }
     }
-  }),
+  })
 );
 
 const mapStateToProps = (state: IRootState) => ({
@@ -50,7 +50,12 @@ export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: str
 
 const ExploreMenu = (props: IProps) => {
   const classes = useStyles();
-  const { gameCharacters, setCharacter } = props;
+  const {
+    gameCharacters
+  } = props;
+
+  const setCharacterAction = props.setCharacter;
+
   const headerText = 'Välj ninja';
   const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
@@ -69,13 +74,14 @@ const ExploreMenu = (props: IProps) => {
   }, [headerText, introText]);
 
   const handleFocus = (id: number) => {
-    speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url))
-  }
+    speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url));
+  };
 
   const handleClick = (id: number) => {
-    setCharacter(id);
+    setCharacterAction(id);
     props.history.push('/explore/play');
-  }
+  };
+
   return (
     <div className={classes.root}>
       <Grid container alignItems="center" justify="center">
@@ -89,7 +95,7 @@ const ExploreMenu = (props: IProps) => {
             <MenuList
               ref={menuElement}
               className={classes.menuList}
-              aria-hidden={true}
+              aria-hidden
             >
               {gameCharacters.map((character, index) => (
                 <MenuItem
@@ -112,6 +118,6 @@ const ExploreMenu = (props: IProps) => {
       </Grid>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExploreMenu);

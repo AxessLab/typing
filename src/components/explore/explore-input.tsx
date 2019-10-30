@@ -2,23 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
-import { completed } from './explore.reducer';
 
 const mapStateToProps = (state: IRootState, ownProps) => ({
   isAnimating: state.explore.isAnimating,
   currentGameCharacter: state.game.gameCharacter,
   handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation,
+  handleAnimation: ownProps.handleAnimation
 });
 
-const mapDispatchToProps = {
-  completed
-};
-
 type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
 
-export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+export type IProps = StateProps & RouteComponentProps<{ url: string }>;
 
 const ExploreInput = (props: IProps) => {
   const {
@@ -34,7 +28,7 @@ const ExploreInput = (props: IProps) => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
-  })
+  });
 
   return (
     <div
@@ -51,6 +45,6 @@ const ExploreInput = (props: IProps) => {
         />
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps)(ExploreInput);

@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       marginTop: theme.spacing(8),
       alignItems: 'center'
-    },
-  }),
+    }
+  })
 );
 
 const mapStateToProps = (state: IRootState) => ({
@@ -40,12 +40,13 @@ const Explore = props => {
   const classes = useStyles();
   const {
     explore,
-    completed,
-    increaseType,
-    startAnimate,
-    stopAnimate,
     currentGameCharacter
   } = props;
+
+  const completedAction = props.completed;
+  const increaseTypeAction = props.increaseType;
+  const startAnimateAction = props.startAnimate;
+  const stopAnimateAction = props.stopAnimate;
 
   const KEYROWS = {
     ROW_ONE: 'ROW_ONE',
@@ -74,14 +75,14 @@ const Explore = props => {
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
       setIntroText('Bra jobbat! ' + currentGameCharacter.name + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
-      completed();
+      completedAction();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
     }
 
     return () => clearInterval(interval);
 
-  }, [explore.typeCount, timeCount, completed, currentGameCharacter]);
+  }, [explore.typeCount, timeCount, completedAction, currentGameCharacter]);
 
   useEffect(() => {
     if (audioEl && audioEl.current) {
@@ -92,27 +93,25 @@ const Explore = props => {
         const promise = audioEl.current.play();
 
         if (promise !== undefined) {
-          promise.catch(error => console.log("Audio error", error));
+          promise.catch(error => console.error('Audio error', error));
         }
       }
     }
   }, [audioEl]);
 
-  const getKeyRow = (key : number) => {
+  const getKeyRow = (key: number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
       return KEYROWS.ROW_ONE;
-    }
-    else if ([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(x => x === key)) {
+    } else if ([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(x => x === key)) {
       return KEYROWS.ROW_ZERO;
-    }
-    else if ([90, 88, 67, 86, 66, 78, 77, 188, 190].some(x => x === key)) {
+    } else if ([90, 88, 67, 86, 66, 78, 77, 188, 190].some(x => x === key)) {
       return KEYROWS.ROW_MINUS_ONE;
     }
     return null;
-  }
+  };
 
   const handleKey = (event: React.KeyboardEvent) => {
-    increaseType();
+    increaseTypeAction();
 
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
       switch (getKeyRow(event.keyCode)) {
@@ -125,10 +124,12 @@ const Explore = props => {
         case KEYROWS.ROW_MINUS_ONE:
           playAudio(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
           break;
+        default:
+          break;
       }
-      startAnimate();
+      startAnimateAction();
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -141,7 +142,7 @@ const Explore = props => {
         <Grid item xs={12} lg={3}>
           {!explore.completed ?
             <>
-              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimate} />
+              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimateAction} />
               <audio id="player" ref={audio} src="" autoPlay />
             </>
             :
@@ -159,7 +160,7 @@ const Explore = props => {
         <audio
           ref={audioEl}
           src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
-          autoPlay={true}
+          autoPlay
           loop
         >
           Your browser does not support the audio element.
@@ -167,6 +168,6 @@ const Explore = props => {
       </Grid>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Explore);

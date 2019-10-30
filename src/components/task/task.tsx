@@ -1,5 +1,4 @@
 import './task.scss';
-
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
@@ -11,7 +10,7 @@ const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   correctInput: task.correctInput,
-  wrongInput: task.wrongInput,
+  wrongInput: task.wrongInput
 });
 
 const mapDispatchToProps = {
@@ -29,17 +28,19 @@ const Task = props => {
   const {
     task,
     currentPos,
-    handleCorrectInput,
-    handleWrongInput,
     correctInput,
-    wrongInput,
-    completed
+    wrongInput
   } = props;
 
   const inputElement = useRef<HTMLDivElement | null>(null);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
   const correctAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
   const wrongAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
+
+  // Action declaration to avoid shadowing
+  const handleCorrectInputAction = props.handleCorrectInput;
+  const handleWrongInputAction = props.handleWrongInput;
+  const completedAction = props.completed;
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
@@ -55,7 +56,7 @@ const Task = props => {
       !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)
     ) {
       audioElement.current.pause();
-      audioElement.current.setAttribute('src','');
+      audioElement.current.setAttribute('src', '');
       audioElement.current = new Audio();
       correctAudioElement.current.load();
       wrongAudioElement.current.load();
@@ -72,12 +73,12 @@ const Task = props => {
       };
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
-        completed(task);
+        completedAction(task);
         props.history.push('/summary');
       }
 
       if (correctKeyPressed) {
-        handleCorrectInput(event.key).then(() => {
+        handleCorrectInputAction(event.key).then(() => {
           if (correctAudioElement.current) {
             correctAudioElement.current.setAttribute('currentTime', '0');
             const p = correctAudioElement.current.play().then(() => {
@@ -87,7 +88,7 @@ const Task = props => {
                     if (textURL !== '' && audioElement.current) {
                       audioElement.current.pause();
                       audioElement.current.setAttribute('src', '');
-                      audioElement.current = new Audio(textURL)
+                      audioElement.current = new Audio(textURL);
 
                       const promise = audioElement.current.play().then(data => {
                         if (promise === undefined) {
@@ -97,15 +98,14 @@ const Task = props => {
                     }
                   }).catch(error => console.error('playAudio error', error));
                  }
-               }
-               else {
+               } else {
                  console.error('Play correct audio promise undefined');
                }
             }).catch(error => console.error('playAudio error', error));
           }
         });
        } else {
-        handleWrongInput(event.key);
+        handleWrongInputAction(event.key);
         speak(event.key, textToSpeak).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
@@ -118,17 +118,16 @@ const Task = props => {
                   if (promise === undefined) {
                     console.error('Play wrong audio promise undefined');
                   }
-                }
-                else {
+                } else {
                   console.error('Play wrong audio text promise undefined');
                 }
               }).catch(error => console.error('playAudio error', error));
           }
 
         });
+      }
     }
-  }
-  }
+  };
 
   return (
     <div className="task pad-top-60">
@@ -137,7 +136,7 @@ const Task = props => {
         <div className="col-12">
           <h1>Typing in the Dark</h1>
         </div>
-        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
+        <div className={'col-2 task__value-to-type task__value-to-type' + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
           <span>{ task.text.charAt(currentPos) }</span>
         </div>
         <div className="col-10 task__remaining-text">
@@ -150,7 +149,7 @@ const Task = props => {
             ref={inputElement}
             tabIndex={0}
             onKeyUp={handleKey}>
-              <span className={"task__typed-text" +  (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
+              <span className={'task__typed-text' + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
                 { task.typedText }
               </span>
           </div>
@@ -162,6 +161,6 @@ const Task = props => {
       </div>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Task);

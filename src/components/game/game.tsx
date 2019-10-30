@@ -34,6 +34,6 @@ const Game = () => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default Game;

@@ -1,11 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-
 import { IRootState } from '../../shared/reducers';
-
 import { playAudio } from '../audio/audio';
 import { speak } from '../tts/tts';
-
 import './summary.scss';
 
 const mapStateToProps = ({ task }: IRootState) => ({
@@ -32,8 +29,7 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
       }).catch(error => console.error('speak error', error));
 
       setFeedbackText(`Bra Jobbat! Du hade bara ${taskErrors} fel!`);
-    }
-    else {
+    } else {
       speak('Resultat. Jättebra jobbat! Felfri.').then(url => {
         playAudio(audioElement, url).then(() => {
           playAudio(audioElement, '/assets/done.mp3')
@@ -54,6 +50,6 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps)(Summmary);

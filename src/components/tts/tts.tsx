@@ -3,18 +3,17 @@ import Speech from 'speak-tts';
 let isWebspeechLoaded = false;
 
 export interface ITTS {
-    lang: string,
-    type: string,
-    rate: string,
-    pitch: string
+    lang: string;
+    type: string;
+    rate: string;
+    pitch: string;
 }
-
 
 export const TTS_PLATTFORM = {
   GOOGLE: 'tts/GOOGLE',
   MARY: 'tts/MARY',
   WEBSPEECH: 'tts/WEBSPEECH'
-}
+};
 
 const defaultValue: ITTS = {
   type: TTS_PLATTFORM.GOOGLE,
@@ -26,13 +25,13 @@ const speech = new Speech();
 
 speech.init({
   volume: 0.5,
-  lang: "sv-SE",
+  lang: 'sv-SE',
   rate: 1,
   pitch: 1,
   listeners: {
     onvoiceschanged: voices => {
       voices.forEach(voice => {
-        if (voice.lang === 'sv-SE' || voice.lang === 'sv_SE') {
+        if (voice.lang === 'sv-SE' || voice.lang === 'sv_SE') {
           speech.setVoice(voice.name);
           isWebspeechLoaded = true;
         }
@@ -42,8 +41,7 @@ speech.init({
 }).catch(error => console.error('An error occured while initializing', error));
 
 export const speak = async (text: string, tts: ITTS = defaultValue): Promise<string> => {
-  console.info(tts);
-  let requestURL: string = '';
+  let requestURL = '';
 
   switch (tts.type) {
     case TTS_PLATTFORM.GOOGLE:
@@ -54,7 +52,7 @@ export const speak = async (text: string, tts: ITTS = defaultValue): Promise<str
       return Promise.resolve(requestURL);
     case TTS_PLATTFORM.WEBSPEECH:
       if (isWebspeechLoaded) {
-        //speech.cancel();
+        // speech.cancel();
         await webSpeech(text).then(() => {
           return Promise.resolve(requestURL);
         });
@@ -67,20 +65,17 @@ export const speak = async (text: string, tts: ITTS = defaultValue): Promise<str
       return Promise.resolve(requestURL);
   }
   return Promise.reject('');
-}
+};
 
 // TODO: Check browser support
 // const text = speech.hasBrowserSupport();
-
-const webSpeech = async (text: string): Promise<string>  => {
-  return new Promise((resolve, reject) => {
-    speech.speak({
-      text: text,
-      queue: false
-    }).catch(error => {
-      console.error('webSpeech, an error occurred', error);
-      reject(`webSpeech error: ${error}`);
-    });
-    resolve('webspeech done')
+const webSpeech = async (text: string): Promise<string> => new Promise((resolve, reject) => {
+  speech.speak({
+    text: ('{text}'),
+    queue: false
+  }).catch(error => {
+    console.error('webSpeech, an error occurred', error);
+    reject(`webSpeech error: ${error}`);
   });
-}
+  resolve('webspeech done');
+});

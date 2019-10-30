@@ -1,5 +1,5 @@
-export const playAudio = async (audio, url: string, rate: number = 1): Promise<string> => {
-  if (url == null || url === '' || audio == null || audio.current == null) {
+export const playAudio = async (audio, url: string, rate = 1): Promise<string> => {
+  if (url == null || url === '' || audio == null || audio.current == null) {
     return Promise.reject(`playAudio URL: ${url} audio: ${audio}`);
   } else {
     return new Promise((resolve, reject) => {
@@ -16,4 +16,4 @@ export const playAudio = async (audio, url: string, rate: number = 1): Promise<s
       }
     });
   }
-}
+};
