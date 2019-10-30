@@ -40,8 +40,6 @@ const ExploreInput = (props: IProps) => {
         <img
           src={currentGameCharacter.image}
           alt={currentGameCharacter.name}
-          onAnimationEnd={handleAnimation}
-          className={isAnimating ? 'explore__character-large' : ''}
         />
     </div>
   );
