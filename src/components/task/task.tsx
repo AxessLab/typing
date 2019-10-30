@@ -4,13 +4,16 @@ import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
+<<<<<<< HEAD
 
 import { playAudio } from '../audio/audio';
 import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from 'config/audio';
 
+=======
+import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+>>>>>>> b822be6821f6e058177d8c47220030634dae844a
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
@@ -43,19 +46,25 @@ const Task = props => {
 
   const inputElement = useRef<HTMLDivElement | null>(null);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const correctAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const wrongAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
-  })
+  });
 
   const handleKey = (event: React.KeyboardEvent): void => {
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
+      audioElement.current.pause();
+      audioElement.current.setAttribute('src','');
+      audioElement.current = new Audio();
+      correctAudioElement.current.load();
+      wrongAudioElement.current.load();
 
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
-
       const textToSpeak: ITTS = {
         text: event.key,
         rate: 2
@@ -76,43 +85,66 @@ const Task = props => {
       }
 
       if (correctKeyPressed) {
-        handleCorrectInput(event.key);
-        // const startTime = Date.now();
+        handleCorrectInput(event.key).then(() => {
+          correctAudioElement.current.setAttribute('currentTime','0');
 
-        playAudio(audioElement, 'assets/correct.mp3', 2).then(() => {
-          if (currentPos < task.text.length - 1) {
-            speak(nextTextToSpeak).then(url => {
-              playAudio(audioElement, url, 2).then(() => {
+          const p = correctAudioElement.current.play().then(() => {
+            if(p !== undefined) {
+              if (currentPos < task.text.length - 1) {
+                speak(nextTextToSpeak).then(textURL => {
+                  if (textURL !== '') {
+                    audioElement.current.pause();
+                    audioElement.current.setAttribute('src', '');
+                    audioElement.current = new Audio(textURL)
 
-                // const endTime = Date.now();
-                // const timeDiff = endTime - startTime;
-                // Leaving this in code for now, since benchmarking is ongoing
-                // console.log(`Correct feedback for character to write and next character, took ${timeDiff} ms.`);
-
-              }).catch(error => console.error('playAudio error', error));
-            }).catch(error => console.error('speak error', error));
-          }
-        }).catch(error => console.error('playAudio error', error));
-      } else {
-        handleWrongInput(event.key);
-
-        speak(textToSpeak).then(text => {
-          playAudio(audioElement, text, 2).then(() => {
-            playAudio(audioElement, assetBaseUrl + 'wrongsound.wav', 2)
-              .catch(error => console.error('playAudio error', error));
+                    const promise = audioElement.current.play().then( data => {
+                      if (promise === undefined) {
+                        console.error('Play correct text promise undefined');
+                      }
+                    }).catch(error => console.error('play error ', error));
+                  }
+                }).catch(error => console.error('playAudio error', error));
+               }
+             }
+             else {
+               console.error('Play correct audio promise undefined');
+             }
           }).catch(error => console.error('playAudio error', error));
-         }).catch(error => console.error('speak error', error));
-      }
+        });
+
+       } else {
+        handleWrongInput(event.key);
+        speak(textToSpeak).then(textURL => {
+            if (textURL !== '') {
+              audioElement.current.pause();
+              audioElement.current.setAttribute('src', '');
+              audioElement.current = new Audio(textURL);
+              const p = audioElement.current.play().then(() => {
+                if (p !== undefined) {
+                  wrongAudioElement.current.setAttribute('currentTime', '0');
+                  const promise = wrongAudioElement.current.play().catch(error => console.error('playAudio error', error));
+                  if(promise === undefined) {
+                    console.error('Play wrong audio promise undefined');
+                  }
+                }
+                else {
+                  console.error('Play wrong audio text promise undefined');
+                }
+              }).catch(error => console.error('playAudio error', error));
+          }
+        });
     }
+  }
   }
 
   return (
     <div className="task pad-top-60">
       <div className="flex-m flex-wrap-m">
+      <React.StrictMode>
         <div className="col-12">
           <h1>Typing in the Dark</h1>
         </div>
-        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
+        <div className={"col-2 task__value-to-type task__value-to-type" + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
           <span>{ task.text.charAt(currentPos) }</span>
         </div>
         <div className="col-10 task__remaining-text">
@@ -130,7 +162,10 @@ const Task = props => {
               </span>
           </div>
           <audio id="player" ref={audioElement} src="" autoPlay />
-        </div>
+          <audio id="correct" ref={correctAudioElement} src="/assets/correct.mp3" preload="true" />
+          <audio id="wrong" ref={wrongAudioElement} src="/assets/wrongsound.wav" preload="true" />
+         </div>
+        </React.StrictMode>
       </div>
     </div>
   );
