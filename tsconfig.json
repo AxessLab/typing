@@ -22,7 +22,8 @@
     "noEmit": true,
     "baseUrl": "src",
     "importHelpers": true,
-    "strict": false
+    "strict": false,
+    "strictNullChecks": true
   },
   "include": [
     "src",

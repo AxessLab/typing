@@ -1,10 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-
 import { IRootState } from '../../shared/reducers';
-
 import { playAudio } from '../audio/audio';
-import { speak, ITTS } from '../tts/tts';
+import { speak } from '../tts/tts';
 import { assetBaseUrl } from 'config/audio';
 
 import './summary.scss';
@@ -22,16 +20,10 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
   const [feedbackText, setFeedbackText] = useState('');
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const textToSpeak: ITTS = {
-    text: ''
-  };
-
   useEffect(() => {
     // TODO: useEffect runs twice, for some reason...
     if (taskErrors > 0) {
-      textToSpeak.text = `Resultat. Bra jobbat! Du hade bara ${taskErrors} fel.`;
-
-      speak(textToSpeak).then(url => {
+      speak(`Resultat. Bra jobbat! Du hade bara ${taskErrors} fel.`).then(url => {
         playAudio(audioElement, url).then(() => {
           playAudio(audioElement, assetBaseUrl + 'done.mp3')
             .catch(error => console.error('playAudio error', error));
@@ -39,11 +31,8 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
       }).catch(error => console.error('speak error', error));
 
       setFeedbackText(`Bra Jobbat! Du hade bara ${taskErrors} fel!`);
-    }
-    else {
-      textToSpeak.text = 'Resultat. Jättebra jobbat! Felfri.';
-
-      speak(textToSpeak).then(url => {
+    } else {
+      speak('Resultat. Jättebra jobbat! Felfri.').then(url => {
         playAudio(audioElement, url).then(() => {
           playAudio(audioElement, assetBaseUrl + 'done.mp3')
             .catch(error => console.error('playAudio error', error));
@@ -52,7 +41,7 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
 
       setFeedbackText('Jättebra jobbat! Felfri!');
     }
-  }, [feedbackText, taskErrors, textToSpeak]);
+  }, [feedbackText, taskErrors]);
 
   return (
     <div className="flex-m flex-center pad-top-60-m pad-top-30">
@@ -63,6 +52,6 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps)(Summmary);

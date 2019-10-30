@@ -1,59 +1,123 @@
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { speak, ITTS } from '../tts/tts';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
+import { speak } from '../tts/tts';
 import { playAudio } from '../audio/audio';
+import { IRootState } from '../../shared/reducers';
+import { setCharacter } from '../../shared/reducers/game-data';
+import { Paper, MenuItem, MenuList, Typography, Grid } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-// Images
-import logo1 from '../../static/images/Fosauri.svg';
-import logo2 from '../../static/images/Onzua.svg';
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    paper: {
+      display: 'flex',
+      backgroundColor: 'rgba(255, 255, 255, 0)'
+    },
+    menuList: {
+      '&:focus': {
+        outline: 'none'
+      }
+    },
+    menuItem: {
+      whiteSpace: 'normal',
+      textAlign: 'center',
+      '&:focus': {
+        border: '2px solid white'
+      }
+    }
+  })
+);
 
+const mapStateToProps = (state: IRootState) => ({
+  gameCharacters: state.game.gameCharacters
+});
 
-const ExploreMenu = () => {
+const mapDispatchToProps = {
+  setCharacter
+};
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+
+const ExploreMenu = (props: IProps) => {
+  const classes = useStyles();
+  const {
+    gameCharacters
+  } = props;
+
+  const setCharacterAction = props.setCharacter;
+
   const headerText = 'Välj ninja';
   const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const handleKey = (event: React.KeyboardEvent) => {
-    if (event.keyCode === 38 || event.keyCode === 40) {
-      // TODO: Keyboard navigation in menu
-    }
-  }
+  const menuElement = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
-    const textToSpeak: ITTS = {
-      text: headerText + ' ' + introText
-    };
+    if (menuElement && menuElement.current) {
+      menuElement.current.focus();
+    }
+  });
 
-    speak(textToSpeak).then(url => playAudio(audioElementIntro, url));
+  useEffect(() => {
+    speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
+  const handleFocus = (id: number) => {
+    speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url));
+  };
+
+  const handleClick = (id: number) => {
+    setCharacterAction(id);
+    props.history.push('/explore/play');
+  };
+
   return (
-    <div className="container pad-top-60 text-center">
-      <h1>{headerText}</h1>
-      <p>{introText}</p>
-      <audio id="intro-audio" ref={audioElementIntro} src="" />
-      <div className="flex-m flex-wrap-m flex-center-m pad-top-10">
-        <div className="explore__menu col-2-l col-12 pad-top-30">
-          <ul
-            tabIndex={-1}
-            role="menu"
-            onKeyUp={handleKey}>
-              <li role="none">
-                <Link role="menuitem" to="/explore/1">
-                  <img src={logo1} alt="Fosuari character" className="menu" />
-                </Link>
-              </li>
-              <li role="none">
-                <Link role="menuitem" to="/explore/2">
-                  <img src={logo2} alt="Onzua character" className="pad-top-20 menu" />
-                </Link>
-              </li>
-          </ul>
-        </div>
-      </div>
+    <div className={classes.root}>
+      <Grid container alignItems="center" justify="center">
+        <Grid item xs={12} lg={12}>
+          <Typography variant="h1" align="center" gutterBottom>{headerText}</Typography>
+          <Typography variant="body2" align="center">{introText}</Typography>
+          <audio id="intro-audio" ref={audioElementIntro} src="" />
+        </Grid>
+        <Grid item xs={12} lg={5}>
+          <Paper className={classes.paper} elevation={0}>
+            <MenuList
+              ref={menuElement}
+              className={classes.menuList}
+              aria-hidden
+            >
+              {gameCharacters.map((character, index) => (
+                <MenuItem
+                  key={index}
+                  className={classes.menuItem}
+                  onClick={() => handleClick(character.id)}
+                  data-id={character.id}
+                  onFocus={() => handleFocus(character.id)}
+                >
+                  <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
+                  <span>
+                    <Typography variant="h2">{character.name}</Typography>
+                    <Typography variant="body2">{character.description}</Typography>
+                  </span>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
-}
+};
 
-export default ExploreMenu;
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreMenu);
