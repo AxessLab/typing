@@ -151,7 +151,7 @@ const Task = props => {
           </div>
           <audio id="player" ref={audioElement} src="" autoPlay />
           <audio id="correct" ref={correctAudioElement} src={assetBaseUrl + 'correct.mp3'} preload="true" />
-          <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.wav'} preload="true" />
+          <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.mp3'} preload="true" />
          </div>
         </React.StrictMode>
       </div>

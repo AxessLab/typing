@@ -121,10 +121,10 @@ const Explore = props => {
           playAudio(audio, assetBaseUrl + '131142__flameeagle__block.mp3');
           break;
         case KEYROWS.ROW_ZERO:
-          playAudio(audio, assetBaseUrl + '471147__worldmaxter__sword-slide.wav');
+          playAudio(audio, assetBaseUrl + '471147__worldmaxter__sword-slide.mp3');
           break;
         case KEYROWS.ROW_MINUS_ONE:
-          playAudio(audio, assetBaseUrl + '411462__thebuilder15__bubble-pop.wav');
+          playAudio(audio, assetBaseUrl + '411462__thebuilder15__bubble-pop.mp3');
           break;
         default:
           break;
@@ -161,7 +161,7 @@ const Explore = props => {
         </Grid>
         <audio
           ref={audioEl}
-          src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.wav'}
+          src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.mp3'}
           autoPlay
           loop
         >
