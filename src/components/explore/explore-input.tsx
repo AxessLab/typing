@@ -1,13 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
 const mapStateToProps = (state: IRootState, ownProps) => ({
-  isAnimating: state.explore.isAnimating,
   currentGameCharacter: state.game.gameCharacter,
-  handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation
+  handleKey: ownProps.handleKey
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -16,11 +14,11 @@ export type IProps = StateProps & RouteComponentProps<{ url: string }>;
 
 const ExploreInput = (props: IProps) => {
   const {
-    isAnimating,
     handleKey,
-    handleAnimation,
     currentGameCharacter
   } = props;
+
+  const [ className, setClassNames ] = useState('');
 
   const inputElement = useRef<HTMLDivElement | null>(null);
 
@@ -30,19 +28,28 @@ const ExploreInput = (props: IProps) => {
     }
   });
 
+  const handleKeyUp = (event: React.KeyboardEvent) => {
+    setClassNames(className ? '' : 'explore__character-animation');
+    handleKey(event);
+  };
+
+  const onAnimationEnd = () => {
+    setClassNames('');
+  };
+
   return (
     <div
       className="explore__input"
       role="application"
       ref={inputElement}
       tabIndex={0}
-      onKeyDown={handleKey}>
+      onKeyUp={(event: React.KeyboardEvent) => handleKeyUp(event)}>
         <img
           src={currentGameCharacter.image}
           alt={currentGameCharacter.name}
-          onAnimationEnd={handleAnimation}
-          className={isAnimating ? 'explore__character-large' : ''}
-        />
+          onAnimationEnd={onAnimationEnd}
+          className={className}
+          />
     </div>
   );
 };

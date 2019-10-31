@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
-import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
+import { completed, increaseType } from './explore.reducer';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
 import './explore.scss';
@@ -26,9 +26,7 @@ const mapStateToProps = (state: IRootState) => ({
 
 const mapDispatchToProps = {
   completed,
-  increaseType,
-  startAnimate,
-  stopAnimate
+  increaseType
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -45,8 +43,6 @@ const Explore = props => {
 
   const completedAction = props.completed;
   const increaseTypeAction = props.increaseType;
-  const startAnimateAction = props.startAnimate;
-  const stopAnimateAction = props.stopAnimate;
 
   const KEYROWS = {
     ROW_ONE: 'ROW_ONE',
@@ -129,7 +125,6 @@ const Explore = props => {
       audioElement2.current.setAttribute('currentTime', '0');
       audioElement3.current.setAttribute('currentTime', '0');
 
-
       if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
         switch (getKeyRow(event.keyCode)) {
           case KEYROWS.ROW_ONE:
@@ -156,7 +151,6 @@ const Explore = props => {
           default:
             break;
         }
-        startAnimateAction();
       }
     }
   };
@@ -172,7 +166,7 @@ const Explore = props => {
         <Grid item xs={12} sm={3} md={3} lg={3}>
           {!explore.completed ?
             <>
-              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimateAction} />
+              <ExploreInput handleKey={handleKey} />
               <audio id="player" ref={audio} src="" autoPlay />
             </>
             :
