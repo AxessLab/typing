@@ -1,27 +1,18 @@
 import Speech from 'speak-tts';
-
-let isWebspeechLoaded = false;
+import { ttsEndpointUrl } from '../../config/audio';
 
 export interface ITTS {
-    lang: string;
-    type: string;
-    rate: string;
-    pitch: string;
+  platform?: 'GOOGLE' | 'WEBSPEECH';
+  encoding?: 'OPUS' | 'MP3' | 'PCM';
+  rate?: number;
+  pitch?: number;
+  language?: string;
+  voice?: string;
+  gender?: 'MALE' | 'FEMALE';
 }
 
-export const TTS_PLATTFORM = {
-  GOOGLE: 'tts/GOOGLE',
-  MARY: 'tts/MARY',
-  WEBSPEECH: 'tts/WEBSPEECH'
-};
-
-const defaultValue: ITTS = {
-  type: TTS_PLATTFORM.GOOGLE,
-  lang: 'sv-SE',
-  pitch: '',
-  rate: '1.0'
-};
 const speech = new Speech();
+let isWebspeechLoaded = false;
 
 speech.init({
   volume: 0.5,
@@ -40,42 +31,41 @@ speech.init({
   }
 }).catch(error => console.error('An error occured while initializing', error));
 
-export const speak = async (text: string, tts: ITTS = defaultValue): Promise<string> => {
-  let requestURL = '';
+export const speak = async (text = '', options: ITTS = {}): Promise<string> => {
+  const parameters: ITTS & { text: string } = { text, ...options };
 
-  switch (tts.type) {
-    case TTS_PLATTFORM.GOOGLE:
-      requestURL = `https://webbkonversation.se/googleCloudTTS.php?tts_txt=${encodeURIComponent(text)}&tts_rate=${encodeURIComponent(tts.rate)}&tts_pitch=${tts.pitch}`;
-      return Promise.resolve(requestURL);
-    case TTS_PLATTFORM.MARY:
-      requestURL = `http://webbkonversation.se:59125/process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=${encodeURIComponent(text)}%0A&OUTPUT_TEXT=&VOICE_SELECTIONS=stts_sv_nst-hsmm%20sv%20male%20hmm&AUDIO_OUT=WAVE_FILE&LOCALE=sv&VOICE=stts_sv_nst-hsmm&AUDIO=WAVE_FILE`;
-      return Promise.resolve(requestURL);
-    case TTS_PLATTFORM.WEBSPEECH:
-      if (isWebspeechLoaded) {
-        // speech.cancel();
-        await webSpeech(text).then(() => {
-          return Promise.resolve(requestURL);
-        });
-      } else {
-        return Promise.reject('Webspeech not ready');
-      }
-      break;
-    default:
-      requestURL = `/assets/error${tts.lang}.mp3`;
-      return Promise.resolve(requestURL);
+  // Remove bad parameters
+  Object.keys(parameters).forEach(key => {
+    if (['', null, undefined].some(badValue => parameters[key] === badValue)) delete parameters[key];
+  });
+
+  // Return URL without parameters if there are none
+  if (!Object.keys(parameters)) return Promise.resolve(ttsEndpointUrl);
+
+  if (!parameters.platform || parameters.platform === 'GOOGLE') {
+    return Promise.resolve(ttsEndpointUrl + '?' +
+      Object.keys(parameters).map(key => `${key}=${encodeURIComponent(parameters[key])}`).join('&')
+    );
+  } else {
+    if (isWebspeechLoaded) {
+      // speech.cancel();
+      // TODO: Set language, rate, and pitch
+      await webSpeech(text).then(() => Promise.resolve(''));
+    } else {
+      return Promise.reject('Web speech not ready');
+    }
   }
+
   return Promise.reject('');
 };
 
 // TODO: Check browser support
 // const text = speech.hasBrowserSupport();
+
 const webSpeech = async (text: string): Promise<string> => new Promise((resolve, reject) => {
-  speech.speak({
-    text: ('{text}'),
-    queue: false
-  }).catch(error => {
-    console.error('webSpeech, an error occurred', error);
-    reject(`webSpeech error: ${error}`);
+  speech.speak({ text, queue: false }).catch(error => {
+    console.error('Web speech error', error);
+    reject(`Web speech error: ${error}`);
   });
-  resolve('webspeech done');
+  resolve('Web speech done');
 });

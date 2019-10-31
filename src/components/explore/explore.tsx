@@ -4,6 +4,7 @@ import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { completed, increaseType } from './explore.reducer';
+import { assetBaseUrl } from '../../config/audio';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
 import './explore.scss';
@@ -183,15 +184,15 @@ const Explore = props => {
         </Grid>
         <audio
           ref={audioEl}
-          src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+          src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.mp3'}
           autoPlay
           loop
         >
           Your browser does not support the audio element.
         </audio>
-        <audio ref={audioElement1} src="/assets/131142__flameeagle__block.mp3" preload="true" />
-        <audio ref={audioElement2} src="/assets/471147__worldmaxter__sword-slide.wav" preload="true" />
-        <audio ref={audioElement3} src="/assets/471147__worldmaxter__sword-slide.wav" preload="true" />
+        <audio ref={audioElement1} src={assetBaseUrl + '131142__flameeagle__block.mp3'} preload="true" />
+        <audio ref={audioElement2} src={assetBaseUrl + '471147__worldmaxter__sword-slide.mp3'} preload="true" />
+        <audio ref={audioElement3} src={assetBaseUrl + '411462__thebuilder15__bubble-pop.mp3'} preload="true" />
       </Grid>
     </div>
   );
