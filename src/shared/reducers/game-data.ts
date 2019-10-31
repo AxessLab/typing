@@ -1,23 +1,49 @@
 import { IAction } from './index';
+import logo1 from '../../static/images/Fosauri.svg';
+import logo2 from '../../static/images/Onzua.svg';
 
 export const ACTION_TYPES = {
   SET_CHARACTER: 'game/SET_CHARACTER'
 };
 
-const initialState = {
-  character: '',
-  inProduction: true
-};
+export interface IGameState {
+  gameCharacters: ReadonlyArray<IGameCharacter>;
+  gameCharacter: IGameCharacter;
+}
 
-export type IGameState = Readonly<typeof initialState>;
+interface IGameCharacter {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
+
+const defaultCharacters: ReadonlyArray<IGameCharacter> = [
+  {
+    id: 0,
+    name: 'Onzua',
+    description: 'Gul med stora tänder, och tuppkam. Studsar snabbt med sin svans på tangenterna.',
+    image: logo1
+  },
+  {
+    id: 1,
+    name: 'Fonsuai',
+    description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
+    image: logo2
+  }
+];
+
+const initialState: IGameState = {
+  gameCharacters: defaultCharacters,
+  gameCharacter: defaultCharacters[0]
+};
 
 export default (state: IGameState = initialState, action: IAction): IGameState => {
   switch (action.type) {
     case ACTION_TYPES.SET_CHARACTER: {
-      const { data } = action.payload;
       return {
         ...state,
-        character: data.name
+        gameCharacter: state.gameCharacters[action.payload]
       };
     }
     default:
@@ -25,7 +51,7 @@ export default (state: IGameState = initialState, action: IAction): IGameState =
   }
 };
 
-export const setCharacter = (name: string) => ({
+export const setCharacter = (id: number) => ({
   type: ACTION_TYPES.SET_CHARACTER,
-  payload: name
+  payload: id
 });
