@@ -32,19 +32,19 @@ speech.init({
 }).catch(error => console.error('An error occured while initializing', error));
 
 export const speak = async (text = '', options: ITTS = {}): Promise<string> => {
-  const filteredOptions: ITTS & { text: string } = { ...{ text }, ...options };
+  const parameters: ITTS & { text: string } = { text, ...options };
 
   // Remove bad parameters
-  Object.keys(filteredOptions).forEach(key => {
-    if (['', null, undefined].some(badValue => filteredOptions[key] === badValue)) delete filteredOptions[key];
+  Object.keys(parameters).forEach(key => {
+    if (['', null, undefined].some(badValue => parameters[key] === badValue)) delete parameters[key];
   });
 
   // Return URL without parameters if there are none
-  if (!Object.keys(filteredOptions)) return Promise.resolve(ttsEndpointUrl);
+  if (!Object.keys(parameters)) return Promise.resolve(ttsEndpointUrl);
 
-  if (!filteredOptions.platform || filteredOptions.platform === 'GOOGLE') {
+  if (!parameters.platform || parameters.platform === 'GOOGLE') {
     return Promise.resolve(ttsEndpointUrl + '?' +
-      Object.keys(filteredOptions).map(key => `${key}=${encodeURIComponent(filteredOptions[key])}`).join('&')
+      Object.keys(parameters).map(key => `${key}=${encodeURIComponent(parameters[key])}`).join('&')
     );
   } else {
     if (isWebspeechLoaded) {
