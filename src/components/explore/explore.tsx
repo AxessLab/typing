@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
+import { completed, increaseType } from './explore.reducer';
 import { assetBaseUrl } from '../../config/audio';
-
-import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
 import './explore.scss';
@@ -28,9 +27,7 @@ const mapStateToProps = (state: IRootState) => ({
 
 const mapDispatchToProps = {
   completed,
-  increaseType,
-  startAnimate,
-  stopAnimate
+  increaseType
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -47,14 +44,8 @@ const Explore = props => {
 
   const completedAction = props.completed;
   const increaseTypeAction = props.increaseType;
-  const startAnimateAction = props.startAnimate;
-  const stopAnimateAction = props.stopAnimate;
 
-  const KEYROWS = {
-    ROW_ONE: 'ROW_ONE',
-    ROW_ZERO: 'ROW_ZERO',
-    ROW_MINUS_ONE: 'ROW_MINUS_ONE'
-  };
+  enum KEYROW { ONE, ZERO, MINUS_ONE };
 
   const [timeCount, setTimeCount] = useState(0);
   const [headerText, setHeaderText] = useState('Träna din ninja');
@@ -63,9 +54,11 @@ const Explore = props => {
   const timeForExercise = 60;
   const maxInputs = 50;
 
-  const audioEl = useRef<HTMLAudioElement | null>(null);
-  const audio: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+  const audioElementMusic = useRef<HTMLAudioElement | null>(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
+
+  const [audioElement1, audioElement2, audioElement3]: React.MutableRefObject<HTMLMediaElement | null>[] = [useRef(null), useRef(null), useRef(null)];
+  const audioElements = [audioElement1, audioElement2, audioElement3];
 
   useEffect(() => {
     speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
@@ -76,7 +69,7 @@ const Explore = props => {
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
-      setIntroText('Bra jobbat! ' + currentGameCharacter.name + ' har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.');
+      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.`);
       completedAction();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -87,49 +80,50 @@ const Explore = props => {
   }, [explore.typeCount, timeCount, completedAction, currentGameCharacter]);
 
   useEffect(() => {
-    if (audioEl && audioEl.current) {
-      const isPlaying = !audioEl.current.paused;
+    if (audioElementMusic && audioElementMusic.current) {
+      const isPlaying = !audioElementMusic.current.paused;
 
       if (!isPlaying) {
-        audioEl.current.volume = 0.1;
-        const promise = audioEl.current.play();
+        audioElementMusic.current.volume = 0.1;
+        const promise = audioElementMusic.current.play();
 
         if (promise !== undefined) {
           promise.catch(error => console.error('Audio error', error));
         }
       }
     }
-  }, [audioEl]);
+  }, [audioElementMusic]);
+
+  useEffect(() => {
+    if (audioElement1.current !== null && audioElement2.current !== null && audioElement3.current !== null) {
+      audioElement1.current.load();
+      audioElement2.current.load();
+      audioElement3.current.load();
+    }
+  }, [audioElement1, audioElement2, audioElement3]);
 
   const getKeyRow = (key: number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
-      return KEYROWS.ROW_ONE;
+      return KEYROW.ONE;
     } else if ([65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222].some(x => x === key)) {
-      return KEYROWS.ROW_ZERO;
+      return KEYROW.ZERO;
     } else if ([90, 88, 67, 86, 66, 78, 77, 188, 190].some(x => x === key)) {
-      return KEYROWS.ROW_MINUS_ONE;
+      return KEYROW.MINUS_ONE;
     }
     return null;
   };
 
   const handleKey = (event: React.KeyboardEvent) => {
     increaseTypeAction();
+    if (audioElements.every(element => element.current)) {
+      audioElements.forEach(element => element.current!.setAttribute('currentTime', '0'));
 
-    if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
-      switch (getKeyRow(event.keyCode)) {
-        case KEYROWS.ROW_ONE:
-          playAudio(audio, assetBaseUrl + '131142__flameeagle__block.mp3');
-          break;
-        case KEYROWS.ROW_ZERO:
-          playAudio(audio, assetBaseUrl + '471147__worldmaxter__sword-slide.mp3');
-          break;
-        case KEYROWS.ROW_MINUS_ONE:
-          playAudio(audio, assetBaseUrl + '411462__thebuilder15__bubble-pop.mp3');
-          break;
-        default:
-          break;
+      const keyRow: KEYROW | null = getKeyRow(event.keyCode);
+
+      if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier) && keyRow !== null) {
+        const promise = audioElements[keyRow].current!.play().catch(error => console.error('play error ', error));
+        if (promise === undefined) console.error(`Play ${keyRow} correct text promise undefined`);
       }
-      startAnimateAction();
     }
   };
 
@@ -141,17 +135,14 @@ const Explore = props => {
           <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={12} sm={3} md={3} lg={3}>
           {!explore.completed ?
-            <>
-              <ExploreInput handleKey={handleKey} handleAnimation={stopAnimateAction} />
-              <audio id="player" ref={audio} src="" autoPlay />
-            </>
+            <ExploreInput handleKey={handleKey} />
             :
             <>
               <img
-              src={currentGameCharacter.image}
-              alt={currentGameCharacter.name}
+                src={currentGameCharacter.image}
+                alt={currentGameCharacter.name}
               />
               <Link to="/task" className="button">
                 Gå till nästa övning
@@ -159,14 +150,12 @@ const Explore = props => {
             </>
           }
         </Grid>
-        <audio
-          ref={audioEl}
-          src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.mp3'}
-          autoPlay
-          loop
-        >
+        <audio ref={audioElementMusic} src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.mp3'} autoPlay loop>
           Your browser does not support the audio element.
         </audio>
+        <audio ref={audioElements[0]} src={assetBaseUrl + '131142__flameeagle__block.mp3'} preload="true" />
+        <audio ref={audioElements[1]} src={assetBaseUrl + '471147__worldmaxter__sword-slide.mp3'} preload="true" />
+        <audio ref={audioElements[2]} src={assetBaseUrl + '411462__thebuilder15__bubble-pop.mp3'} preload="true" />
       </Grid>
     </div>
   );
