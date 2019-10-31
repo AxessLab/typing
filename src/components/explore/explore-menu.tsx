@@ -69,7 +69,7 @@ const ExploreMenu = (props: IProps) => {
     useRef<HTMLLIElement | null>(null),
     useRef<HTMLLIElement | null>(null)
   ];
-  const [ listIndex, setListIndex ] = useState(menuElements.length - 1);
+  const [ listIndex, setListIndex ] = useState(-1);
 
   useEffect(() => {
     if (menuElement && menuElement.current) {
@@ -91,8 +91,13 @@ const ExploreMenu = (props: IProps) => {
   };
 
   const handleKey = (event: React.KeyboardEvent) => {
-    if (event.keyCode === 38 || event.keyCode === 40) {
-      if (listIndex === menuElements.length - 1 && menuElements[0].current) {
+    if (event.keyCode === 13) {
+      if(listIndex >= 0) {
+        handleClick(listIndex);
+        props.history.push('/explore/play');
+      }
+    } else if (event.keyCode === 38 || event.keyCode === 40) {
+      if ((listIndex === menuElements.length - 1 || listIndex === -1) && menuElements[0].current) {
         menuElements[0].current.focus();
       } else {
         const element = menuElements[listIndex + 1].current;
