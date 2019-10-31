@@ -1,38 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 
-// Images
-import logo1 from '../../static/images/Fosauri.svg';
-import logo2 from '../../static/images/Onzua.svg';
-
-import { completed } from './explore.reducer';
-
-
-const mapStateToProps = ({ explore }: IRootState, ownProps) => ({
-  isAnimating: explore.isAnimating,
-  handleKey: ownProps.handleKey,
-  handleAnimation: ownProps.handleAnimation,
-  charId: ownProps.charId
+const mapStateToProps = (state: IRootState, ownProps) => ({
+  currentGameCharacter: state.game.gameCharacter,
+  handleKey: ownProps.handleKey
 });
 
-const mapDispatchToProps = {
-  completed
-};
-
 type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
 
-export type ITaskProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+export type IProps = StateProps & RouteComponentProps<{ url: string }>;
 
-const ExploreInput = (props: ITaskProps) => {
+const ExploreInput = (props: IProps) => {
   const {
-    isAnimating,
     handleKey,
-    handleAnimation,
-    charId
+    currentGameCharacter
   } = props;
+
+  const [ className, setClassNames ] = useState('');
 
   const inputElement = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +26,12 @@ const ExploreInput = (props: ITaskProps) => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
-  })
+  });
+
+  const handleKeyUp = (event: React.KeyboardEvent) => {
+    setClassNames(className ? '' : 'explore__character-animation');
+    handleKey(event);
+  };
 
   return (
     <div
@@ -48,15 +39,15 @@ const ExploreInput = (props: ITaskProps) => {
       role="application"
       ref={inputElement}
       tabIndex={0}
-      onKeyDown={handleKey}>
+      onKeyUp={(event: React.KeyboardEvent) => handleKeyUp(event)}>
         <img
-          src={charId === '1' ? logo1 : logo2}
-          alt="character figure"
-          onAnimationEnd={handleAnimation}
-          className={isAnimating ? 'explore__character-large' : ''}
-        />
+          src={currentGameCharacter.image}
+          alt={currentGameCharacter.name}
+          onAnimationEnd={() => setClassNames('')}
+          className={className}
+          />
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps)(ExploreInput);

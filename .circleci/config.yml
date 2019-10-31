@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Deploy to test server
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_TEST_ENV.git master
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_TEST_ENV.git HEAD:master
 
   deploy_to_prod:
     machine:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Deploy to production server
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PROD_ENV.git master
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PROD_ENV.git HEAD:master
 
 workflows:
   version: 2
