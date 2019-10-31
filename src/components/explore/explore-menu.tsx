@@ -92,7 +92,7 @@ const ExploreMenu = (props: IProps) => {
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 13) {
-      if(listIndex >= 0) {
+      if (listIndex >= 0) {
         handleClick(listIndex);
         props.history.push('/explore/play');
       }
@@ -132,7 +132,7 @@ const ExploreMenu = (props: IProps) => {
                   onFocus={() => handleFocus(character.id)}
                 >
                   <Link to="/explore/play" className={classes.link} tabIndex={-1}>
-                    <img src={character.image} className="explore__menu-image" alt="Fosuari karaktär" />
+                    <img src={character.image} className="explore__menu-image" alt={character.name + ' karaktär'} />
                     <span>
                       <Typography variant="h2">{character.name}</Typography>
                       <Typography variant="body2">{character.description}</Typography>

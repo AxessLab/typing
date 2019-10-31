@@ -33,10 +33,6 @@ const ExploreInput = (props: IProps) => {
     handleKey(event);
   };
 
-  const onAnimationEnd = () => {
-    setClassNames('');
-  };
-
   return (
     <div
       className="explore__input"
@@ -47,7 +43,7 @@ const ExploreInput = (props: IProps) => {
         <img
           src={currentGameCharacter.image}
           alt={currentGameCharacter.name}
-          onAnimationEnd={onAnimationEnd}
+          onAnimationEnd={() => setClassNames('')}
           className={className}
           />
     </div>
