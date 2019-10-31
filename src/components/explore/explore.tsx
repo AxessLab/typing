@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
+import { assetBaseUrl } from '../../config/audio';
+
 import { completed, startAnimate, stopAnimate, increaseType } from './explore.reducer';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
@@ -116,13 +118,13 @@ const Explore = props => {
     if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
       switch (getKeyRow(event.keyCode)) {
         case KEYROWS.ROW_ONE:
-          playAudio(audio, '/assets/131142__flameeagle__block.mp3');
+          playAudio(audio, assetBaseUrl + '131142__flameeagle__block.mp3');
           break;
         case KEYROWS.ROW_ZERO:
-          playAudio(audio, '/assets/471147__worldmaxter__sword-slide.wav');
+          playAudio(audio, assetBaseUrl + '471147__worldmaxter__sword-slide.mp3');
           break;
         case KEYROWS.ROW_MINUS_ONE:
-          playAudio(audio, '/assets/411462__thebuilder15__bubble-pop.wav');
+          playAudio(audio, assetBaseUrl + '411462__thebuilder15__bubble-pop.mp3');
           break;
         default:
           break;
@@ -159,7 +161,7 @@ const Explore = props => {
         </Grid>
         <audio
           ref={audioEl}
-          src="/assets/482783__mattiagiovanetti__ninja-tune.wav"
+          src={assetBaseUrl + '482783__mattiagiovanetti__ninja-tune.mp3'}
           autoPlay
           loop
         >

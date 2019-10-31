@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
-import { speak, ITTS, TTS_PLATTFORM } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
+import { assetBaseUrl } from '../../config/audio';
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
@@ -63,14 +64,9 @@ const Task = props => {
 
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.text.charAt(currentPos);
-      // Select voices
-      // GOOGLE / Mary / WEBSPEECH
-      const textToSpeak: ITTS = {
-        type: TTS_PLATTFORM.GOOGLE,
-        lang: 'sv-SE',
-        rate: '2.00',
-        pitch: '0.00'
-      };
+
+      // TODO: Maybe rename this variable?
+      const ttsOptions: ITTS = { rate: 2 };
 
       if (currentPos + 1 === task.text.length && correctKeyPressed) {
         completedAction(task);
@@ -84,7 +80,7 @@ const Task = props => {
             const p = correctAudioElement.current.play().then(() => {
               if (p !== undefined) {
                 if (currentPos < task.text.length - 1) {
-                  speak(task.text[currentPos + 1], textToSpeak).then(textURL => {
+                  speak(task.text[currentPos + 1], ttsOptions).then(textURL => {
                     if (textURL !== '' && audioElement.current) {
                       audioElement.current.pause();
                       audioElement.current.setAttribute('src', '');
@@ -106,7 +102,7 @@ const Task = props => {
         });
        } else {
         handleWrongInputAction(event.key);
-        speak(event.key, textToSpeak).then(textURL => {
+        speak(event.key, ttsOptions).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
@@ -154,8 +150,8 @@ const Task = props => {
               </span>
           </div>
           <audio id="player" ref={audioElement} src="" autoPlay />
-          <audio id="correct" ref={correctAudioElement} src="/assets/correct.mp3" preload="true" />
-          <audio id="wrong" ref={wrongAudioElement} src="/assets/wrongsound.wav" preload="true" />
+          <audio id="correct" ref={correctAudioElement} src={assetBaseUrl + 'correct.mp3'} preload="true" />
+          <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.mp3'} preload="true" />
          </div>
         </React.StrictMode>
       </div>
