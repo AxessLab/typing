@@ -67,6 +67,7 @@ const Explore = props => {
 
   const audioElement1: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
   const audioElement2: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
+  const audioElement3: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
 
   useEffect(() => {
     speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
@@ -103,9 +104,10 @@ const Explore = props => {
   }, [audioEl]);
 
   useEffect(() => {
-    if(audioElement1.current && audioElement2.current) {
+    if (audioElement1.current && audioElement2.current && audioElement3.current) {
       audioElement1.current.load();
       audioElement2.current.load();
+      audioElement3.current.load();
     }
   }, [audioElement1, audioElement2]);
 
@@ -122,9 +124,11 @@ const Explore = props => {
 
   const handleKey = (event: React.KeyboardEvent) => {
     increaseTypeAction();
-    if(audioElement1.current && audioElement2.current) {
+    if (audioElement1.current && audioElement2.current && audioElement3.current) {
       audioElement1.current.setAttribute('currentTime', '0');
       audioElement2.current.setAttribute('currentTime', '0');
+      audioElement3.current.setAttribute('currentTime', '0');
+
 
       if (event.which !== 0 && !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)) {
         switch (getKeyRow(event.keyCode)) {
@@ -142,11 +146,17 @@ const Explore = props => {
               }
             }).catch(error => console.error('play error ', error));
             break;
-
+          case KEYROWS.ROW_MINUS_ONE:
+            const promise3 = audioElement3.current.play().then(data => {
+              if (promise3 === undefined) {
+                console.error('Play 3 correct text promise undefined');
+              }
+            }).catch(error => console.error('play error ', error));
+            break;
           default:
             break;
         }
-        // startAnimateAction();
+        startAnimateAction();
       }
     }
   };
@@ -159,7 +169,7 @@ const Explore = props => {
           <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={12} sm={3} md={3} lg={3}>
           {!explore.completed ?
             <>
               <ExploreInput handleKey={handleKey} handleAnimation={stopAnimateAction} />
@@ -185,8 +195,9 @@ const Explore = props => {
         >
           Your browser does not support the audio element.
         </audio>
-        <audio id="correct" ref={audioElement1} src="/assets/131142__flameeagle__block.mp3" preload="true" />
-        <audio id="wrong" ref={audioElement2} src="/assets/471147__worldmaxter__sword-slide.wav" preload="true" />
+        <audio ref={audioElement1} src="/assets/131142__flameeagle__block.mp3" preload="true" />
+        <audio ref={audioElement2} src="/assets/471147__worldmaxter__sword-slide.wav" preload="true" />
+        <audio ref={audioElement3} src="/assets/471147__worldmaxter__sword-slide.wav" preload="true" />
       </Grid>
     </div>
   );

@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 import { IRootState } from '../../shared/reducers';
 import { setCharacter } from '../../shared/reducers/game-data';
-import { Paper, MenuItem, MenuList, Typography, Grid } from '@material-ui/core';
+import { Paper, List, ListItem, Typography, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,9 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
     menuItem: {
       whiteSpace: 'normal',
       textAlign: 'center',
+      outline: 'none',
       '&:focus': {
         border: '2px solid white'
       }
+    },
+    link: {
+      textDecoration: 'none'
     }
   })
 );
@@ -60,26 +64,41 @@ const ExploreMenu = (props: IProps) => {
   const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
-
   const menuElement = useRef<HTMLUListElement | null>(null);
+  const menuElements = [
+    useRef<HTMLLIElement | null>(null),
+    useRef<HTMLLIElement | null>(null)
+  ];
+  const [ listIndex, setListIndex ] = useState(menuElements.length - 1);
 
   useEffect(() => {
     if (menuElement && menuElement.current) {
       menuElement.current.focus();
     }
-  });
+  }, []);
 
   useEffect(() => {
     speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
   }, [headerText, introText]);
 
   const handleFocus = (id: number) => {
+    setListIndex(id);
     speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url));
   };
 
   const handleClick = (id: number) => {
     setCharacterAction(id);
-    props.history.push('/explore/play');
+  };
+
+  const handleKey = (event: React.KeyboardEvent) => {
+    if (event.keyCode === 38 || event.keyCode === 40) {
+      if (listIndex === menuElements.length - 1 && menuElements[0].current) {
+        menuElements[0].current.focus();
+      } else {
+        const element = menuElements[listIndex + 1].current;
+        if (element) element.focus();
+      }
+    }
   };
 
   return (
@@ -92,27 +111,31 @@ const ExploreMenu = (props: IProps) => {
         </Grid>
         <Grid item xs={12} lg={5}>
           <Paper className={classes.paper} elevation={0}>
-            <MenuList
+            <List
               ref={menuElement}
               className={classes.menuList}
-              aria-hidden
+              onKeyUp={handleKey}
+              tabIndex={-1}
             >
               {gameCharacters.map((character, index) => (
-                <MenuItem
+                <ListItem
                   key={index}
+                  tabIndex={0}
                   className={classes.menuItem}
+                  ref={menuElements[index]}
                   onClick={() => handleClick(character.id)}
-                  data-id={character.id}
                   onFocus={() => handleFocus(character.id)}
                 >
-                  <img src={character.image} className="explore__menu-image" alt="Fosuari character" />
-                  <span>
-                    <Typography variant="h2">{character.name}</Typography>
-                    <Typography variant="body2">{character.description}</Typography>
-                  </span>
-                </MenuItem>
+                  <Link to="/explore/play" className={classes.link} tabIndex={-1}>
+                    <img src={character.image} className="explore__menu-image" alt="Fosuari karaktär" />
+                    <span>
+                      <Typography variant="h2">{character.name}</Typography>
+                      <Typography variant="body2">{character.description}</Typography>
+                    </span>
+                  </Link>
+                </ListItem>
               ))}
-            </MenuList>
+            </List>
           </Paper>
         </Grid>
       </Grid>
