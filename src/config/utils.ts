@@ -1,4 +1,4 @@
-export const fingerPlacement  = (c: string): string => {
+export const fingerPlacement = (c: string): string => {
   const input = c.charAt(0);
   switch(input) {
     case '§':
