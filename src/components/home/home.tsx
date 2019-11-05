@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import { Grid, Typography, Link } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import enterImage from '../../static/images/enter_button.svg';
@@ -48,6 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
+  <RouterLink innerRef={ref} {...props} />
+));
+
 const mapStateToProps = (state: IRootState) => ({
   gameCharacters: state.game.gameCharacters
 });
@@ -96,7 +101,7 @@ const Home = (props: IProps) => {
           <img src={gameCharacters[0].image} alt={gameCharacters[0].name} />
         </Grid>
         <Grid item xs={12} md={2}>
-          <Link href="/explore" className={classes.link} ref={linkElement}>
+          <Link to="/explore" className={classes.link} ref={linkElement} component={Link1}>
             <img src={enterImage} alt="Enter knapp" />
           </Link>
         </Grid>

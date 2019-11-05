@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const mapStateToProps = ({ task, game }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
-  correctInput: task.correctInput,
   wrongInput: task.wrongInput,
   currentGameCharacter: game.gameCharacter
 });
@@ -192,7 +191,7 @@ const Task = props => {
                 <Typography
                   variant="h2"
                   className={classes.textToType}
-                  style={{ color: wrongInput ? '#ff6347' : 'inherit' }}
+                  style={{ color: (wrongInput ? '#ff6347' : 'inherit') }}
                   aria-live="polite"
                 >
                   { task.exercise.length ? task.exercise[currentPos].text : '' }
