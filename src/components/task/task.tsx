@@ -51,11 +51,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const mapStateToProps = ({ task }: IRootState) => ({
+const mapStateToProps = ({ task, game }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   correctInput: task.correctInput,
-  wrongInput: task.wrongInput
+  wrongInput: task.wrongInput,
+  currentGameCharacter: game.gameCharacter
 });
 
 const mapDispatchToProps = {
@@ -75,7 +76,8 @@ const Task = props => {
   const {
     task,
     currentPos,
-    wrongInput
+    wrongInput,
+    currentGameCharacter
   } = props;
 
   const inputElement = useRef<HTMLDivElement | null>(null);
@@ -177,39 +179,44 @@ const Task = props => {
       </Grid>
       {!task.completed ?
       <React.StrictMode>
-        <Grid item container xs={12} justify="center" alignContent="center" spacing={2} className={classes.typingGrid}>
-          <Grid item xs={2}>
-            <div
-              className={classes.input}
-              role="application"
-              ref={inputElement}
-              tabIndex={0}
-              onKeyUp={handleKey}
-            >
+        <Grid item container xs={12} justify="center" direction="column" alignItems="center" spacing={2} className={classes.typingGrid}>
+          <Grid item container justify="center" spacing={2}>
+            <Grid item xs={2}>
+              <div
+                className={classes.input}
+                role="application"
+                ref={inputElement}
+                tabIndex={0}
+                onKeyUp={handleKey}
+              >
+                <Typography
+                  variant="h2"
+                  className={classes.textToType}
+                  style={{ color: wrongInput ? '#ff6347' : 'inherit' }}
+                  aria-live="polite"
+                >
+                  { task.exercise.length ? task.exercise[currentPos].text : '' }
+                </Typography>
+              </div>
+              <div
+                className={classes.borderBottom}
+                style={{ background: wrongInput ? '#ff6347' : '#ffffff' }}
+              />
+            </Grid>
+            <Grid item xs={2}>
               <Typography
                 variant="h2"
-                className={classes.textToType}
-                style={{ color: wrongInput ? '#ff6347' : 'inherit' }}
-                aria-live="polite"
+                className={classes.remainingText}
               >
-                { task.exercise.length ? task.exercise[currentPos].text : '' }
+                {
+                  (currentPos + 1 < task.exercise.length ? task.exercise[currentPos + 1].text : '') +
+                  (currentPos + 2 < task.exercise.length ? task.exercise[currentPos + 2].text : '')
+                }
               </Typography>
-            </div>
-            <div
-              className={classes.borderBottom}
-              style={{ background: wrongInput ? '#ff6347' : '#ffffff' }}
-            />
+            </Grid>
           </Grid>
           <Grid item xs={2}>
-            <Typography
-              variant="h2"
-              className={classes.remainingText}
-            >
-              {
-                (currentPos + 1 < task.exercise.length ? task.exercise[currentPos + 1].text : '') +
-                (currentPos + 2 < task.exercise.length ? task.exercise[currentPos + 2].text : '')
-              }
-            </Typography>
+            <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' karaktär'} />
           </Grid>
         </Grid>
         <audio id="player" ref={audioElement} src="" autoPlay />
