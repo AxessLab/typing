@@ -5,7 +5,7 @@ import ExploreMenu from './explore-menu';
 
 const Routes = ({ match }) => (
   <Switch>
-    <Route exact path={`${match.url}/play`} component={Explore} />
+    <Route path={`${match.url}/play`} component={Explore} />
     <Route path={`${match.url}`} component={ExploreMenu} />
   </Switch>
 );
