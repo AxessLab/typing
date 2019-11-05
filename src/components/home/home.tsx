@@ -97,7 +97,7 @@ const Home = (props: IProps) => {
         </Grid>
         <Grid item xs={12} md={2}>
           <Link href="/explore" className={classes.link} ref={linkElement}>
-            <img src={enterImage} alt="Enter knapp" />
+            <img src={enterImage} alt="Enter starta spelet" />
           </Link>
         </Grid>
         <Grid item xs={12} md={2}>
