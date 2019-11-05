@@ -65,7 +65,7 @@ const Home = (props: IProps) => {
   return (
     <Grid container className={classes.root}spacing={2}>
       <img src={logo} alt="Logotyp for projektet" className={classes.logo} />
-      <InstructionLayout title="Välkommen till Typing in the dark">
+      <InstructionLayout title="Välkommen till Typing in the dark" to="/explore">
         <Grid item xs={12} sm={8}>
           <Typography variant="body1" align="left">I det här spelet kommer du att få göra olika uppdrag med hjälp av tangentbordet och
             du spelar med en ninja. Du kommer få olika uppdrag att klara av och efter varje avklarat uppdrag få olika bälten från vit till svart.

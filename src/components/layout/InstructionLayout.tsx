@@ -30,10 +30,11 @@ const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) 
 export interface IProps {
   children: React.ReactNode;
   title: string;
+  to: string;
 }
 
 const InstructionLayout = (props: IProps) => {
-  const { children, title } = props;
+  const { children, title, to } = props;
   const classes = useStyles();
   const linkElement = useRef<HTMLAnchorElement | null>(null);
 
@@ -51,7 +52,7 @@ const InstructionLayout = (props: IProps) => {
       <Grid item container xs={12} justify="center" spacing={2}>
         { children }
       </Grid>
-      <Link to="/explore" className={classes.link} ref={linkElement} component={Link1}>
+      <Link to={to} className={classes.link} ref={linkElement} component={Link1}>
         <img src={enterImage} alt="Enter knapp" />
       </Link>
     </Grid>

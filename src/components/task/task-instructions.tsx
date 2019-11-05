@@ -44,7 +44,7 @@ const TaskInstruction = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.root} spacing={8}>
-      <InstructionLayout title="Uppdrag 1">
+      <InstructionLayout title="Uppdrag 1" to="/task/prestart">
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
             Nu ska Fousari samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.
