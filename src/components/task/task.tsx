@@ -249,19 +249,18 @@ const Task = props => {
         handleWrongInputAction(event.key);
         wrongAudioElement.current.setAttribute('currentTime', '0');
         const promise = wrongAudioElement.current.play().then(() => {
-          const guidance = fingerPlacement(task.text.charAt(currentPos), 'sv-SE');
-          speak(guidance).then( textURL => { 
-            if(textURL !== '' && audioElement.current) {
+          const guidance = fingerPlacement(task.text.charAt(currentPos));
+          speak(guidance).then(textURL => { 
+            if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
-              const p = audioElement.current.play().then(() => {
-              }).catch(error =>console.error('playAudio error', error));
+              const p = audioElement.current.play().catch(error => console.error('playAudio error', error));
               if (p === undefined) {
                 console.error('Play wrong promise error');
               }
             }
-          }).catch(error =>console.error('speak error', error));
+          }).catch(error => console.error('speak error', error));
         })
         .catch(error => console.error('playAudio wrong effect error', error));
         if(promise === undefined) {
