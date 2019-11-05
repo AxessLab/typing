@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
+import { fingerPlacement } from '../../config/utils';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -242,21 +243,20 @@ const Task = props => {
           }
         });
        } else {
-        handleWrongInput(event.key);
+        handleWrongInputAction(event.key);
         wrongAudioElement.current.setAttribute('currentTime', '0');
         const promise = wrongAudioElement.current.play().then(() => {
           const guidance = fingerPlacement(task.text.charAt(currentPos), 'sv-SE');
-          textToSpeak.text = guidance;
-          speak(textToSpeak).then( textURL => { 
-            if(textURL !== '') {
+          speak(guidance).then( textURL => { 
+            if(textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
               const p = audioElement.current.play().then(() => {
-                if (p === undefined) {
-                  console.error('Play wrong promise error');
-                }
               }).catch(error =>console.error('playAudio error', error));
+              if (p === undefined) {
+                console.error('Play wrong promise error');
+              }
             }
           }).catch(error =>console.error('speak error', error));
         })
