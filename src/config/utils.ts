@@ -19,7 +19,6 @@ export const fingerPlacement = (c: string): string => {
     //windows + cmd
       return 'Använd vänster lillfinger för att trycka på '+c;
     case '2':
-    case '\"':
     case '@':
     case 'w':
     case 's':
