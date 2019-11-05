@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { completed, increaseType } from './explore.reducer';
 import { assetBaseUrl } from '../../config/audio';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
 import './explore.scss';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,10 +54,11 @@ const Explore = props => {
   const timeForExercise = 60;
   const maxInputs = 50;
 
+  const buttonElement = useRef<HTMLAnchorElement | null>(null);
   const audioElementMusic = useRef<HTMLAudioElement | null>(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const [audioElement1, audioElement2, audioElement3]: React.MutableRefObject<HTMLMediaElement | null>[] = [useRef(null), useRef(null), useRef(null)];
+  const [audioElement1, audioElement2, audioElement3]: Array<React.MutableRefObject<HTMLMediaElement | null>> = [useRef(null), useRef(null), useRef(null)];
   const audioElements = [audioElement1, audioElement2, audioElement3];
 
   useEffect(() => {
@@ -102,6 +103,12 @@ const Explore = props => {
     }
   }, [audioElement1, audioElement2, audioElement3]);
 
+  useEffect(() => {
+    if (explore.completed && buttonElement.current !== null) {
+      buttonElement.current.focus();
+    }
+  }, [explore.completed]);
+
   const getKeyRow = (key: number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
       return KEYROW.ONE;
@@ -135,18 +142,24 @@ const Explore = props => {
           <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
-        <Grid item xs={12} sm={3} md={3} lg={3}>
+        <Grid item container xs={12} sm={3} md={3} lg={3} spacing={3} alignItems="center" justify="center">
           {!explore.completed ?
-            <ExploreInput handleKey={handleKey} />
+            <Grid item xs={12}>
+              <ExploreInput handleKey={handleKey} />
+            </Grid>
             :
             <>
-              <img
-                src={currentGameCharacter.image}
-                alt={currentGameCharacter.name}
-              />
-              <Link to="/task" className="button">
-                Gå till nästa övning
-              </Link>
+              <Grid item xs={12}>
+                <Button variant="outlined" href="/task" ref={buttonElement}>
+                  Gå till nästa övning
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <img
+                  src={currentGameCharacter.image}
+                  alt={currentGameCharacter.name}
+                />
+              </Grid>
             </>
           }
         </Grid>

@@ -1,4 +1,3 @@
-import './task.scss';
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
@@ -6,6 +5,49 @@ import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed } from './task.reducer';
 import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
+import { Grid, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(8),
+      alignItems: 'center'
+    },
+    typingGrid: {
+      lineHeight: '2em',
+      fontWeight: 600,
+      fontSize: '5em'
+    },
+    valueToType: {
+      textAlign: 'center',
+      color: '#ffffff',
+      '&:after': {
+        content: ' ',
+        display: 'block',
+        borderBottom: '3px solid white'
+      }
+    },
+    remainingText: {
+      letterSpacing: '0.5em',
+      color: '#aaaaaa'
+    },
+    typedText: {
+      color: '#ffffff'
+    },
+    input: {
+      border: '1px solid white',
+      width: '100%',
+      height: '2em',
+      textAlign: 'center',
+      '&:focus': {
+        boxShadow: '0 0 10px rgba(255, 255, 255, 1)',
+        border: '2px solid rgba(255, 255, 255, 1)',
+        outline: '0'
+      }
+    }
+  })
+);
 
 const mapStateToProps = ({ task }: IRootState) => ({
   task: task.entity,
@@ -26,6 +68,7 @@ type IDispatchProps = typeof mapDispatchToProps;
 export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
 
 const Task = props => {
+  const classes = useStyles();
   const {
     task,
     currentPos,
@@ -126,36 +169,51 @@ const Task = props => {
   };
 
   return (
-    <div className="task pad-top-60">
-      <div className="flex-m flex-wrap-m">
+    <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>
       <React.StrictMode>
-        <div className="col-12">
-          <h1>Typing in the Dark</h1>
-        </div>
-        <div className={'col-2 task__value-to-type task__value-to-type' + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')} aria-live="polite">
-          <span>{ task.text.charAt(currentPos) }</span>
-        </div>
-        <div className="col-10 task__remaining-text">
-          { task.text.substr(currentPos + 1, task.text.length) }
-        </div>
-        <div className="col-12 col-2-m pad-top-30">
+      <Grid item xs={12}>
+        <Typography variant="h1" align="center">Typing in the dark</Typography>
+      </Grid>
+      <Grid item container xs={12} spacing={2} className={classes.typingGrid}>
+        <Grid item xs={2}>
+          <Typography
+            variant="h2"
+            className={classes.valueToType}
+            aria-live="polite"
+          >
+            { task.text.charAt(currentPos) }
+          </Typography>
+        </Grid>
+        <Grid item xs={10}>
+          <Typography
+            variant="h2"
+            className={classes.remainingText}
+          >
+            { task.text.substr(currentPos + 1, task.text.length) }
+          </Typography>
+        </Grid>
+        <Grid item xs={2}>
           <div
-            className="task__input"
+            className={classes.input}
             role="application"
             ref={inputElement}
             tabIndex={0}
             onKeyUp={handleKey}>
-              <span className={'task__typed-text' + (correctInput ? '--correct' : '') + (wrongInput ? '--wrong' : '')}>
+              <Typography
+                variant="h2"
+                className={classes.typedText}
+                style={{ color: (correctInput ? '#4add8c' : '' + wrongInput ? '#ff6347' : '') }}
+              >
                 { task.typedText }
-              </span>
-          </div>
-          <audio id="player" ref={audioElement} src="" autoPlay />
-          <audio id="correct" ref={correctAudioElement} src={assetBaseUrl + 'correct.mp3'} preload="true" />
-          <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.mp3'} preload="true" />
-         </div>
-        </React.StrictMode>
-      </div>
-    </div>
+              </Typography>
+            </div>
+        </Grid>
+      </Grid>
+      <audio id="player" ref={audioElement} src="" autoPlay />
+      <audio id="correct" ref={correctAudioElement} src={assetBaseUrl + 'correct.mp3'} preload="true" />
+      <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.mp3'} preload="true" />
+      </React.StrictMode>
+    </Grid>
   );
 };
 

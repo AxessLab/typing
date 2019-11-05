@@ -4,8 +4,17 @@ import { IRootState } from '../../shared/reducers';
 import { playAudio } from '../audio/audio';
 import { speak } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
+import { Typography, Grid } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-import './summary.scss';
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(8),
+      alignItems: 'center'
+    }
+  })
+);
 
 const mapStateToProps = ({ task }: IRootState) => ({
   taskErrors: task.errors
@@ -16,7 +25,7 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type ISummmaryProps = StateProps;
 
 const Summmary = ({ taskErrors }: ISummmaryProps) => {
-
+  const classes = useStyles();
   const [feedbackText, setFeedbackText] = useState('');
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
@@ -44,13 +53,13 @@ const Summmary = ({ taskErrors }: ISummmaryProps) => {
   }, [feedbackText, taskErrors]);
 
   return (
-    <div className="flex-m flex-center pad-top-60-m pad-top-30">
-      <div className="summary__status">
-        <h2>Resultat</h2>
-          <p>{feedbackText}</p>
-          <audio id="player" ref={audioElement} src="" autoPlay />
-      </div>
-    </div>
+    <Grid container justify="center" alignItems="center" className={classes.root}>
+      <Grid item xs={12}>
+        <Typography variant="h2">Resultat</Typography>
+        <Typography variant="body1">{feedbackText}</Typography>
+        <audio id="player" ref={audioElement} src="" autoPlay />
+      </Grid>
+    </Grid>
   );
 };
 
