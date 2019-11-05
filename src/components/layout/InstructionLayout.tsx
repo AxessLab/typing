@@ -48,7 +48,7 @@ const InstructionLayout = (props: IProps) => {
       <Grid item xs={10}>
         <Typography variant="h1">{title}</Typography>
       </Grid>
-      <Grid item xs={12} sm={8}>
+      <Grid item container xs={12} justify="center" spacing={2}>
         { children }
       </Grid>
       <Link to="/explore" className={classes.link} ref={linkElement} component={Link1}>

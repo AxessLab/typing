@@ -1,11 +1,10 @@
-import React, { useRef, useEffect } from 'react';
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { Grid, Typography, Link } from '@material-ui/core';
+import React from 'react';
+import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
-import { IRootState } from '../../shared/reducers';
-import { connect } from 'react-redux';
 import InstructionLayout from '../layout/InstructionLayout';
+import buttonImageF from '../../static/images/f_button.svg';
+import buttonImageJ from '../../static/images/j_button.svg';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,13 +14,6 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center'
-    },
-    link: {
-      outline: '0',
-      '&:focus img': {
-        borderRadius: 3,
-        border: '2px solid white'
-      }
     },
     illustration: {
       position: 'absolute',
@@ -48,39 +40,38 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
-  <RouterLink innerRef={ref} {...props} />
-));
-
-const mapStateToProps = (state: IRootState) => ({
-  gameCharacters: state.game.gameCharacters
-});
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-export type IProps = StateProps;
-
-const TaskInstruction = (props: IProps) => {
-  const linkElement = useRef<HTMLAnchorElement | null>(null);
-  const {
-    gameCharacters
-  } = props;
-
-  useEffect(() => {
-    if (linkElement.current) {
-      linkElement.current.focus();
-    }
-  }, []);
-
+const TaskInstruction = () => {
   const classes = useStyles();
   return (
-    <Grid container className={classes.root}spacing={2}>
+    <Grid container className={classes.root} spacing={8}>
       <InstructionLayout title="Uppdrag 1">
-        Test
+        <Grid item xs={12} md={7}>
+          <Typography variant="body1" align="left">
+            Nu ska Fousari samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={7}>
+          <Typography variant="body1" align="left">
+            F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={7}>
+          <Typography variant="body1" align="left">
+            Tryck enter för att starta, lycka till!
+          </Typography>
+        </Grid>
       </InstructionLayout>
+      <Grid item container justify="center">
+        <Grid item xs={12} md={2}>
+          <img src={buttonImageF} alt="F knapp" />
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <img src={buttonImageJ} alt="J knapp" />
+        </Grid>
+      </Grid>
       <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration}/>
     </Grid>
   );
 };
 
-export default connect(mapStateToProps)(TaskInstruction);
+export default TaskInstruction;
