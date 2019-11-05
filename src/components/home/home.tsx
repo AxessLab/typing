@@ -1,6 +1,11 @@
-import React from 'react';
-import { Grid, Typography, Button } from '@material-ui/core';
+import React, { useRef, useEffect } from 'react';
+import { Grid, Typography, Link } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import enterImage from '../../static/images/enter_button.svg';
+import whiteImage from '../../static/images/vita_illustrationer.svg';
+import logo from '../../static/images/logo.png';
+import { IRootState } from '../../shared/reducers';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,15 +15,64 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center'
+    },
+    link: {
+      outline: '0',
+      '&:focus img': {
+        borderRadius: 3,
+        border: '2px solid white'
+      }
+    },
+    illustration: {
+      position: 'absolute',
+      right: '7em',
+      top: '10em',
+      [theme.breakpoints.down('lg')]: {
+        position: 'relative',
+        top: '0',
+        right: '0'
+      }
+    },
+    logo: {
+      position: 'absolute',
+      top: '1em',
+      left: '2em',
+      height: '70px',
+      [theme.breakpoints.down('md')]: {
+        position: 'relative',
+        display: 'block',
+        top: '0',
+        left: '0'
+      }
     }
   })
 );
 
-const Home = () => {
+const mapStateToProps = (state: IRootState) => ({
+  gameCharacters: state.game.gameCharacters
+});
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export type IProps = StateProps;
+
+const Home = (props: IProps) => {
+  const linkElement = useRef<HTMLAnchorElement | null>(null);
+  const {
+    gameCharacters
+  } = props;
+
+  useEffect(() => {
+    if (linkElement.current) {
+      linkElement.current.focus();
+    }
+  }, []);
+
   const classes = useStyles();
   return (
-    <Grid container className={classes.root} spacing={2}>
-      <Grid item xs={12}>
+    <Grid container className={classes.root}spacing={2}>
+      <img src={logo} alt="Logotyp for projektet" className={classes.logo} />
+      <Grid item xs={10}>
         <Typography variant="h1">Välkommen till Typing in the dark</Typography>
       </Grid>
       <Grid item xs={12} sm={8}>
@@ -34,17 +88,25 @@ const Home = () => {
       </Grid>
       <Grid item xs={12} sm={8}>
         <Typography variant="body1" align="left">
-          För att starta spelet tryck tab och sedan Enter, den knappen ligger till höger på tangentbordet format som ett upp och nedvänt L.
+          För att starta spelet tryck Enter, den knappen ligger till höger på tangentbordet format som ett upp och nedvänt L.
         </Typography>
       </Grid>
-
-      <Grid item>
-        <Button variant="outlined" href="/explore">
-          Starta
-        </Button>
+      <Grid item container justify="center" >
+        <Grid item xs={12} md={2}>
+          <img src={gameCharacters[0].image} alt={gameCharacters[0].name} />
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Link href="/explore" className={classes.link} ref={linkElement}>
+            <img src={enterImage} alt="Enter starta spelet" />
+          </Link>
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <img src={gameCharacters[1].image} alt={gameCharacters[1].name} />
+        </Grid>
       </Grid>
+      <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration}/>
     </Grid>
   );
 };
 
-export default Home;
+export default connect(mapStateToProps)(Home);
