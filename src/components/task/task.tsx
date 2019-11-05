@@ -229,10 +229,10 @@ const Task = props => {
                       audioElement.current = new Audio(textURL);
 
                       const promise = audioElement.current.play().then(data => {
-                        if (promise === undefined) {
-                          console.error('Play correct text promise undefined');
-                        }
                       }).catch(error => console.error('play error ', error));
+                      if (promise === undefined) {
+                        console.error('Play correct text promise undefined');
+                      }
                     }
                   }).catch(error => console.error('playAudio error', error));
                  }
@@ -240,6 +240,9 @@ const Task = props => {
                  console.error('Play correct audio promise undefined');
                }
             }).catch(error => console.error('playAudio error', error));
+            if(p === undefined) {
+              console.error('Play correct effect promise undefined');
+            }
           }
         });
        } else {
