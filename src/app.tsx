@@ -10,7 +10,7 @@ const App = () => (
     <Switch>
       <Route exact path="/" render={props => <Home {...props} />} />
       <Route path="/explore" render={props => <Explore {...props} />} />
-      <Route exact path="/task" render={props => <Task {...props} />} />
+      <Route path="/task" render={props => <Task {...props} />} />
       <Route path="/summary" render={props => <Summary {...props} />} />
     </Switch>
   </Router>
