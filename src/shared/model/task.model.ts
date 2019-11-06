@@ -1,11 +1,30 @@
 export interface ITask {
   completed?: boolean;
-  text?: string;
-  typedText?: string;
+  exercise: ITypedText[];
+}
+
+interface ITypedText {
+  text: string;
+  correct: boolean;
 }
 
 export const defaultValue: Readonly<ITask> = {
   completed: false,
-  text: 'fjfjfjjfjjjfjjjfjjjf',
-  typedText: ''
+  exercise: [
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
+    { text: 'j', correct: false },
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
+    { text: 'j', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
+    { text: 'f', correct: false }
+  ]
 };

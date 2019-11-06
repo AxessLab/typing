@@ -2,6 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import { RouteComponentProps } from 'react-router-dom';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    input: {
+      outline: '0',
+      textAlign: 'center'
+    }
+  })
+);
 
 const mapStateToProps = (state: IRootState, ownProps) => ({
   currentGameCharacter: state.game.gameCharacter,
@@ -13,6 +23,7 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 export type IProps = StateProps & RouteComponentProps<{ url: string }>;
 
 const ExploreInput = (props: IProps) => {
+  const classes = useStyles();
   const {
     handleKey,
     currentGameCharacter
@@ -35,7 +46,7 @@ const ExploreInput = (props: IProps) => {
 
   return (
     <div
-      className="explore__input"
+      className={classes.input}
       role="application"
       ref={inputElement}
       tabIndex={0}
@@ -45,7 +56,7 @@ const ExploreInput = (props: IProps) => {
           alt={currentGameCharacter.name}
           onAnimationEnd={() => setClassNames('')}
           className={className}
-          />
+        />
     </div>
   );
 };
