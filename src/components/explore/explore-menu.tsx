@@ -66,7 +66,7 @@ const ExploreMenu = (props: IProps) => {
   const setCharacterAction = props.setCharacter;
 
   const headerText = 'Välj ninja';
-  const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
+  const introText = 'Tryck pil ned eller upp för att navigera. Välj ninja genom att trycka på enter.';
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const menuElement = useRef<HTMLUListElement | null>(null);
