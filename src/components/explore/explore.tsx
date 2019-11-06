@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
-  currentGameCharacter: state.game.gameCharacter.name
+  currentGameCharacter: state.game.gameCharacter
 });
 
 const mapDispatchToProps = {
