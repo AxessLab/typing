@@ -47,7 +47,7 @@ const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) 
 ));
 
 const Explore = props => {
-  const classes = useStyles(props);
+  const classes = useStyles();
   const {
     explore,
     currentGameCharacter

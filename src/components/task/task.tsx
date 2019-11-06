@@ -75,7 +75,7 @@ type IDispatchProps = typeof mapDispatchToProps;
 export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
 
 const Task = props => {
-  const classes = useStyles(props);
+  const classes = useStyles();
   const {
     task,
     currentPos,

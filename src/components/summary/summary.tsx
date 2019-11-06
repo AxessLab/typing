@@ -25,7 +25,7 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type ISummmaryProps = StateProps;
 
   const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
-  const classes = useStyles(mapStateToProps);
+  const classes = useStyles();
   const [feedbackText] = useState('Bra jobbat, du har samlat flera verktyg att klara nästa uppdrag.');
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 

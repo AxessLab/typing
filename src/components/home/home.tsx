@@ -72,7 +72,7 @@ const Home = (props: IProps) => {
     resetAction();
   }, [resetAction]);
 
-  const classes = useStyles(props);
+  const classes = useStyles();
   return (
     <Grid container className={classes.root}spacing={2}>
       <img src={logo} alt="Logotyp for projektet" className={classes.logo} />
