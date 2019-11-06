@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center'
+    },
+    heading: {
+      fontSize: '5rem'
     }
   })
 );
@@ -31,15 +34,11 @@ const TaskCountDown = (props: IProps) => {
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
-    if (!timeLeft) {
-      // todo: Replace this with hooks https://stackoverflow.com/questions/31079081/programmatically-navigate-using-react-router
-      props.history.push(to);
-    }
+    // todo: Replace this with hooks https://stackoverflow.com/questions/31079081/programmatically-navigate-using-react-router
+    if (!timeLeft) props.history.push(to);
 
     // save intervalId to clear the interval when the component re-renders
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
+    const intervalId = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
 
     // clear interval on re-render to avoid memory leaks
     return () => clearInterval(intervalId);
@@ -52,7 +51,7 @@ const TaskCountDown = (props: IProps) => {
 
   return (
     <Grid container className={classes.root}>
-      <Typography variant="h2">{ timeLeft }</Typography>
+      <Typography variant="h2" className={classes.heading}>{ timeLeft }</Typography>
       <audio ref={audioElement} src="" />
     </Grid>
   );

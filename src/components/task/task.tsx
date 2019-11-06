@@ -24,12 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textToType: {
       color: '#ffffff',
-      lineHeight: '2em',
+      lineHeight: '1.5em',
+      fontSize: '1.2em',
       fontWeight: 600
     },
     remainingText: {
       color: '#ffffff',
-      lineHeight: '2em',
+      fontSize: '1.5em',
+      lineHeight: '1.2em',
       fontWeight: 600,
       letterSpacing: '0.5em'
     },
