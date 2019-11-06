@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       display: 'flex',
+      textAlign: 'center',
       backgroundColor: 'rgba(255, 255, 255, 0)'
     },
     menuList: {
@@ -34,7 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     link: {
-      textDecoration: 'none'
+      textDecoration: 'none',
+      color: '#ffffff'
+    },
+    image: {
+      width: '25%'
     }
   })
 );
@@ -61,7 +66,7 @@ const ExploreMenu = (props: IProps) => {
   const setCharacterAction = props.setCharacter;
 
   const headerText = 'Välj ninja';
-  const introText = 'Tryck tabb för att navigera. Välj genom att trycka på enter.';
+  const introText = 'Tryck pil ned eller upp för att navigera. Välj ninja genom att trycka på enter.';
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const menuElement = useRef<HTMLUListElement | null>(null);
@@ -109,12 +114,12 @@ const ExploreMenu = (props: IProps) => {
   return (
     <div className={classes.root}>
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={12} lg={12}>
+        <Grid item xs={12} sm={12}>
           <Typography variant="h1" align="center" gutterBottom>{headerText}</Typography>
-          <Typography variant="body2" align="center">{introText}</Typography>
+          <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
-        <Grid item xs={12} lg={5}>
+        <Grid item xs={12} sm={5}>
           <Paper className={classes.paper} elevation={0}>
             <List
               ref={menuElement}
@@ -132,7 +137,7 @@ const ExploreMenu = (props: IProps) => {
                   onFocus={() => handleFocus(character.id)}
                 >
                   <Link to="/explore/play" className={classes.link} tabIndex={-1}>
-                    <img src={character.image} className="explore__menu-image" alt={character.name + ' karaktär'} />
+                    <img src={character.image} className={classes.image} alt={character.name + ' karaktär'} />
                     <span>
                       <Typography variant="h2">{character.name}</Typography>
                       <Typography variant="body2">{character.description}</Typography>

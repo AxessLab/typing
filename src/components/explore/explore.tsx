@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+  RouteComponentProps
+} from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { completed, increaseType } from './explore.reducer';
 import { assetBaseUrl } from '../../config/audio';
 import ExploreInput from './explore-input';
 import { playAudio } from '../audio/audio';
 import './explore.scss';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -16,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       marginTop: theme.spacing(8),
       alignItems: 'center'
+    },
+    alignCenter: {
+      textAlign: 'center'
     }
   })
 );
@@ -35,6 +42,10 @@ type DispatchProps = typeof mapDispatchToProps;
 
 export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
 
+const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
+  <RouterLink innerRef={ref} {...props} />
+));
+
 const Explore = props => {
   const classes = useStyles();
   const {
@@ -45,19 +56,20 @@ const Explore = props => {
   const completedAction = props.completed;
   const increaseTypeAction = props.increaseType;
 
-  enum KEYROW { ONE, ZERO, MINUS_ONE };
+  enum KEYROW { ONE, ZERO, MINUS_ONE }
 
   const [timeCount, setTimeCount] = useState(0);
-  const [headerText, setHeaderText] = useState('Träna din ninja');
-  const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
+  const [headerText, setHeaderText] = useState('Uppvärmning');
+  const [introText, setIntroText] = useState('Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!');
 
   const timeForExercise = 60;
   const maxInputs = 50;
 
+  const buttonElement = useRef<HTMLAnchorElement | null>(null);
   const audioElementMusic = useRef<HTMLAudioElement | null>(null);
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const [audioElement1, audioElement2, audioElement3]: React.MutableRefObject<HTMLMediaElement | null>[] = [useRef(null), useRef(null), useRef(null)];
+  const [audioElement1, audioElement2, audioElement3]: Array<React.MutableRefObject<HTMLMediaElement | null>> = [useRef(null), useRef(null), useRef(null)];
   const audioElements = [audioElement1, audioElement2, audioElement3];
 
   useEffect(() => {
@@ -69,7 +81,7 @@ const Explore = props => {
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
-      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.`);
+      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har fått ett rött bälte och är redo för sitt första uppdrag, tryck enter för att starta.`);
       completedAction();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -102,6 +114,12 @@ const Explore = props => {
     }
   }, [audioElement1, audioElement2, audioElement3]);
 
+  useEffect(() => {
+    if (explore.completed && buttonElement.current !== null) {
+      buttonElement.current.focus();
+    }
+  }, [explore.completed]);
+
   const getKeyRow = (key: number) => {
     if ([81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219].some(x => x === key)) {
       return KEYROW.ONE;
@@ -129,24 +147,30 @@ const Explore = props => {
 
   return (
     <div className={classes.root}>
-      <Grid container alignItems="center" justify="center" spacing={8}>
+      <Grid container alignItems="center" justify="center" direction="column" spacing={8}>
         <Grid item xs={12}>
           <Typography variant="h1" align="center">{headerText}</Typography>
           <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
-        <Grid item xs={12} sm={3} md={3} lg={3}>
+        <Grid item container xs={12} sm={3} md={3} lg={3} spacing={3} alignItems="center" justify="center">
           {!explore.completed ?
-            <ExploreInput handleKey={handleKey} />
+            <Grid item xs={12} className={classes.alignCenter} >
+              <ExploreInput handleKey={handleKey} />
+            </Grid>
             :
             <>
-              <img
-                src={currentGameCharacter.image}
-                alt={currentGameCharacter.name}
-              />
-              <Link to="/task" className="button">
-                Gå till nästa övning
-              </Link>
+              <Grid item xs={12} className={classes.alignCenter}>
+                <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
+                  Gå till nästa övning
+                </Button>
+              </Grid>
+              <Grid item xs={12} className={classes.alignCenter}>
+                <img
+                  src={currentGameCharacter.image}
+                  alt={currentGameCharacter.name}
+                />
+              </Grid>
             </>
           }
         </Grid>
