@@ -56,7 +56,7 @@ const Explore = props => {
   const completedAction = props.completed;
   const increaseTypeAction = props.increaseType;
 
-  enum KEYROW { ONE, ZERO, MINUS_ONE };
+  enum KEYROW { ONE, ZERO, MINUS_ONE }
 
   const [timeCount, setTimeCount] = useState(0);
   const [headerText, setHeaderText] = useState('Uppvärmning');

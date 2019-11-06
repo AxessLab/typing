@@ -1,6 +1,6 @@
 import { IAction } from './index';
 import logo1 from '../../static/images/ninja_doruk.svg';
-import logo2 from '../../static/images/ninja_white.svg';
+import logo2 from '../../static/images/ninja_fousari.svg';
 
 export const ACTION_TYPES = {
   SET_CHARACTER: 'game/SET_CHARACTER'
