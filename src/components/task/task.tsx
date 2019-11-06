@@ -134,11 +134,11 @@ const Task = props => {
             if (currentPos < task.exercise.length - 1) {
               speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
                 if (textURL !== '' && audioElement.current) {
-                  playAudio(audioElement, textURL).catch(error => console.error('play error ', error));
+                  playAudio(audioElement, textURL).catch(error => console.error('playAudio error ', error));
                 }
-              }).catch(error => console.error('playAudio error', error));
+              }).catch(error => console.error('speak error', error));
             }
-          }).catch(error => console.error('playAudio error', error));
+          }).catch(error => console.error('play current error', error));
         }
       }) : handleWrongInputAction(event.key).then(() => {
         wrongAudioElement.current!.setAttribute('currentTime', '0');
@@ -148,7 +148,7 @@ const Task = props => {
               playAudio(audioElement, textURL).catch(error => console.error('playAudio error', error));
             }
           }).catch(error => console.error('speak error', error));
-        }).catch(error => console.error('playAudio wrong effect error', error));
+        }).catch(error => console.error('play wrong effect error', error));
       });
     }
   };
