@@ -1,8 +1,8 @@
 import React from 'react';
 import Explore from './components/explore';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Task from './components/task/task';
-import Summary from './components/summary';
+import Task from './components/task';
+import Summary from './components/summary/summary';
 import Home from './components/home/home';
 
 const App = () => (

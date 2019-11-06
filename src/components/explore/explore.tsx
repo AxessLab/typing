@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       marginTop: theme.spacing(8),
       alignItems: 'center'
+    },
+    alignCenter: {
+      textAlign: 'center'
     }
   })
 );
@@ -56,8 +59,8 @@ const Explore = props => {
   enum KEYROW { ONE, ZERO, MINUS_ONE };
 
   const [timeCount, setTimeCount] = useState(0);
-  const [headerText, setHeaderText] = useState('Träna din ninja');
-  const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
+  const [headerText, setHeaderText] = useState('Uppvärmning');
+  const [introText, setIntroText] = useState('Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!');
 
   const timeForExercise = 60;
   const maxInputs = 50;
@@ -78,7 +81,7 @@ const Explore = props => {
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText('Redo');
-      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har nu fått ett gult bälte i karate och är redo för sitt första uppdrag.`);
+      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har fått ett rött bälte och är redo för sitt första uppdrag, tryck enter för att starta.`);
       completedAction();
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
@@ -144,7 +147,7 @@ const Explore = props => {
 
   return (
     <div className={classes.root}>
-      <Grid container alignItems="center" justify="center" spacing={8}>
+      <Grid container alignItems="center" justify="center" direction="column" spacing={8}>
         <Grid item xs={12}>
           <Typography variant="h1" align="center">{headerText}</Typography>
           <Typography variant="body1" align="center">{introText}</Typography>
@@ -152,17 +155,17 @@ const Explore = props => {
         </Grid>
         <Grid item container xs={12} sm={3} md={3} lg={3} spacing={3} alignItems="center" justify="center">
           {!explore.completed ?
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.alignCenter} >
               <ExploreInput handleKey={handleKey} />
             </Grid>
             :
             <>
-              <Grid item xs={12}>
+              <Grid item xs={12} className={classes.alignCenter}>
                 <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
                   Gå till nästa övning
                 </Button>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} className={classes.alignCenter}>
                 <img
                   src={currentGameCharacter.image}
                   alt={currentGameCharacter.name}
