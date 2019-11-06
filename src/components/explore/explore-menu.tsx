@@ -116,7 +116,7 @@ const ExploreMenu = (props: IProps) => {
       <Grid container alignItems="center" justify="center">
         <Grid item xs={12} sm={12}>
           <Typography variant="h1" align="center" gutterBottom>{headerText}</Typography>
-          <Typography variant="body2" align="center">{introText}</Typography>
+          <Typography variant="body1" align="center">{introText}</Typography>
           <audio id="intro-audio" ref={audioElementIntro} src="" />
         </Grid>
         <Grid item xs={12} sm={5}>

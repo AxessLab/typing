@@ -7,6 +7,7 @@ import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { playAudio } from '../../components/audio/audio';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -88,12 +89,14 @@ const Task = props => {
   const handleCorrectInputAction = props.handleCorrectInput;
   const handleWrongInputAction = props.handleWrongInput;
   const completedAction = props.completed;
+  const ttsOptions: ITTS = { rate: 2 };
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
-  }, []);
+    speak(task.exercise[currentPos].text, ttsOptions).then(url => playAudio(audioElement, url));
+  }, [currentPos, task.exercise, ttsOptions]);
 
   const handleKey = (event: React.KeyboardEvent): void => {
     if (event.which !== 0 &&
@@ -112,7 +115,6 @@ const Task = props => {
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
 
       // TODO: Maybe rename this variable?
-      const ttsOptions: ITTS = { rate: 2 };
 
       if (currentPos + 1 === task.exercise.length && correctKeyPressed) {
         completedAction(task);

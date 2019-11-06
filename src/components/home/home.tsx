@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
@@ -6,6 +6,7 @@ import logo from '../../static/images/logo.png';
 import { IRootState } from '../../shared/reducers';
 import { connect } from 'react-redux';
 import InstructionLayout from '../../components/layout/InstructionLayout';
+import { reset } from '../task/task.reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,18 +49,28 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const mapStateToProps = (state: IRootState) => ({
-  gameCharacters: state.game.gameCharacters
+const mapStateToProps = ({ game }: IRootState) => ({
+  gameCharacters: game.gameCharacters
 });
 
-type StateProps = ReturnType<typeof mapStateToProps>;
+const mapDispatchToProps = {
+  reset
+};
 
-export type IProps = StateProps;
+type StateProps = ReturnType<typeof mapStateToProps>;
+type IDispatchProps = typeof mapDispatchToProps;
+
+export type IProps = StateProps & IDispatchProps;
 
 const Home = (props: IProps) => {
   const {
     gameCharacters
   } = props;
+  const resetAction = props.reset;
+
+  useEffect(() => {
+    resetAction();
+  }, [resetAction]);
 
   const classes = useStyles();
   return (
@@ -96,4 +107,4 @@ const Home = (props: IProps) => {
   );
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

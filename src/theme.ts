@@ -24,7 +24,25 @@ const theme = createMuiTheme({
       textTransform: 'none'
     },
     h1: {
-      fontSize: '5rem'
+      fontSize: '2.25rem'
+    },
+    h2: {
+      fontSize: '1.75rem'
+    },
+    h3: {
+      fontSize: '1.375rem'
+    },
+    h4: {
+      fontSize: '1.125rem'
+    },
+    h5: {
+      fontSize: '1rem'
+    },
+    body1: {
+      fontSize: '1.25rem'
+    },
+    body2: {
+      fontSize: '1rem'
     }
   }
 });
