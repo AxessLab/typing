@@ -120,58 +120,35 @@ const Task = props => {
         props.history.push('/summary');
       }
 
-      if (correctKeyPressed) {
-        handleCorrectInputAction(event.key).then(() => {
-          if (correctAudioElement.current) {
-            correctAudioElement.current.setAttribute('currentTime', '0');
-            const p = correctAudioElement.current.play().then(() => {
-              if (p !== undefined) {
-                if (currentPos < task.exercise.length - 1) {
-                  speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
-                    if (textURL !== '' && audioElement.current) {
-                      audioElement.current.pause();
-                      audioElement.current.setAttribute('src', '');
-                      audioElement.current = new Audio(textURL);
-
-                      const promise = audioElement.current.play().then(data => {
-                      }).catch(error => console.error('play error ', error));
-                      if (promise === undefined) {
-                        console.error('Play correct text promise undefined');
-                      }
-                    }
-                  }).catch(error => console.error('playAudio error', error));
-                 }
-               } else {
-                 console.error('Play correct audio promise undefined');
-               }
-            }).catch(error => console.error('playAudio error', error));
-
-            if (p === undefined) {
-              console.error('Play correct effect promise undefined');
+      correctKeyPressed ? handleCorrectInputAction(event.key).then(() => {
+        if (correctAudioElement.current) {
+          correctAudioElement.current.setAttribute('currentTime', '0');
+          correctAudioElement.current.play().then(() => {
+            if (currentPos < task.exercise.length - 1) {
+              speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
+                if (textURL !== '' && audioElement.current) {
+                  audioElement.current.pause();
+                  audioElement.current.setAttribute('src', '');
+                  audioElement.current = new Audio(textURL);
+                  audioElement.current.play().catch(error => console.error('play error ', error));
+                }
+              }).catch(error => console.error('playAudio error', error));
             }
-          }
-        });
-       } else {
-        handleWrongInputAction(event.key);
-        wrongAudioElement.current.setAttribute('currentTime', '0');
-        const promise = wrongAudioElement.current.play().then(() => {
+          }).catch(error => console.error('playAudio error', error));
+        }
+      }) : handleWrongInputAction(event.key).then(() => {
+        wrongAudioElement.current!.setAttribute('currentTime', '0');
+        wrongAudioElement.current!.play().then(() => {
           speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
-              const p = audioElement.current.play().catch(error => console.error('playAudio error', error));
-              if (p === undefined) {
-                console.error('Play wrong promise error');
-              }
+              audioElement.current.play().catch(error => console.error('playAudio error', error));
             }
           }).catch(error => console.error('speak error', error));
         }).catch(error => console.error('playAudio wrong effect error', error));
-
-        if (promise === undefined) {
-          console.error('Play wrong audio promise undefined');
-        }
-      }
+      });
     }
   };
 
