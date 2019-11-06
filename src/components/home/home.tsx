@@ -73,7 +73,7 @@ const Home = (props: IProps) => {
     }
   }, []);
 
-  const classes = useStyles();
+  const classes = useStyles(props);
   return (
     <Grid container className={classes.root}spacing={2}>
       <img src={logo} alt="Logotyp for projektet" className={classes.logo} />

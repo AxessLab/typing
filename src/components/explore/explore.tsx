@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const mapStateToProps = (state: IRootState) => ({
   explore: state.explore,
-  currentGameCharacter: state.game.gameCharacter
+  currentGameCharacter: state.game.gameCharacter.name
 });
 
 const mapDispatchToProps = {
@@ -44,7 +44,7 @@ const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) 
 ));
 
 const Explore = props => {
-  const classes = useStyles();
+  const classes = useStyles(props);
   const {
     explore,
     currentGameCharacter

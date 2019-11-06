@@ -25,7 +25,7 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type ISummmaryProps = StateProps;
 
 const Summmary = ({ taskErrors }: ISummmaryProps) => {
-  const classes = useStyles();
+  const classes = useStyles(mapStateToProps);
   const [feedbackText, setFeedbackText] = useState('');
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
