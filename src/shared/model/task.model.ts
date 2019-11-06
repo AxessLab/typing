@@ -17,6 +17,14 @@ export const defaultValue: Readonly<ITask> = {
     { text: 'f', correct: false },
     { text: 'j', correct: false },
     { text: 'j', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'f', correct: false },
+    { text: 'j', correct: false },
     { text: 'f', correct: false }
   ]
 };
