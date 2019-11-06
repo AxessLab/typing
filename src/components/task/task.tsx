@@ -155,8 +155,7 @@ const Task = props => {
         handleWrongInputAction(event.key);
         wrongAudioElement.current.setAttribute('currentTime', '0');
         const promise = wrongAudioElement.current.play().then(() => {
-          const guidance = fingerPlacement(task.text.charAt(currentPos));
-          speak(guidance).then(textURL => {
+          speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
