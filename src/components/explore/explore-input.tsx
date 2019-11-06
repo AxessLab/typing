@@ -7,7 +7,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     input: {
-      outline: '0'
+      outline: '0',
+      textAlign: 'center'
     }
   })
 );
@@ -55,7 +56,7 @@ const ExploreInput = (props: IProps) => {
           alt={currentGameCharacter.name}
           onAnimationEnd={() => setClassNames('')}
           className={className}
-          />
+        />
     </div>
   );
 };
