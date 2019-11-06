@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed, reset } from './task.reducer';
 import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
+import { fingerPlacement } from '../../config/utils';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -133,10 +134,10 @@ const Task = props => {
                       audioElement.current = new Audio(textURL);
 
                       const promise = audioElement.current.play().then(data => {
-                        if (promise === undefined) {
-                          console.error('Play correct text promise undefined');
-                        }
                       }).catch(error => console.error('play error ', error));
+                      if (promise === undefined) {
+                        console.error('Play correct text promise undefined');
+                      }
                     }
                   }).catch(error => console.error('playAudio error', error));
                  }
@@ -144,29 +145,32 @@ const Task = props => {
                  console.error('Play correct audio promise undefined');
                }
             }).catch(error => console.error('playAudio error', error));
+
+            if (p === undefined) {
+              console.error('Play correct effect promise undefined');
+            }
           }
         });
        } else {
         handleWrongInputAction(event.key);
-        speak(event.key, ttsOptions).then(textURL => {
+        wrongAudioElement.current.setAttribute('currentTime', '0');
+        const promise = wrongAudioElement.current.play().then(() => {
+          speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
               audioElement.current = new Audio(textURL);
-              const p = audioElement.current.play().then(() => {
-                if (p !== undefined && wrongAudioElement.current) {
-                  wrongAudioElement.current.setAttribute('currentTime', '0');
-                  const promise = wrongAudioElement.current.play().catch(error => console.error('playAudio error', error));
-                  if (promise === undefined) {
-                    console.error('Play wrong audio promise undefined');
-                  }
-                } else {
-                  console.error('Play wrong audio text promise undefined');
-                }
-              }).catch(error => console.error('playAudio error', error));
-          }
+              const p = audioElement.current.play().catch(error => console.error('playAudio error', error));
+              if (p === undefined) {
+                console.error('Play wrong promise error');
+              }
+            }
+          }).catch(error => console.error('speak error', error));
+        }).catch(error => console.error('playAudio wrong effect error', error));
 
-        });
+        if (promise === undefined) {
+          console.error('Play wrong audio promise undefined');
+        }
       }
     }
   };
