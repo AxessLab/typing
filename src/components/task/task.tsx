@@ -5,6 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { handleCorrectInput, handleWrongInput, completed, reset } from './task.reducer';
 import { speak, ITTS } from '../tts/tts';
 import { assetBaseUrl } from '../../config/audio';
+import { playAudio } from '../audio/audio';
 import { fingerPlacement } from '../../config/utils';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -94,6 +95,14 @@ const Task = props => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
+
+    //pre-load sound effects
+    if (correctAudioElement.current) {
+      correctAudioElement.current.load();
+    }
+    if (wrongAudioElement.current) {
+      wrongAudioElement.current.load();
+    }
   }, []);
 
   const handleKey = (event: React.KeyboardEvent): void => {
@@ -103,11 +112,6 @@ const Task = props => {
       wrongAudioElement.current &&
       !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)
     ) {
-      audioElement.current.pause();
-      audioElement.current.setAttribute('src', '');
-      audioElement.current = new Audio();
-      correctAudioElement.current.load();
-      wrongAudioElement.current.load();
 
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
@@ -127,10 +131,7 @@ const Task = props => {
             if (currentPos < task.exercise.length - 1) {
               speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
                 if (textURL !== '' && audioElement.current) {
-                  audioElement.current.pause();
-                  audioElement.current.setAttribute('src', '');
-                  audioElement.current = new Audio(textURL);
-                  audioElement.current.play().catch(error => console.error('play error ', error));
+                  playAudio(audioElement, textURL).catch(error => console.error('play error ', error));
                 }
               }).catch(error => console.error('playAudio error', error));
             }
@@ -141,10 +142,7 @@ const Task = props => {
         wrongAudioElement.current!.play().then(() => {
           speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
             if (textURL !== '' && audioElement.current) {
-              audioElement.current.pause();
-              audioElement.current.setAttribute('src', '');
-              audioElement.current = new Audio(textURL);
-              audioElement.current.play().catch(error => console.error('playAudio error', error));
+              playAudio(audioElement, textURL).catch(error => console.error('playAudio error', error));
             }
           }).catch(error => console.error('speak error', error));
         }).catch(error => console.error('playAudio wrong effect error', error));
