@@ -1,6 +1,6 @@
 import { IAction } from './index';
-import logo1 from '../../static/images/Fosauri.svg';
-import logo2 from '../../static/images/Onzua.svg';
+import logo1 from '../../static/images/ninja_doruk.svg';
+import logo2 from '../../static/images/ninja_white.svg';
 
 export const ACTION_TYPES = {
   SET_CHARACTER: 'game/SET_CHARACTER'
@@ -21,14 +21,14 @@ interface IGameCharacter {
 const defaultCharacters: ReadonlyArray<IGameCharacter> = [
   {
     id: 0,
-    name: 'Onzua',
-    description: 'Gul med stora tänder, och tuppkam. Studsar snabbt med sin svans på tangenterna.',
+    name: 'Doruk',
+    description: 'Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.',
     image: logo1
   },
   {
     id: 1,
-    name: 'Fonsuai',
-    description: 'Rosa med två långa armar och fyrkantig kropp. Snabb och når långt på tangenterna.',
+    name: 'Fousari',
+    description: 'Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna.',
     image: logo2
   }
 ];

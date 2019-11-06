@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
-import { RouteComponentProps } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+  RouteComponentProps
+} from 'react-router-dom';
 import { speak } from '../tts/tts';
 import { completed, increaseType } from './explore.reducer';
 import { assetBaseUrl } from '../../config/audio';
@@ -34,6 +38,10 @@ type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
 export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: string }>;
+
+const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
+  <RouterLink innerRef={ref} {...props} />
+));
 
 const Explore = props => {
   const classes = useStyles();
@@ -150,7 +158,7 @@ const Explore = props => {
             :
             <>
               <Grid item xs={12}>
-                <Button variant="outlined" href="/task" ref={buttonElement}>
+                <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
                   Gå till nästa övning
                 </Button>
               </Grid>

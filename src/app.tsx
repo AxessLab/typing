@@ -8,9 +8,9 @@ import Home from './components/home/home';
 const App = () => (
   <Router>
     <Switch>
-      <Route exact path="/" render={() => <Home />} />
+      <Route exact path="/" render={props => <Home {...props} />} />
       <Route path="/explore" render={props => <Explore {...props} />} />
-      <Route exact path="/task" render={props => <Task {...props} />} />
+      <Route path="/task" render={props => <Task {...props} />} />
       <Route path="/summary" render={props => <Summary {...props} />} />
     </Switch>
   </Router>

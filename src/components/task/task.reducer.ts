@@ -39,40 +39,28 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
         ...state,
         entity: {
           ...state.entity,
-          text: action.payload.data
+          exercise: action.payload.data
         }
       };
     case ACTION_TYPES.CORRECT_INPUT:
       return {
         ...state,
         correctInput: true,
-        wrongInput: false,
-        entity: {
-          ...state.entity,
-          typedText: action.payload
-        }
+        wrongInput: false
       };
     case ACTION_TYPES.WRONG_INPUT:
       return {
         ...state,
         errors: state.errors + 1,
         correctInput: false,
-        wrongInput: true,
-        entity: {
-          ...state.entity,
-          typedText: action.payload
-        }
+        wrongInput: true
       };
     case ACTION_TYPES.NEXT:
       return {
         ...state,
         currentPos: state.currentPos + 1,
         wrongInput: false,
-        correctInput: false,
-        entity: {
-          ...state.entity,
-        typedText: ''
-        }
+        correctInput: false
       };
     case ACTION_TYPES.COMPLETED:
       return {
@@ -93,11 +81,11 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
 
 // Actions
 
-export const getTask = (task: string): IAction => ({
+export const getTask = (task: ITask): IAction => ({
   type: ACTION_TYPES.FETCH_TASK,
   payload: {
     completed: false,
-    text: task
+    exercise: task
   }
 });
 
