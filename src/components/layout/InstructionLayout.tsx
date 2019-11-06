@@ -49,7 +49,7 @@ const InstructionLayout = (props: IProps) => {
   }, []);
 
   useEffect(() => {
-    speak(instructionToSpeak).then(url => playAudio(audioInstructionElement, url));
+    if (instructionToSpeak !== undefined) speak(instructionToSpeak).then(url => playAudio(audioInstructionElement, url));
   }, [instructionToSpeak]);
 
   return (
