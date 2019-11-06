@@ -57,7 +57,7 @@ const Explore = props => {
 
   const [timeCount, setTimeCount] = useState(0);
   const [headerText, setHeaderText] = useState('Träna din ninja');
-  const [introText, setIntroText] = useState('Tryck på olika knappar på tangentbordet');
+  const [introText, setIntroText] = useState('Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!');
 
   const timeForExercise = 60;
   const maxInputs = 50;
