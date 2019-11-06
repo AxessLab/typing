@@ -92,7 +92,7 @@ const Task = props => {
       inputElement.current.focus();
     }
   });
-  
+
   const handleKey = (event: React.KeyboardEvent): void => {
     if (event.which !== 0 &&
       audioElement.current &&
@@ -142,7 +142,8 @@ const Task = props => {
                  console.error('Play correct audio promise undefined');
                }
             }).catch(error => console.error('playAudio error', error));
-            if(p === undefined) {
+
+            if (p === undefined) {
               console.error('Play correct effect promise undefined');
             }
           }
@@ -152,7 +153,7 @@ const Task = props => {
         wrongAudioElement.current.setAttribute('currentTime', '0');
         const promise = wrongAudioElement.current.play().then(() => {
           const guidance = fingerPlacement(task.text.charAt(currentPos));
-          speak(guidance).then(textURL => { 
+          speak(guidance).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               audioElement.current.pause();
               audioElement.current.setAttribute('src', '');
@@ -163,14 +164,14 @@ const Task = props => {
               }
             }
           }).catch(error => console.error('speak error', error));
-        })
-        .catch(error => console.error('playAudio wrong effect error', error));
-        if(promise === undefined) {
+        }).catch(error => console.error('playAudio wrong effect error', error));
+
+        if (promise === undefined) {
           console.error('Play wrong audio promise undefined');
         }
       }
     }
-  }
+  };
 
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>

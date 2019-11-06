@@ -1,6 +1,6 @@
-export const fingerPlacement = (c: string): string => {
-  const input = c.charAt(0);
-  switch(input) {
+export const fingerPlacement = (input: string): string => {
+  const character = input.charAt(0);
+  switch (character) {
     case '§':
     case '°':
     case '1':
@@ -9,30 +9,30 @@ export const fingerPlacement = (c: string): string => {
     case 'tab':
     case 'q':
     case 'capslock:':
-    case  'a':
+    case 'a':
     case 'shift':
     case '<':
     case '>':
     case 'z':
     case 'ctrl':
     case 'left alt':
-    //windows + cmd
-      return 'Använd vänster lillfinger för att trycka på '+c;
+    // Windows + cmd
+      return 'Använd vänster lillfinger för att trycka på ' + character;
     case '2':
     case '@':
     case 'w':
     case 's':
     case 'x':
-        return 'Använd vänster ringfinger för att trycka på '+c;
+      return 'Använd vänster ringfinger för att trycka på ' + character;
     case '3':
     case '#':
     case '£':
     case 'e':
     case 'd':
     case 'c':
-      return 'Använd vänster långfinger för att trycka på '+c;
+      return 'Använd vänster långfinger för att trycka på ' + character;
     case '4':
-    case '€': 
+    case '€':
     case '$':
     case 'r':
     case 'f':
@@ -43,7 +43,7 @@ export const fingerPlacement = (c: string): string => {
     case 't':
     case 'g':
     case 'b':
-      return 'Använd väsnter pekfinger för att trycka på '+c;
+      return 'Använd väsnter pekfinger för att trycka på ' + character;
     case '6':
     case '&':
     case 'y':
@@ -55,7 +55,7 @@ export const fingerPlacement = (c: string): string => {
     case 'u':
     case 'j':
     case 'm':
-      return 'Använd höger pekfinger för att trycka på '+c;
+      return 'Använd höger pekfinger för att trycka på ' + character;
     case '8':
     case '(':
     case '[':
@@ -63,7 +63,7 @@ export const fingerPlacement = (c: string): string => {
     case 'k':
     case ',':
     case ';':
-      return 'Använd höger långfinger för att trycka på '+c;
+      return 'Använd höger långfinger för att trycka på ' + character;
     case '9':
     case ')':
     case ']':
@@ -71,7 +71,7 @@ export const fingerPlacement = (c: string): string => {
     case 'l':
     case '.':
     case ':':
-      return 'Använd höger ringfinger för att trycka på '+c;
+      return 'Använd höger ringfinger för att trycka på ' + character;
     case '0':
     case '=':
     case 'p':
@@ -88,8 +88,8 @@ export const fingerPlacement = (c: string): string => {
     case '^':
     case '\'':
     case '*':
-      return 'Använd höger lillfinger för att trycka på '+c;
+      return 'Använd höger lillfinger för att trycka på ' + character;
     default:
       return '';
   }
-}
+};
