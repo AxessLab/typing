@@ -101,7 +101,10 @@ const Task = props => {
   }, [currentPos, task.exercise, ttsOptions]);
 
   useEffect(() => {
-    speak(task.exercise[currentPos].text, ttsOptions).then(url => playAudio(audioElement, url));
+    speak(task.exercise[currentPos].text, ttsOptions).then(url => 
+      playAudio(audioElement, url).catch(error => 
+        console.error('play error intial character ' + error))).catch(error => 
+          console.error('speak inital character errror ' + error));
   }, []);
 
   const handleKey = (event: React.KeyboardEvent): void => {
