@@ -114,7 +114,7 @@ const Task = props => {
         props.history.push('/summary');
       }
 
-      if(correctKeyPressed) {
+      if (correctKeyPressed) {
         handleCorrectInputAction(event.key);
           playAudio(audioElement, assetBaseUrl + 'correct.mp3').then(() => {
             if (currentPos < task.exercise.length - 1) {
@@ -125,8 +125,7 @@ const Task = props => {
             }).catch(error => console.error('speak error', error));
           }
         }).catch(error => console.error('play current error', error));
-      }
-      else {
+      } else {
         handleWrongInputAction(event.key);
         playAudio(audioElement, assetBaseUrl + 'wrongsound.mp3').then(() => {
           speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
