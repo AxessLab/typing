@@ -11,9 +11,8 @@ export const playAudio = async (audio, url: string, rate = 1): Promise<string> =
       audio.current.load();
       audio.current.addEventListener('ended', resolve);
       audio.current.addEventListener('error', reject);
-
       const promise = audio.current.play().catch(error => console.error('playAudio error '+error));
-      if (promise !== undefined) {
+      if (promise === undefined) {
         promise.catch(error => reject(error + ''));
       }
     });
