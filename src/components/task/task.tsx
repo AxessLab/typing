@@ -105,8 +105,7 @@ const Task = props => {
   }, []);
 
   const handleKey = (event: React.KeyboardEvent): void => {
-    if (event.which !== 0 &&
-      audioElement.current) {
+    if (event.which !== 0 && audioElement.current) {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
 
