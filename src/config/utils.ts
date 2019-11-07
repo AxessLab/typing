@@ -43,7 +43,7 @@ export const fingerPlacement = (input: string): string => {
     case 't':
     case 'g':
     case 'b':
-      return 'Använd väsnter pekfinger för att trycka på ' + character;
+      return 'Använd vänster pekfinger för att trycka på ' + character;
     case '6':
     case '&':
     case 'y':
