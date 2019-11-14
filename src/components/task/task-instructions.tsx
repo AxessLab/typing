@@ -7,6 +7,7 @@ import buttonImageF from '../../static/images/f_button.svg';
 import buttonImageJ from '../../static/images/j_button.svg';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,15 +53,18 @@ export type IProps = StateProps;
 
 const TaskInstruction = (props: IProps) => {
   const classes = useStyles();
+
+  const { t } = useTranslation();
+
   const { currentGameCharacter } = props;
   const paragraphs = [
-    'Nu ska ' + currentGameCharacter.name + ' samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.',
-    'F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.',
-    'Tryck enter för att starta, lycka till!'
+    t('task-instructions.p1a') + currentGameCharacter.name + t('task-instructions.p1b'),
+    t('task-instructions.p2'),
+    t('task-instructions.p3')
   ];
   return (
     <Grid container className={classes.root} spacing={8}>
-      <InstructionLayout title="Uppdrag 1" to="/task/prestart" instructionToSpeak={ paragraphs.join(' ') }>
+      <InstructionLayout title={t('task.mission1Text')} to="/task/prestart" instructionToSpeak={ paragraphs.join(' ') }>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
             {paragraphs[0]}

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { RouteComponentProps } from 'react-router-dom';
-import { speak } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
 import { playAudio } from '../audio/audio';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +30,9 @@ export type IProps = IOwnProps & RouteComponentProps<{ url: string }>;
 
 const TaskCountDown = (props: IProps) => {
   const classes = useStyles();
+  
+  const { i18n } = useTranslation();
+
   const { startTime, to } = props;
   const [ timeLeft, setTimeLeft ] = useState(startTime);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -45,8 +49,11 @@ const TaskCountDown = (props: IProps) => {
   }, [timeLeft, to, props.history]);
 
   useEffect(() => {
+    const ttsOptionsInEffect: ITTS = { language: i18n.language };
     // todo: Fix to start counting at starttime and not starttime - 1
-    speak(timeLeft + ' ').then(url => playAudio(audioElement, url));
+    speak(timeLeft + ' ', ttsOptionsInEffect).then(url => playAudio(audioElement, url));
+    //ignore lint i18n warning
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
   return (

@@ -1,0 +1,54 @@
+{
+  "home": {
+    "logoAlt": "Projektets logotyp",
+    "header": "Välkommen till Typing in the Dark",
+    "text1": "I det här spelet kommer du att få göra olika uppdrag med hjälp av tangentbordet och du spelar med en ninja. Du kommer få olika uppdrag att klara av och efter varje avklarat uppdrag få olika bälten från vit till svart. Uppdragen består av allt ifrån att hitta saker i mörka grottor till att göra så många kombos av ninja moves som möjligt.",
+    "text2": "Målet är att klara alla uppdrag i spelet och att lära sig att skriva på tangentbordet. utan att se det. När du har klarat alla uppdrag i spelet får du svart bälte i tangentbord.",
+    "text3": "För att starta spelet tryck Enter, den knappen ligger till höger på tangentbordet format som ett upp och nedvänt L.",
+    "illustrations": "Vita illustrationer"
+  },
+  "game-data": {
+    "dorukDescription": "Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.",
+    "fosauriDescription": "Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna."
+  },
+  "explore": {
+    "next": "Gå till nästa övning",
+    "introHeader": "Uppvärmning",
+    "introText": "Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!",
+    "completedHeader": "Redo!",
+    "wellDone": "Bra jobbat!",
+    "readyText": "har fått ett rött bälte och är redo för sitt första uppdrag, tryck enter för att starta."
+  },
+  "explore-menu": {
+    "selectNinja": "Välj ninja",
+    "selectHelp": "Tryck pil ned eller upp för att navigera. Välj ninja genom att trycka på enter.",
+    "characterAltText": "karaktär"
+  },
+  "task": {
+    "mission1Text": "Uppdrag 1",
+    "missionAlreadyCompleted": "Uppdraget redan slutfört.2",
+    "character": "karaktär."
+  },
+  "task-instructions": {
+    "p1": "Nu ska ' + currentGameCharacter.name + ' samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.",
+    "p2": "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
+    "p3": "Tryck enter för att starta, lycka till!"
+  },
+  "utilsFingerPlacement":  {
+    "useLeftLittleFinger": "Använd vänster lillfinger för att trycka på ",
+    "useLeftRingFinger": "Använd vänster ringfinger för att trycka på ",
+    "useLeftIndexFinger": "Använd vänster långfinger för att trycka på ",
+    "useLeftForeFinger": "Använd vänster pekfinger för att trycka på ",
+    "useRightForeFinger": "Använd höger pekfinger för att trycka på ",
+    "useRightIndexFinger": "Använd höger långfinger för att trycka på ",
+    "useRightRingFinger": "Använd höger ringfinger för att trycka på ",
+    "useRightLittleFinger": "Använd höger lillfinger för att trycka på "
+  },
+  "instructionLayout": {
+    "enterButtonAlt": "Enter knapp"
+  },
+  "summary": {
+    "completedHeader": "Uppdrag klart",
+    "completedText": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag."
+  }
+}

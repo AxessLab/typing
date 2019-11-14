@@ -1,0 +1,55 @@
+{
+  "home": {
+    "logoAlt": "Project logo",
+    "header": "Welcome to Typing in the Dark",
+    "text1": "In this game you play a Ninja who is sent on different missione. The missons are completed by using your ninja skills on the keyboard. As you complete missions, you will advance in the ninja ranks receiving belts in different colors. Starting with white and ending with black. The missions range from finding stuff in dark caves to completing as many ninja keyboard combos as possible.",
+    "text2": "The main objective of the game is to complete all missions and learn to touch type. When all missions are complete you will get a black belt in touch typing.",
+    "text3": "To start the game, press Enter. The enter button is located on the right side of the kayboard and shaped like an upside-down L.",
+    "illustrations": "White illustrations"
+  },
+  "game-data": {
+    "dorukDescription": "Green clothes, white cane to quickly find keys in the dark. Doruks speciality is fast reflexes.",
+    "fosauriDescription": "Purple clothes and white short sticks in each hand. Fousaris speciality is combos using both hands."
+  }, 
+  "explore": {
+    "next": "Next exercise",
+    "introHeader": "Warm-up",
+    "introText": "Press different keys to train your ninja for the first mission. Begin!",
+    "completedHeader": "Done",
+    "wellDone": "Well done!",
+    "readyText": "has received the red belt and is now ready for the first mission. Press Enter to begin."
+  },
+  "explore-menu": {
+    "selectNinja": "Select ninja",
+    "selectHelp": "Press the up and down arrows to navigate. Press enter to select ninja",
+    "characterAltText": "character"
+  },
+  "task": {
+    "mission1Text": "Mission 1",
+    "missionAlreadyCompleted": "Mission already completed.",
+    "character": "character."
+  },
+  "task-instructions": {
+    "p1a": "Now ",
+    "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+    "p2": "F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+    "p3": "Press enter to begin, good luck!"
+  },
+  "utilsFingerPlacement": {
+    "useLeftPinky": "Use your left little finger to press ",
+    "useLeftRingFinger": "Use your left ring finger to press ",
+    "useLeftIndexFinger": "Use your left index finger to press ",
+    "useLeftForeFinger": "Use your left fore finger to press ",
+    "useRightForeFinger": "Use your right fore finger to press ",
+    "useRightIndexFinger": "Use your right index finger to press ",
+    "useRightRingFinger": "Use your right ring finger to press",
+    "useRightLittleFinger": "Use your right little finger to press"
+  },
+  "instructionLayout": {
+    "enterButtonAlt": "Enter button"
+  },
+  "summary": {
+    "completedHeader": "Mission completed",
+    "completedText": "Well done. You have collected several tools to use on the next mission."
+  }
+}

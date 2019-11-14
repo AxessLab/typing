@@ -3,8 +3,9 @@ import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-d
 import { Grid, Typography, Link } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import enterImage from '../../static/images/enter_button.svg';
-import { speak } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
 import { playAudio } from '../audio/audio';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,6 +43,8 @@ const InstructionLayout = (props: IProps) => {
   const linkElement = useRef<HTMLAnchorElement | null>(null);
   const audioInstructionElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
+  const { t, i18n } = useTranslation();
+
   useEffect(() => {
     if (linkElement.current) {
       linkElement.current.focus();
@@ -49,7 +52,10 @@ const InstructionLayout = (props: IProps) => {
   }, []);
 
   useEffect(() => {
-    if (instructionToSpeak !== undefined) speak(instructionToSpeak).then(url => playAudio(audioInstructionElement, url));
+    const ttsOptionsInEffecct: ITTS = { language: i18n.language }
+    if (instructionToSpeak !== undefined) speak(instructionToSpeak, ttsOptionsInEffecct).then(url => playAudio(audioInstructionElement, url));
+    //ignore lint i18n warning
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instructionToSpeak]);
 
   return (
@@ -61,7 +67,7 @@ const InstructionLayout = (props: IProps) => {
         { children }
       </Grid>
       <Link to={to} className={classes.link} ref={linkElement} component={Link1}>
-        <img src={enterImage} alt="Enter knapp" />
+        <img src={enterImage} alt={t('InstructionLayout.enterButtonAlt')} />
       </Link>
       <audio ref={audioInstructionElement} src="" />
     </Grid>
