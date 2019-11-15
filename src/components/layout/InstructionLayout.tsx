@@ -67,7 +67,7 @@ const InstructionLayout = (props: IProps) => {
         { children }
       </Grid>
       <Link to={to} className={classes.link} ref={linkElement} component={Link1}>
-        <img src={enterImage} alt={t('InstructionLayout.enterButtonAlt')} />
+        <img src={enterImage} alt={t('instructionLayout.enterButtonAlt')} />
       </Link>
       <audio ref={audioInstructionElement} src="" />
     </Grid>

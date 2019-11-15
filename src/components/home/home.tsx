@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
 import logo from '../../static/images/logo.png';
@@ -46,6 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
         top: '0',
         left: '0'
       }
+    },
+    FormControl: {
+      position: "absolute",
+      top: '1em',
+      right: '2em'
     }
   })
 );
@@ -77,9 +82,20 @@ const Home = (props: IProps) => {
 
   const { t, i18n } = useTranslation();
 
+  let langCode = i18n.language;
+
+  const onLanguageSelect = (e) => { e.target.value === 'sv-SE'? langCode = 'sv-SE' : langCode = 'en-US'; i18n.changeLanguage(langCode); };
+
   return (
     <Grid container className={classes.root}spacing={2}>
       <img src={logo} alt={t('home.logoAlt')} className={classes.logo} />
+      <FormControl className={classes.FormControl}>
+        <InputLabel id="label">{t('home.language')}</InputLabel>
+        <Select labelId="label" id="selectLanguage" onChange={onLanguageSelect} value={i18n.language}>
+          <MenuItem value={"en-US"}>English</MenuItem>
+          <MenuItem value={"sv-SE"}>Svenska</MenuItem>
+        </Select>
+      </FormControl>
       <InstructionLayout title={t('home.header')} to="/explore">
         <Grid item xs={12} sm={8}>
           <Typography variant="body1" align="left">
