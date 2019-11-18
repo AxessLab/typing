@@ -79,7 +79,7 @@ const Explore = props => {
   useEffect(() => {
     const ttsOptions: ITTS = { language: i18n.language };
     speak(headerText + ' ' + introText, ttsOptions).then(url => playAudio(audioElementIntro, url));
-    //ignore lint i18n warning
+    // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerText, introText]);
 
@@ -88,14 +88,14 @@ const Explore = props => {
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
       setHeaderText(t('explore.completedHeader'));
-      setIntroText(t('explore.wellDone') + ' ' + currentGameCharacter.name+ ' ' + t('explore.readyText')); 
+      setIntroText(t('explore.wellDone') + ' ' + currentGameCharacter.name + ' ' + t('explore.readyText')); 
       completedAction();  
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
     }
 
     return () => clearInterval(interval);
-    //ignore lint warnigns about t(...)
+    // ignore lint warnings about t(...)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [explore.typeCount, timeCount, completedAction, currentGameCharacter]);
 

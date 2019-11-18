@@ -108,7 +108,7 @@ const Task = props => {
       playAudio(audioElement, url).catch(error => 
         console.error('play error intial character ' + error))).catch(error => 
           console.error('speak inital character errror ' + error));
-      //Ignore lint warning about currentPos, i18n and audioElement
+      // Ignore lint warning about currentPos, i18n and audioElement
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

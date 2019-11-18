@@ -39,7 +39,7 @@ const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
         playAudio(audioElement, url).catch(error => console.error('playAudio error', error));
       }).catch(error => console.error('speak error', error));
     }).catch(error => console.error('play audio error', error));
-    //ignore lint i18n warning
+    // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

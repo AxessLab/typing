@@ -52,7 +52,7 @@ const TaskCountDown = (props: IProps) => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
     // todo: Fix to start counting at starttime and not starttime - 1
     speak(timeLeft + ' ', ttsOptionsInEffect).then(url => playAudio(audioElement, url));
-    //ignore lint i18n warning
+    // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 

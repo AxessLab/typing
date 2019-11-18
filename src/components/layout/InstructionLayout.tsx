@@ -54,7 +54,7 @@ const InstructionLayout = (props: IProps) => {
   useEffect(() => {
     const ttsOptionsInEffecct: ITTS = { language: i18n.language }
     if (instructionToSpeak !== undefined) speak(instructionToSpeak, ttsOptionsInEffecct).then(url => playAudio(audioInstructionElement, url));
-    //ignore lint i18n warning
+    // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instructionToSpeak]);
 
