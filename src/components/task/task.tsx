@@ -9,6 +9,7 @@ import { fingerPlacement } from '../../config/utils';
 import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { playAudio } from '../../components/audio/audio';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +77,9 @@ export type IProps = IStateProps & IDispatchProps & RouteComponentProps<{ url: s
 
 const Task = props => {
   const classes = useStyles();
+
+  const { t, i18n } = useTranslation();
+
   const {
     task,
     currentPos,
@@ -85,81 +89,71 @@ const Task = props => {
 
   const inputElement = useRef<HTMLDivElement | null>(null);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
-  const correctAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
-  const wrongAudioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef<HTMLMediaElement | null>(null);
 
   // Action declaration to avoid shadowing
   const handleCorrectInputAction = props.handleCorrectInput;
   const handleWrongInputAction = props.handleWrongInput;
   const completedAction = props.completed;
-  const ttsOptions: ITTS = { rate: 2 };
+  const ttsOptions: ITTS = { language: i18n.language, rate: 2 };
 
   useEffect(() => {
     if (inputElement && inputElement.current) {
       inputElement.current.focus();
     }
-    speak(task.exercise[currentPos].text, ttsOptions).then(url => playAudio(audioElement, url));
   }, [currentPos, task.exercise, ttsOptions]);
 
-  const handleKey = (event: React.KeyboardEvent): void => {
-    if (event.which !== 0 &&
-      audioElement.current &&
-      correctAudioElement.current &&
-      wrongAudioElement.current &&
-      !['Control', 'Meta', 'Shift', 'Alt'].some((modifier: string): boolean => event.key === modifier)
-    ) {
-      audioElement.current.pause();
-      audioElement.current.setAttribute('src', '');
-      audioElement.current = new Audio();
-      correctAudioElement.current.load();
-      wrongAudioElement.current.load();
+  useEffect(() => {
+    const ttsOptionsInEffect: ITTS = { language: i18n.language, rate: 2 };
+    speak(task.exercise[currentPos].text, ttsOptionsInEffect).then(url => 
+      playAudio(audioElement, url).catch(error => 
+        console.error('play error intial character ' + error))).catch(error => 
+          console.error('speak inital character errror ' + error));
+      // Ignore lint warning about currentPos, i18n and audioElement
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const handleKey = (event: React.KeyboardEvent): void => {
+    if (event.which !== 0 && audioElement.current) {
       // Check is correct key is typed or not
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
-
-      // TODO: Maybe rename this variable?
 
       if (currentPos + 1 === task.exercise.length && correctKeyPressed) {
         completedAction(task);
         props.history.push('/summary');
       }
 
-      correctKeyPressed ? handleCorrectInputAction(event.key).then(() => {
-        if (correctAudioElement.current) {
-          correctAudioElement.current.setAttribute('currentTime', '0');
-          correctAudioElement.current.play().then(() => {
+      if (correctKeyPressed) {
+        handleCorrectInputAction(event.key);
+          playAudio(audioElement, assetBaseUrl + 'correct.mp3').then(() => {
             if (currentPos < task.exercise.length - 1) {
               speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
-                if (textURL !== '' && audioElement.current) {
-                  audioElement.current.pause();
-                  audioElement.current.setAttribute('src', '');
-                  audioElement.current = new Audio(textURL);
-                  audioElement.current.play().catch(error => console.error('play error ', error));
-                }
-              }).catch(error => console.error('playAudio error', error));
-            }
-          }).catch(error => console.error('playAudio error', error));
-        }
-      }) : handleWrongInputAction(event.key).then(() => {
-        wrongAudioElement.current!.setAttribute('currentTime', '0');
-        wrongAudioElement.current!.play().then(() => {
-          speak(fingerPlacement(task.exercise[currentPos].text)).then(textURL => {
+              if (textURL !== '' && audioElement.current) {
+                playAudio(audioElement, textURL).catch(error => console.error('playAudio error ', error));
+              }
+            }).catch(error => console.error('speak error', error));
+          }
+        }).catch(error => console.error('play current error', error));
+      } else {
+        handleWrongInputAction(event.key);
+        playAudio(audioElement, assetBaseUrl + 'wrongsound.mp3').then(() => {
+          const ttsOptionsSlow = { language: i18n.language, rate: 1};
+          speak(fingerPlacement(task.exercise[currentPos].text, i18n.language), ttsOptionsSlow).then(textURL => {
             if (textURL !== '' && audioElement.current) {
-              audioElement.current.pause();
-              audioElement.current.setAttribute('src', '');
-              audioElement.current = new Audio(textURL);
-              audioElement.current.play().catch(error => console.error('playAudio error', error));
+              playAudio(audioElement, textURL).catch(error => console.error('playAudio error', error));
             }
           }).catch(error => console.error('speak error', error));
-        }).catch(error => console.error('playAudio wrong effect error', error));
-      });
+        }).catch(error => console.error('play wrong effect error', error));
+      }
     }
-  };
+  }
+
+  
+  
 
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>
       <Grid item xs={12}>
-        <Typography variant="h1" align="center">Uppdrag 1</Typography>
+        <Typography variant="h1" align="center">{t('task.mission1Text')}</Typography>
       </Grid>
       {!task.completed ?
       <React.StrictMode>
@@ -200,15 +194,13 @@ const Task = props => {
             </Grid>
           </Grid>
           <Grid item xs={2}>
-            <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' karaktär'} />
+            <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' ' + t('task.character')} />
           </Grid>
         </Grid>
         <audio id="player" ref={audioElement} src="" autoPlay />
-        <audio id="correct" ref={correctAudioElement} src={assetBaseUrl + 'correct.mp3'} preload="true" />
-        <audio id="wrong" ref={wrongAudioElement} src={assetBaseUrl + 'wrongsound.mp3'} preload="true" />
       </React.StrictMode>
       :
-        <Typography variant="body1">Uppdraget är redan slutfört!</Typography>
+        <Typography variant="body1">{t('task.missionAlreadyCompleted')}</Typography>
       }
     </Grid>
   );

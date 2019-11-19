@@ -6,7 +6,7 @@ import {
   LinkProps as RouterLinkProps,
   RouteComponentProps
 } from 'react-router-dom';
-import { speak } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
 import { completed, increaseType } from './explore.reducer';
 import { assetBaseUrl } from '../../config/audio';
 import ExploreInput from './explore-input';
@@ -14,6 +14,7 @@ import { playAudio } from '../audio/audio';
 import './explore.scss';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +49,9 @@ const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) 
 
 const Explore = props => {
   const classes = useStyles();
+
+  const { t, i18n } = useTranslation();
+
   const {
     explore,
     currentGameCharacter
@@ -59,8 +63,8 @@ const Explore = props => {
   enum KEYROW { ONE, ZERO, MINUS_ONE }
 
   const [timeCount, setTimeCount] = useState(0);
-  const [headerText, setHeaderText] = useState('Uppvärmning');
-  const [introText, setIntroText] = useState('Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!');
+  const [headerText, setHeaderText] = useState(t('explore.introHeader'));
+  const [introText, setIntroText] = useState(t('explore.introText'));
 
   const timeForExercise = 60;
   const maxInputs = 50;
@@ -71,24 +75,28 @@ const Explore = props => {
 
   const [audioElement1, audioElement2, audioElement3]: Array<React.MutableRefObject<HTMLMediaElement | null>> = [useRef(null), useRef(null), useRef(null)];
   const audioElements = [audioElement1, audioElement2, audioElement3];
-
+  
   useEffect(() => {
-    speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
+    const ttsOptions: ITTS = { language: i18n.language };
+    speak(headerText + ' ' + introText, ttsOptions).then(url => playAudio(audioElementIntro, url));
+    // ignore lint i18n warning
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerText, introText]);
 
   useEffect(() => {
     let interval;
 
     if (timeCount > timeForExercise || explore.typeCount > maxInputs) {
-      setHeaderText('Redo');
-      setIntroText(`Bra jobbat! ${currentGameCharacter.name} har fått ett rött bälte och är redo för sitt första uppdrag, tryck enter för att starta.`);
-      completedAction();
+      setHeaderText(t('explore.completedHeader'));
+      setIntroText(t('explore.wellDone') + ' ' + currentGameCharacter.name + ' ' + t('explore.readyText')); 
+      completedAction();  
     } else {
       interval = setInterval(() => setTimeCount(0), 1000);
     }
 
     return () => clearInterval(interval);
-
+    // ignore lint warnings about t(...)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [explore.typeCount, timeCount, completedAction, currentGameCharacter]);
 
   useEffect(() => {
@@ -162,7 +170,7 @@ const Explore = props => {
             <>
               <Grid item xs={12} className={classes.alignCenter}>
                 <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
-                  Gå till nästa övning
+                  {t('explore.next')}
                 </Button>
               </Grid>
               <Grid item xs={12} className={classes.alignCenter}>
