@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { speak } from '../tts/tts';
+import { speak, ITTS } from '../tts/tts';
 import { playAudio } from '../audio/audio';
 import { IRootState } from '../../shared/reducers';
 import { setCharacter } from '../../shared/reducers/game-data';
 import { Paper, List, ListItem, Typography, Grid } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,14 +60,17 @@ export type IProps = StateProps & DispatchProps & RouteComponentProps<{ url: str
 
 const ExploreMenu = (props: IProps) => {
   const classes = useStyles();
+
+  const { t, i18n } = useTranslation();
+
   const {
     gameCharacters
   } = props;
 
   const setCharacterAction = props.setCharacter;
 
-  const headerText = 'Välj ninja';
-  const introText = 'Tryck pil ned eller upp för att navigera. Välj ninja genom att trycka på enter.';
+  const headerText = t('explore-menu.selectNinja');
+  const introText = t('explore-menu.selectHelp');
 
   const audioElementIntro: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
   const menuElement = useRef<HTMLUListElement | null>(null);
@@ -76,6 +80,8 @@ const ExploreMenu = (props: IProps) => {
   ];
   const [ listIndex, setListIndex ] = useState(-1);
 
+  const ttsOptions: ITTS = { language: i18n.language };
+
   useEffect(() => {
     if (menuElement && menuElement.current) {
       menuElement.current.focus();
@@ -83,12 +89,25 @@ const ExploreMenu = (props: IProps) => {
   }, []);
 
   useEffect(() => {
-    speak(headerText + ' ' + introText).then(url => playAudio(audioElementIntro, url));
+    const ttsOptionsInEffect: ITTS = { language: i18n.language };
+    speak(headerText + ' ' + introText, ttsOptionsInEffect).then(url => playAudio(audioElementIntro, url));
+    //ignore lint i18n warning
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerText, introText]);
+
+  //Can't use t() from i18n in a shared reducer, ugly fix for now
+  const localizeDescription = (id: number): string => {
+    if (id === 0) {
+      return t('game-data.dorukDescription');
+    }
+    else {
+      return t('game-data.fosauriDescription');
+    }
+  } 
 
   const handleFocus = (id: number) => {
     setListIndex(id);
-    speak(gameCharacters[id].name + '.  ' + gameCharacters[id].description).then(url => playAudio(audioElementIntro, url));
+    speak(gameCharacters[id].name + '.  ' + localizeDescription(id), ttsOptions).then(url => playAudio(audioElementIntro, url));
   };
 
   const handleClick = (id: number) => {
@@ -137,10 +156,10 @@ const ExploreMenu = (props: IProps) => {
                   onFocus={() => handleFocus(character.id)}
                 >
                   <Link to="/explore/play" className={classes.link} tabIndex={-1}>
-                    <img src={character.image} className={classes.image} alt={character.name + ' karaktär'} />
+                    <img src={character.image} className={classes.image} alt={character.name + ' ' + t('explore-menu.characterAltText')} />
                     <span>
                       <Typography variant="h2">{character.name}</Typography>
-                      <Typography variant="body2">{character.description}</Typography>
+                      <Typography variant="body2">{localizeDescription(character.id)}</Typography>
                     </span>
                   </Link>
                 </ListItem>

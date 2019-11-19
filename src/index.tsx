@@ -8,6 +8,7 @@ import App from './app';
 import { Container, CssBaseline } from '@material-ui/core';
 import theme from './theme';
 import { ThemeProvider } from '@material-ui/styles';
+import './i18n';
 
 if (process.env.NODE_ENV === 'development') {
   require('react-axe')(React, ReactDOM, 1000);
