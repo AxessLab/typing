@@ -39,8 +39,6 @@ This project was bootstrapped with [Create React App][create-react-app].
 - Free Ninja Vector https://www.vecteezy.com/vector-art/128934-free-ninja-vector
 - Free Ninjas Vector. https://www.vecteezy.com/vector-art/112781-free-ninjas-vector
 
-### Vector graphics
-
 [axesslab]: https://axesslab.com/
 [temkeen]: https://ictenablers.com/
 [srf]: https://www.srf.nu/
