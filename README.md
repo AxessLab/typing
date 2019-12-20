@@ -27,6 +27,18 @@ Typing in the dark is [MIT Licensed](./LICENSE.md).
 ## Contributions
 This project was bootstrapped with [Create React App][create-react-app].
 
+### Sound resources
+- 30248__streety__sword7.flac https://freesound.org/people/Streety/sounds/30248
+- 482783__mattiagiovanetti__ninja-tune.wav https://freesound.org/people/MattiaGiovanetti/sounds/482783/
+- 1437__lostchocolatelab__02sword03.aiff https://freesound.org/people/lostchocolatelab/sounds/1437/
+- 131142__flameeagle__block https://freesound.org/people/FlameEagle/sounds/131142/
+- 411462__thebuilder15__bubble-pop https://freesound.org/people/TheBuilder15/sounds/411462/
+- 471147__worldmaxter__sword-slide https://freesound.org/people/Worldmaxter/sounds/471147/
+
+### Vector graphics
+- Free Ninja Vector https://www.vecteezy.com/vector-art/128934-free-ninja-vector
+- Free Ninjas Vector. https://www.vecteezy.com/vector-art/112781-free-ninjas-vector
+
 [axesslab]: https://axesslab.com/
 [temkeen]: https://ictenablers.com/
 [srf]: https://www.srf.nu/
