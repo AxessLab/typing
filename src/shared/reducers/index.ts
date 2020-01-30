@@ -1,7 +1,9 @@
-import { combineReducers } from 'redux';
-import task, { ITaskState } from '../../components/task/task.reducer';
-import explore, { IExploreState } from '../../components/explore/explore.reducer';
-import game, { IGameState } from './game-data';
+import { combineReducers } from "redux";
+import task, { ITaskState } from "../../components/task/task.reducer";
+import explore, {
+  IExploreState
+} from "../../components/explore/explore.reducer";
+import game, { IGameState } from "./game-data";
 
 export interface IRootState {
   readonly task: ITaskState;
