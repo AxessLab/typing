@@ -3,8 +3,12 @@ import { Grid, Typography } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import whiteImage from "../../static/images/vita_illustrationer.svg";
 import InstructionLayout from "../layout/InstructionLayout";
-import buttonImageF from "../../static/images/f_button.svg";
-import buttonImageJ from "../../static/images/j_button.svg";
+import buttonImageH from "../../static/images/h_button.svg";
+import buttonImageJ from "../../static/images/j_button_small.svg";
+import buttonImageK from "../../static/images/k_button.svg";
+import buttonImageL from "../../static/images/l_button.svg";
+import buttonImageÖ from "../../static/images/ö_button.svg";
+import buttonImageÄ from "../../static/images/ä_button.svg";
 import { connect } from "react-redux";
 import { IRootState } from "../../shared/reducers";
 import { useTranslation } from "react-i18next";
@@ -58,17 +62,17 @@ const TaskInstruction = (props: IProps) => {
 
   const { currentGameCharacter } = props;
   const paragraphs = [
-    t("task-instructions.p1a") +
-      currentGameCharacter.name +
-      t("task-instructions.p1b"),
-    t("task-instructions.p2"),
-    t("task-instructions.p3")
+    t("task2-instructions.p1a") +
+    currentGameCharacter.name +
+    t("task2-instructions.p1b"),
+    t("task2-instructions.p2"),
+    t("task2-instructions.p3")
   ];
   return (
     <Grid container className={classes.root} spacing={8}>
       <InstructionLayout
-        title={t("task.mission1Text")}
-        to='/task/prestart'
+        title={t("task2.mission2Text")}
+        to='/task2/prestart'
         instructionToSpeak={paragraphs.join(" ")}
       >
         <Grid item xs={12} md={7}>
@@ -88,11 +92,23 @@ const TaskInstruction = (props: IProps) => {
         </Grid>
       </InstructionLayout>
       <Grid item container justify='center'>
-        <Grid item xs={12} md={2}>
-          <img src={buttonImageF} alt='F knapp' />
+        <Grid item xs={12} md={1}>
+          <img src={buttonImageH} alt='H knapp' />
         </Grid>
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} md={1}>
           <img src={buttonImageJ} alt='J knapp' />
+        </Grid>
+        <Grid item xs={12} md={1}>
+          <img src={buttonImageK} alt='K knapp' />
+        </Grid>
+        <Grid item xs={12} md={1}>
+          <img src={buttonImageL} alt='L knapp' />
+        </Grid>
+        <Grid item xs={12} md={1}>
+          <img src={buttonImageÖ} alt='Ö knapp' />
+        </Grid>
+        <Grid item xs={12} md={1}>
+          <img src={buttonImageÄ} alt='Ä knapp' />
         </Grid>
       </Grid>
       <img

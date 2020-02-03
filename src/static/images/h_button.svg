@@ -1,1 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="127" height="110" viewBox="0 0 127 110"><defs><filter id="a" x="0" y="0" width="127" height="110" filterUnits="userSpaceOnUse"><feOffset dy="3" input="SourceAlpha"/><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-opacity="0.161"/><feComposite operator="in" in2="b"/><feComposite in="SourceGraphic"/></filter><filter id="c" x="36.5" y="71.5" width="54" height="22" filterUnits="userSpaceOnUse"><feOffset dy="3" input="SourceAlpha"/><feGaussianBlur stdDeviation="3" result="d"/><feFlood flood-opacity="0.161"/><feComposite operator="in" in2="d"/><feComposite in="SourceGraphic"/></filter></defs><g transform="translate(9 6)"><g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#a)"><g transform="translate(9 6)" fill="#fff" stroke="#6facb9" stroke-width="4"><rect width="109" height="92" rx="15" stroke="none"/><rect x="2" y="2" width="105" height="88" rx="13" fill="none"/></g></g><text transform="translate(54 61)" font-size="53" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="700"><tspan x="-15.715" y="0">F</tspan></text><g transform="matrix(1, 0, 0, 1, -9, -6)" filter="url(#c)"><line x2="36" transform="translate(45.5 79.5)" fill="none" stroke="#151515" stroke-width="4"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84" height="74" viewBox="0 0 84 74">
+  <defs>
+    <filter id="Rectangle_38" x="0" y="0" width="84" height="74" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_78" data-name="Group 78" transform="translate(-735 -477)">
+    <g transform="matrix(1, 0, 0, 1, 735, 477)" filter="url(#Rectangle_38)">
+      <g id="Rectangle_38-2" data-name="Rectangle 38" transform="translate(9 6)" fill="#fff" stroke="#6facb9" stroke-width="4">
+        <rect width="66" height="56" rx="15" stroke="none"/>
+        <rect x="2" y="2" width="62" height="52" rx="13" fill="none"/>
+      </g>
+    </g>
+    <text id="H" transform="translate(776 523)" font-size="33" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="700"><tspan x="-12.226" y="0">H</tspan></text>
+  </g>
+</svg>

@@ -35,25 +35,25 @@ export const speak = async (text = '', options: ITTS = {}): Promise<string> => {
   const parameters: ITTS & { text: string } = { text, ...options };
 
   //Fix missing parameters to ensure a voice is returned from backend
-  if (text === '' || text === null || text === undefined) {
+  if (text === '' || text === null || text === undefined) {
     return Promise.reject('No text defined');
   }
   if (parameters.gender === null || parameters.gender === undefined) {
     parameters.gender = 'MALE';
   }
-  if (parameters.rate === null || parameters.rate === undefined) {
+  if (parameters.rate === null || parameters.rate === undefined) {
     parameters.rate = 1;
   }
   if (parameters.language === null || parameters.language === undefined) {
     parameters.language = 'sv-SE';
-  } 
+  }
   if (parameters.language === 'sv-SE') {
     parameters.voice = 'sv-SE-Wavenet-A';
   }
   if (parameters.language === 'en-US') {
     parameters.voice = "en-US-Wavenet-A";
   }
-  
+
   // Remove other bad parameters
   Object.keys(parameters).forEach(key => {
     if (['', null, undefined].some(badValue => parameters[key] === badValue)) delete parameters[key];

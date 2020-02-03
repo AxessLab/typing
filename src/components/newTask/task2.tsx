@@ -6,7 +6,6 @@ import {
   handleCorrectInput,
   handleWrongInput,
   completed,
-  setTask,
   reset
 } from "../task/task.reducer";
 import { speak, ITTS } from "../tts/tts";
@@ -73,7 +72,6 @@ const mapDispatchToProps = {
   handleCorrectInput,
   handleWrongInput,
   completed,
-  setTask,
   reset
 };
 
@@ -175,7 +173,7 @@ const Task2 = props => {
       }
     }
   };
-
+  console.log(currentPos)
   return (
     <Grid
       container
@@ -186,7 +184,7 @@ const Task2 = props => {
     >
       <Grid item xs={12}>
         <Typography variant='h1' align='center'>
-          {t("task.mission1Text")}
+          {t("task2.mission2Text")}
         </Typography>
       </Grid>
       {!task.completed ? (

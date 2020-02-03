@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { IAction } from "../../shared/reducers";
 import { ITask, defaultValue, task2value } from "../../shared/model/task.model";
+import { tasks } from "../../shared/reducers/game-data";
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: "task/FETCH_TASK_LIST",
@@ -16,17 +17,19 @@ export const ACTION_TYPES = {
 export interface ITaskState {
   entities: readonly ITask[];
   entity: Readonly<ITask>;
-  entity2: Readonly<ITask>;
+  currentTask: number;
   currentPos: number;
   correctInput: boolean;
   wrongInput: boolean;
   errors: number;
 }
 
+const firstTask = 0;
+
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
-  entity: defaultValue,
-  entity2: task2value,
+  entity: tasks[firstTask],
+  currentTask: firstTask,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
@@ -51,7 +54,8 @@ export default (
     case ACTION_TYPES.SET_TASK:
       return {
         ...state,
-        entity: action.payload
+        entity: action.payload /* ,
+        currentPos: 0 */
       };
     case ACTION_TYPES.CORRECT_INPUT:
       return {

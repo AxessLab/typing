@@ -36,7 +36,18 @@
     "p2": "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
     "p3": "Tryck enter för att starta, lycka till!"
   },
-  "utilsFingerPlacement":  {
+  "task2": {
+    "mission2Text": "Uppdrag 2",
+    "missionAlreadyCompleted": "Uppdraget redan slutfört.2",
+    "character": "karaktär."
+  },
+  "task2-instructions": {
+    "p1a": "Nu ska ",
+    "p1b": " träna sina reflexer på höger hand. Använd höger hand för att skriva bokstäverna som dyker upp.",
+    "p2": "Håll höger pekfinger på J och använd sen resten av fingrarna på K, L , Ö och Ä.",
+    "p3": "Tryck enter för att starta, lycka till!"
+  },
+  "utilsFingerPlacement": {
     "useLeftLittleFinger": "Använd vänster lillfinger för att trycka på ",
     "useLeftRingFinger": "Använd vänster ringfinger för att trycka på ",
     "useLeftIndexFinger": "Använd vänster långfinger för att trycka på ",
