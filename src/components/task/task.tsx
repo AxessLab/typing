@@ -118,6 +118,7 @@ const Task = props => {
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
 
       if (currentPos + 1 === task.exercise.length && correctKeyPressed) {
+
         completedAction(task);
         props.history.push('/summary');
       }
@@ -146,9 +147,6 @@ const Task = props => {
       }
     }
   }
-
-
-  console.log(currentPos)
 
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>

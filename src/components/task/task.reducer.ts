@@ -1,12 +1,12 @@
 import { Dispatch } from "redux";
 import { IAction } from "../../shared/reducers";
-import { ITask, defaultValue, task2value } from "../../shared/model/task.model";
+import { ITask } from "../../shared/model/task.model";
 import { tasks } from "../../shared/reducers/game-data";
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: "task/FETCH_TASK_LIST",
   FETCH_TASK: "task/FETCH_TASK",
-  SET_TASK: "task/FETCH_TASK",
+  NEXT_TASK: "task/NEXT_TASK",
   CORRECT_INPUT: "task/CORRECT_INPUT",
   NEXT: "task/NEXT",
   WRONG_INPUT: "task/WRONG_INPUT",
@@ -51,11 +51,13 @@ export default (
           exercise: action.payload.data
         }
       };
-    case ACTION_TYPES.SET_TASK:
+    case ACTION_TYPES.NEXT_TASK:
+      const nextTask: number = state.currentTask + 1;
       return {
         ...state,
-        entity: action.payload /* ,
-        currentPos: 0 */
+        entity: tasks[nextTask],
+        currentTask: nextTask,
+        currentPos: 0
       };
     case ACTION_TYPES.CORRECT_INPUT:
       return {
@@ -104,9 +106,8 @@ export const getTask = (task: ITask): IAction => ({
   }
 });
 
-export const setTask = (task: ITask): IAction => ({
-  type: ACTION_TYPES.SET_TASK,
-  payload: task
+export const nextTask = (): IAction => ({
+  type: ACTION_TYPES.NEXT_TASK
 });
 
 export const handleCorrectInput = (key: string) => async (

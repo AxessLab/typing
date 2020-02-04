@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import Explore from "./components/explore";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Task from "./components/task";
-import Task2 from "./components/newTask";
 import Summary from "./components/summary/summary";
 import Home from "./components/home/home";
 
@@ -13,7 +12,6 @@ const Start = () => {
         <Route exact path='/' render={props => <Home {...props} />} />
         <Route path='/explore' render={props => <Explore {...props} />} />
         <Route path='/task' render={props => <Task {...props} />} />
-        <Route path='/task2' render={props => <Task2 {...props} />} />
         <Route path='/summary' render={props => <Summary {...props} />} />
       </Switch>
     </Router>

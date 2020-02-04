@@ -11,7 +11,8 @@ import { assetBaseUrl } from '../../config/audio';
 import { Typography, Grid, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import Task2 from '../newTask/task2';
+import { nextTask } from '../task/task.reducer';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,17 +26,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const mapDispatchToProps = {
+  nextTask
+};
+
 const mapStateToProps = ({ game }: IRootState) => ({
   currentGameCharacter: game.gameCharacter
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
+type IDispatchProps = typeof mapDispatchToProps;
 
-type ISummmaryProps = StateProps;
+type ISummmaryProps = StateProps & IDispatchProps;
 
-const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
+const Summmary = (props: ISummmaryProps) => {
   const classes = useStyles();
-
+  const { currentGameCharacter, nextTask } = props;
   const { t, i18n } = useTranslation();
 
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -47,6 +53,7 @@ const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
   const buttonElement = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
+    nextTask();
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
     playAudio(audioElement, assetBaseUrl + 'done.mp3').then(() => {
       speak(t('summary.completedText'), ttsOptionsInEffect).then(url => {
@@ -73,7 +80,7 @@ const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
         <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
       </Grid>
       <Grid item xs={12} className={classes.alignCenter}>
-        <Button variant="outlined" to="/task2" ref={buttonElement} component={Link1}>
+        <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
           {t('explore.next')}
         </Button>
       </Grid>
@@ -82,4 +89,4 @@ const Summmary = ({ currentGameCharacter }: ISummmaryProps) => {
   );
 };
 
-export default connect(mapStateToProps)(Summmary);
+export default connect(mapStateToProps, mapDispatchToProps)(Summmary);
