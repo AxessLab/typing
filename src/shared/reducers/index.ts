@@ -17,4 +17,8 @@ export interface IAction {
 }
 
 // Export root reducer
-export default combineReducers<IRootState>({ task, explore, game });
+export default combineReducers<IRootState>({
+  task,
+  explore,
+  game
+});

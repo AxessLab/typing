@@ -60,7 +60,8 @@ const mapStateToProps = ({ task, game }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   wrongInput: task.wrongInput,
-  currentGameCharacter: game.gameCharacter
+  currentGameCharacter: game.gameCharacter,
+  currentTaskInstruction: task.entity.instructions
 });
 
 const mapDispatchToProps = {
@@ -84,7 +85,8 @@ const Task = props => {
     task,
     currentPos,
     wrongInput,
-    currentGameCharacter
+    currentGameCharacter,
+    currentTaskInstruction
   } = props;
 
   const inputElement = useRef<HTMLDivElement | null>(null);
@@ -151,7 +153,7 @@ const Task = props => {
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>
       <Grid item xs={12}>
-        <Typography variant="h1" align="center">{t('task.mission1Text')}</Typography>
+        <Typography variant="h1" align="center">{currentTaskInstruction.mission1Text}</Typography>
       </Grid>
       {!task.completed ?
         <React.StrictMode>

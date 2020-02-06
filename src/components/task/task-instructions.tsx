@@ -3,11 +3,10 @@ import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
 import InstructionLayout from '../layout/InstructionLayout';
-import buttonImageF from '../../static/images/f_button.svg';
-import buttonImageJ from '../../static/images/j_button.svg';
 import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
-import { useTranslation } from 'react-i18next';
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,9 +41,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+const localData = localStorage.getItem('i18nextLng')
 
-const mapStateToProps = ({ game }: IRootState) => ({
-  currentGameCharacter: game.gameCharacter
+const mapStateToProps = ({ game, task }: IRootState) => ({
+  currentGameCharacter: game.gameCharacter,
+  currentTaskInstruction: task.entity.instructions,
+  currentTask: task.currentTask
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -54,22 +56,28 @@ export type IProps = StateProps;
 const TaskInstruction = (props: IProps) => {
   const classes = useStyles();
 
-  const { t } = useTranslation();
+  const { currentGameCharacter, currentTaskInstruction, currentTask } = props;
+  let paragraphs;
+  if (localData === 'sv-SE') {
+    paragraphs = [
+      currentTaskInstruction.mission1Text,
+      currentTaskInstruction.p1a + currentGameCharacter.name + currentTaskInstruction.p1b,
+      currentTaskInstruction.p2,
+      currentTaskInstruction.p3
+    ];
+  } else {
+    paragraphs = [
+      currentTaskInstruction.mission1TextEn,
+      currentTaskInstruction.p1aEn + currentGameCharacter.name + currentTaskInstruction.p1bEn,
+      currentTaskInstruction.p2En,
+      currentTaskInstruction.p3En
 
-  const { currentGameCharacter } = props;
-  const paragraphs = [
-    t('task-instructions.p1a') + currentGameCharacter.name + t('task-instructions.p1b'),
-    t('task-instructions.p2'),
-    t('task-instructions.p3')
-  ];
+    ];
+  }
+
   return (
     <Grid container className={classes.root} spacing={8}>
-      <InstructionLayout title={t('task.mission1Text')} to="/task/prestart" instructionToSpeak={ paragraphs.join(' ') }>
-        <Grid item xs={12} md={7}>
-          <Typography variant="body1" align="left">
-            {paragraphs[0]}
-          </Typography>
-        </Grid>
+      <InstructionLayout title={paragraphs[0]} to="/task/prestart" instructionToSpeak={paragraphs.join(' ')}>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
             {paragraphs[1]}
@@ -80,17 +88,56 @@ const TaskInstruction = (props: IProps) => {
             {paragraphs[2]}
           </Typography>
         </Grid>
+        <Grid item xs={12} md={7}>
+          <Typography variant="body1" align="left">
+            {paragraphs[3]}
+          </Typography>
+        </Grid>
       </InstructionLayout>
-      <Grid item container justify="center">
-        <Grid item xs={12} md={2}>
-          <img src={buttonImageF} alt="F knapp" />
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <img src={buttonImageJ} alt="J knapp" />
-        </Grid>
-      </Grid>
-      <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration}/>
-    </Grid>
+      {currentTask === 0 ?
+        <>
+          <Grid item container justify="center">
+            <Grid item xs={12} md={2}>
+              <img src={currentTaskInstruction.img1} alt={currentTaskInstruction.alt1} />
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <img src={currentTaskInstruction.img2} alt={currentTaskInstruction.alt2} />
+            </Grid>
+          </Grid>
+          <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration} />
+        </>
+        :
+        <>
+          <Grid item container justify="center">
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img1} alt={currentTaskInstruction.alt1} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img2} alt={currentTaskInstruction.alt2} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img3} alt={currentTaskInstruction.alt3} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img4} alt={currentTaskInstruction.alt4} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img5} alt={currentTaskInstruction.alt5} />
+            </Grid>
+            <Grid item xs={12} md={1}>
+              <img src={currentTaskInstruction.img6} alt={currentTaskInstruction.alt6} />
+            </Grid>
+
+          </Grid>
+          <img
+            src={whiteImage}
+            alt='Vita illustrationer'
+            className={classes.illustration}
+          />
+        </>
+      }
+    </Grid >
+
   );
 };
 

@@ -1,12 +1,131 @@
 import { Dispatch } from "redux";
 import { IAction } from "../../shared/reducers";
 import { ITask } from "../../shared/model/task.model";
-import { tasks } from "../../shared/reducers/game-data";
+import keyBigF from "../../static/images/f_button.svg";
+import keyBigJ from "../../static/images/j_button.svg";
+import keyF from "../../static/images/f_button_small.svg";
+import keyJ from "../../static/images/j_button_small.svg";
+import keyH from "../../static/images/h_button.svg";
+import keyK from "../../static/images/k_button.svg";
+import keyL from "../../static/images/l_button.svg";
+import keyÖ from "../../static/images/ö_button.svg";
+import keyÄ from "../../static/images/ä_button.svg";
+
+const tasks: ITask[] = [
+  {
+    instructions: {
+      mission1Text: "Uppdrag 1",
+      mission1TextEn: "Mission 1",
+      missionAlreadyCompleted: "Uppdraget redan slutfört.",
+      missionAlreadyCompletedEn: "Mission already completed.",
+      character: "karaktär.",
+      characterEn: "character.",
+      p1a: "Nu ska ",
+      p1aEn: "Now ",
+      p1b:
+        " samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.",
+      p1bEn:
+        " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+      p2:
+        "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
+      p2En:
+        "F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+      p3: "Tryck enter för att starta, lycka till!",
+      p3En: "Press enter to begin, good luck!",
+      img1: keyBigF,
+      alt1: "F",
+      img2: keyBigJ,
+      alt2: "J",
+      img3: "",
+      alt3: "",
+      img4: "",
+      alt4: "",
+      img5: "",
+      alt5: "",
+      img6: "",
+      alt6: ""
+    },
+    completed: false,
+    exercise: [
+      {
+        text: "f",
+        correct: false
+      },
+      { text: "j", correct: false },
+      { text: "j", correct: false },
+      { text: "f", correct: false },
+      { text: "j", correct: false },
+      { text: "j", correct: false },
+      { text: "f", correct: false },
+      { text: "f", correct: false },
+      { text: "f", correct: false },
+      { text: "j", correct: false },
+      { text: "f", correct: false },
+      { text: "f", correct: false },
+      { text: "f", correct: false },
+      { text: "j", correct: false },
+      { text: "f", correct: false }
+    ]
+  },
+  {
+    instructions: {
+      mission1Text: "Uppdrag 2",
+      mission1TextEn: "Mission 2",
+      missionAlreadyCompleted: "Uppdraget redan slutfört.2",
+      missionAlreadyCompletedEn: "Mission already completed.",
+      character: "karaktär.",
+      characterEn: "character.",
+      p1a: "Nu ska ",
+      p1aEn: "Now ",
+      p1b:
+        " träna sina reflexer på höger hand. Använd höger hand för att skriva bokstäverna som dyker upp.",
+      p1bEn:
+        " needs to practice the reflexes on the right hand. Use your right hand to enter the letters that appear.",
+      p2:
+        "Håll höger pekfinger på J och använd sen resten av fingrarna på K, L , Ö och Ä.",
+      p2En:
+        "Hold your right index finger on J and then use the rest of your fingers on K, L , Ö, Ä",
+      p3: "Tryck enter för att starta, lycka till!",
+      p3En: "Press enter to begin, good luck!",
+      img1: keyH,
+      alt1: "H",
+      img2: keyJ,
+      alt2: "J",
+      img3: keyK,
+      alt3: "K",
+      img4: keyL,
+      alt4: "L",
+      img5: keyÖ,
+      alt5: "Ö",
+      img6: keyÄ,
+      alt6: "Ä"
+    },
+    completed: false,
+    exercise: [
+      { text: "ä", correct: false },
+      { text: "h", correct: false },
+      { text: "k", correct: false },
+      { text: "ä", correct: false },
+      { text: "l", correct: false },
+      { text: "ö", correct: false },
+      { text: "ä", correct: false },
+      { text: "k", correct: false },
+      { text: "l", correct: false },
+      { text: "j", correct: false },
+      { text: "ö", correct: false },
+      { text: "ä", correct: false },
+      { text: "h", correct: false },
+      { text: "j", correct: false },
+      { text: "k", correct: false }
+    ]
+  }
+];
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: "task/FETCH_TASK_LIST",
   FETCH_TASK: "task/FETCH_TASK",
   NEXT_TASK: "task/NEXT_TASK",
+  FETCH_TASK_INSTRUCTION: "task/TASK_INSTRUCTION",
   CORRECT_INPUT: "task/CORRECT_INPUT",
   NEXT: "task/NEXT",
   WRONG_INPUT: "task/WRONG_INPUT",
