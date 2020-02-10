@@ -3,7 +3,6 @@ import { IAction } from "../../shared/reducers";
 import { ITask } from "../../shared/model/task.model";
 import keyBigF from "../../static/images/f_button.svg";
 import keyBigJ from "../../static/images/j_button.svg";
-import keyF from "../../static/images/f_button_small.svg";
 import keyJ from "../../static/images/j_button_small.svg";
 import keyH from "../../static/images/h_button.svg";
 import keyK from "../../static/images/k_button.svg";
@@ -13,6 +12,7 @@ import keyÄ from "../../static/images/ä_button.svg";
 
 const tasks: ITask[] = [
   {
+    taskId: 0,
     instructions: {
       mission1Text: "Uppdrag 1",
       mission1TextEn: "Mission 1",
@@ -68,6 +68,7 @@ const tasks: ITask[] = [
     ]
   },
   {
+    taskId: 1,
     instructions: {
       mission1Text: "Uppdrag 2",
       mission1TextEn: "Mission 2",
@@ -143,12 +144,19 @@ export interface ITaskState {
   errors: number;
 }
 
-const firstTask = 0;
+const getData = localStorage.getItem("Current Task");
+let witchTask;
+console.log(typeof getData);
+if (typeof getData === "string") {
+  witchTask = JSON.parse(getData);
+} else {
+  localStorage.setItem("Current Task", JSON.stringify(0));
+}
 
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
-  entity: tasks[firstTask],
-  currentTask: firstTask,
+  entity: tasks[witchTask],
+  currentTask: witchTask,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
@@ -172,6 +180,7 @@ export default (
       };
     case ACTION_TYPES.NEXT_TASK:
       const nextTask: number = state.currentTask + 1;
+      localStorage.setItem("Current Task", JSON.stringify(nextTask));
       return {
         ...state,
         entity: tasks[nextTask],

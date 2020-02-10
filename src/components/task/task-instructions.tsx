@@ -55,8 +55,8 @@ export type IProps = StateProps;
 
 const TaskInstruction = (props: IProps) => {
   const classes = useStyles();
-
   const { currentGameCharacter, currentTaskInstruction, currentTask } = props;
+
   let paragraphs;
   if (localData === 'sv-SE') {
     paragraphs = [

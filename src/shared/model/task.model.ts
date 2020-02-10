@@ -2,6 +2,7 @@ export interface ITask {
   completed?: boolean;
   exercise: ITypedText[];
   instructions: ITaskInstructions;
+  taskId: number;
 }
 
 interface ITypedText {
