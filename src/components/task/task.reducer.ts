@@ -9,6 +9,11 @@ import keyK from "../../static/images/k_button.svg";
 import keyL from "../../static/images/l_button.svg";
 import keyÖ from "../../static/images/ö_button.svg";
 import keyÄ from "../../static/images/ä_button.svg";
+import keyG from "../../static/images/g_button.svg";
+import keyF from "../../static/images/f_button_small.svg";
+import keyD from "../../static/images/d_button.svg";
+import keyS from "../../static/images/s_button.svg";
+import keyA from "../../static/images/a_button.svg";
 
 const tasks: ITask[] = [
   {
@@ -72,7 +77,7 @@ const tasks: ITask[] = [
     instructions: {
       mission1Text: "Uppdrag 2",
       mission1TextEn: "Mission 2",
-      missionAlreadyCompleted: "Uppdraget redan slutfört.2",
+      missionAlreadyCompleted: "Uppdraget redan slutfört.",
       missionAlreadyCompletedEn: "Mission already completed.",
       character: "karaktär.",
       characterEn: "character.",
@@ -118,6 +123,59 @@ const tasks: ITask[] = [
       { text: "h", correct: false },
       { text: "j", correct: false },
       { text: "k", correct: false }
+    ]
+  },
+  {
+    taskId: 2,
+    instructions: {
+      mission1Text: "Uppdrag 3",
+      mission1TextEn: "Mission 3",
+      missionAlreadyCompleted: "Uppdraget redan slutfört.",
+      missionAlreadyCompletedEn: "Mission already completed.",
+      character: "karaktär.",
+      characterEn: "character.",
+      p1a: "Nu ska ",
+      p1aEn: "Now ",
+      p1b:
+        " träna sina reflexer på vänster hand. Använd vänster hand för att skriva bokstäverna som dyker upp.",
+      p1bEn:
+        " needs to practice the reflexes on the left hand. Use your left hand to enter the letters that appear.",
+      p2:
+        "Håll vänster pekfinger på F och använd sen resten av fingrarna på D, S , och A.",
+      p2En:
+        "Hold your left index finger on F and then use the rest of your fingers on A, S , D",
+      p3: "Tryck enter för att starta, lycka till!",
+      p3En: "Press enter to begin, good luck!",
+      img1: keyA,
+      alt1: "A",
+      img2: keyS,
+      alt2: "F",
+      img3: keyD,
+      alt3: "D",
+      img4: keyF,
+      alt4: "S",
+      img5: keyG,
+      alt5: "A",
+      img6: "",
+      alt6: ""
+    },
+    completed: false,
+    exercise: [
+      { text: "f", correct: false },
+      { text: "g", correct: false },
+      { text: "d", correct: false },
+      { text: "a", correct: false },
+      { text: "s", correct: false },
+      { text: "a", correct: false },
+      { text: "s", correct: false },
+      { text: "f", correct: false },
+      { text: "g", correct: false },
+      { text: "s", correct: false },
+      { text: "a", correct: false },
+      { text: "g", correct: false },
+      { text: "s", correct: false },
+      { text: "a", correct: false },
+      { text: "g", correct: false }
     ]
   }
 ];
