@@ -155,13 +155,13 @@ const tasks: ITask[] = [
       img1: keyA,
       alt1: "A",
       img2: keyS,
-      alt2: "F",
+      alt2: "S",
       img3: keyD,
       alt3: "D",
       img4: keyF,
-      alt4: "S",
+      alt4: "F",
       img5: keyG,
-      alt5: "A",
+      alt5: "G",
       img6: "",
       alt6: ""
     },
@@ -294,7 +294,7 @@ export interface ITaskState {
 
 const getData = localStorage.getItem("Current Task");
 let witchTask;
-console.log(typeof getData);
+
 if (typeof getData === "string") {
   witchTask = JSON.parse(getData);
 } else {
@@ -364,6 +364,7 @@ export default (
         }
       };
     case ACTION_TYPES.RESET:
+      localStorage.setItem("Current Task", JSON.stringify(0));
       return {
         ...initialState
       };

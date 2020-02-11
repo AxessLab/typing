@@ -62,6 +62,7 @@
   },
   "summary": {
     "completedHeader": "Mission completed",
-    "completedText": "Well done. You have collected several tools to use on the next mission."
+    "completedText": "Well done. You have collected several tools to use on the next mission.",
+    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon."
   }
 }

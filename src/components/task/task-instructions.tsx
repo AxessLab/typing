@@ -94,7 +94,7 @@ const TaskInstruction = (props: IProps) => {
           </Typography>
         </Grid>
       </InstructionLayout>
-      {currentTask === 0 || 3 ?
+      {(currentTask === 0 || currentTask === 3) ?
         <>
           <Grid item container justify="center">
             <Grid item xs={12} md={2}>

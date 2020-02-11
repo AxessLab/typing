@@ -62,6 +62,7 @@
   },
   "summary": {
     "completedHeader": "Uppdrag klart",
-    "completedText": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag."
+    "completedText": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag.",
+    "completedTextLast": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag. Detta är det sista uppdraget för nu, nya uppdrag kommer snart."
   }
 }
