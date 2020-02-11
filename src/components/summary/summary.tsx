@@ -73,6 +73,7 @@ const Summmary = (props: ISummmaryProps) => {
           playAudio(audioElement, url).catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('speak error', error));
       }).catch(error => console.error('play audio error', error));
+      reset()
     }
     // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,11 +93,9 @@ const Summmary = (props: ISummmaryProps) => {
       currentTaskInstruction.missionSummaryEn
     ];
   }
-  console.log(tasks)
-  console.log(currentTask)
-  if (currentTask >= 3) {
+  /* if (currentTask >= 3) {
     reset()
-  }
+  } */
   return (
     <>
       {currentTask < 3 ?
