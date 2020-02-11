@@ -304,7 +304,7 @@ if (typeof getData === "string") {
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
   entity: tasks[witchTask || 0],
-  currentTask: witchTask,
+  currentTask: witchTask || 0,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
