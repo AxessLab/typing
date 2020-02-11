@@ -74,7 +74,7 @@ const TaskInstruction = (props: IProps) => {
 
     ];
   }
-
+  console.log(currentTask)
   return (
     <Grid container className={classes.root} spacing={8}>
       <InstructionLayout title={paragraphs[0]} to="/task/prestart" instructionToSpeak={paragraphs.join(' ')}>
