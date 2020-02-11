@@ -96,6 +96,7 @@ const Summmary = (props: ISummmaryProps) => {
   /* if (currentTask >= 3) {
     reset()
   } */
+  console.log(currentTask)
   return (
     <>
       {currentTask < 3 ?
