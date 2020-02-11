@@ -73,7 +73,7 @@ const Summmary = (props: ISummmaryProps) => {
           playAudio(audioElement, url).catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('speak error', error));
       }).catch(error => console.error('play audio error', error));
-      reset()
+      /*  reset() */
     }
     // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
