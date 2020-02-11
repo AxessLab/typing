@@ -30,8 +30,11 @@ const mapDispatchToProps = {
   nextTask
 };
 
-const mapStateToProps = ({ game }: IRootState) => ({
-  currentGameCharacter: game.gameCharacter
+const localData = localStorage.getItem('i18nextLng')
+
+const mapStateToProps = ({ game, task }: IRootState) => ({
+  currentGameCharacter: game.gameCharacter,
+  currentTaskInstruction: task.entity.instructions
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
@@ -41,7 +44,7 @@ type ISummmaryProps = StateProps & IDispatchProps;
 
 const Summmary = (props: ISummmaryProps) => {
   const classes = useStyles();
-  const { currentGameCharacter, nextTask } = props;
+  const { currentGameCharacter, nextTask, currentTaskInstruction } = props;
   const { t, i18n } = useTranslation();
 
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -53,7 +56,6 @@ const Summmary = (props: ISummmaryProps) => {
   const buttonElement = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
-    nextTask();
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
     playAudio(audioElement, assetBaseUrl + 'done.mp3').then(() => {
       speak(t('summary.completedText'), ttsOptionsInEffect).then(url => {
@@ -68,10 +70,21 @@ const Summmary = (props: ISummmaryProps) => {
     buttonElement.current.focus()
   }) */
 
+  let paragraphs;
+  if (localData === 'sv-SE') {
+    paragraphs = [
+      currentTaskInstruction.missionSummary
+    ];
+  } else {
+    paragraphs = [
+      currentTaskInstruction.missionSummaryEn
+    ];
+  }
+
   return (
     <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
       <Grid item xs={12} sm={7}>
-        <Typography variant="h2">{t('summary.completedHeader')}</Typography>
+        <Typography variant="h2">{paragraphs[0]}</Typography>
       </Grid>
       <Grid item xs={12} sm={7}>
         <Typography variant="body1">{t('summary.completedText')}</Typography>
@@ -80,7 +93,7 @@ const Summmary = (props: ISummmaryProps) => {
         <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
       </Grid>
       <Grid item xs={12} className={classes.alignCenter}>
-        <Button variant="outlined" to="/task" ref={buttonElement} component={Link1}>
+        <Button variant="outlined" to="/task" ref={buttonElement} component={Link1} onClick={nextTask}>
           {t('explore.next')}
         </Button>
       </Grid>

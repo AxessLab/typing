@@ -60,14 +60,14 @@ const TaskInstruction = (props: IProps) => {
   let paragraphs;
   if (localData === 'sv-SE') {
     paragraphs = [
-      currentTaskInstruction.mission1Text,
+      currentTaskInstruction.missionText,
       currentTaskInstruction.p1a + currentGameCharacter.name + currentTaskInstruction.p1b,
       currentTaskInstruction.p2,
       currentTaskInstruction.p3
     ];
   } else {
     paragraphs = [
-      currentTaskInstruction.mission1TextEn,
+      currentTaskInstruction.missionTextEn,
       currentTaskInstruction.p1aEn + currentGameCharacter.name + currentTaskInstruction.p1bEn,
       currentTaskInstruction.p2En,
       currentTaskInstruction.p3En
@@ -94,7 +94,7 @@ const TaskInstruction = (props: IProps) => {
           </Typography>
         </Grid>
       </InstructionLayout>
-      {currentTask === 0 ?
+      {currentTask === 0 || 3 ?
         <>
           <Grid item container justify="center">
             <Grid item xs={12} md={2}>

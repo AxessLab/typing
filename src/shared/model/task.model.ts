@@ -11,8 +11,10 @@ interface ITypedText {
 }
 
 interface ITaskInstructions {
-  mission1Text: string;
-  mission1TextEn: string;
+  missionText: string;
+  missionTextEn: string;
+  missionSummary: string;
+  missionSummaryEn: string;
   missionAlreadyCompleted: string;
   missionAlreadyCompletedEn: string;
   character: string;
