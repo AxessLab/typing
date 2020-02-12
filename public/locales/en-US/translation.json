@@ -14,6 +14,7 @@
   },
   "explore": {
     "next": "Next exercise",
+    "repeat": "Repeat mission",
     "introHeader": "Warm-up",
     "introText": "Press different keys to train your ninja for the first mission. Begin!",
     "completedHeader": "Done",

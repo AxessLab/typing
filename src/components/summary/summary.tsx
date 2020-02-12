@@ -114,8 +114,8 @@ const Summmary = (props: ISummmaryProps) => {
             <Button variant="outlined" to="/task" ref={buttonElement} component={Link1} onClick={nextTask}>
               {t('explore.next')}
             </Button>
-            <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset}>
-              {t('reset')}
+            <Button variant="outlined" to="/task" ref={buttonElement} component={Link1} >
+              {t('explore.repeat')}
             </Button>
           </Grid>
         </Grid>

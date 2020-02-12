@@ -14,6 +14,7 @@
   },
   "explore": {
     "next": "Gå till nästa övning",
+    "repeat": "Upprepa uppdraget",
     "introHeader": "Uppvärmning",
     "introText": "Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!",
     "completedHeader": "Redo!",
