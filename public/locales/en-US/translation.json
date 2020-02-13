@@ -14,7 +14,6 @@
   },
   "explore": {
     "next": "Next exercise",
-    "repeat": "Repeat mission",
     "introHeader": "Warm-up",
     "introText": "Press different keys to train your ninja for the first mission. Begin!",
     "completedHeader": "Done",
@@ -63,7 +62,9 @@
   },
   "summary": {
     "completedHeader": "Mission completed",
-    "completedText": "Well done. You have collected several tools to use on the next mission.",
-    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon."
+    "completedText": "Well done. You have collected several tools to use on the next mission. Press enter to go to the next mission or The space bar to repeat the same mission. The space bar in the form of a horizontal bar in the lowermost row, significantly wider than other keys",
+    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon.",
+    "next": "Next exercise",
+    "reset": "Go back from the beginning"
   }
 }

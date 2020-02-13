@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../shared/reducers';
 import {
   Link as RouterLink,
-  LinkProps as RouterLinkProps
+  LinkProps as RouterLinkProps,
+  RouteComponentProps
 } from 'react-router-dom';
 import { playAudio } from '../audio/audio';
 import { speak, ITTS } from '../tts/tts';
@@ -12,6 +13,7 @@ import { Typography, Grid, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { nextTask, reset } from '../task/task.reducer';
+import spaceBar from '../../static/images/space_button.svg'
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,11 +46,11 @@ const mapStateToProps = ({ game, task }: IRootState) => ({
 type StateProps = ReturnType<typeof mapStateToProps>;
 type IDispatchProps = typeof mapDispatchToProps;
 
-type ISummmaryProps = StateProps & IDispatchProps;
+type ISummmaryProps = StateProps & IDispatchProps & RouteComponentProps<{ url: string }>;
 
 const Summmary = (props: ISummmaryProps) => {
   const classes = useStyles();
-  const { currentGameCharacter, nextTask, currentTaskInstruction, currentTask, tasks, reset } = props;
+  const { currentGameCharacter, nextTask, currentTaskInstruction, currentTask, reset } = props;
   const { t, i18n } = useTranslation();
 
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -58,6 +60,7 @@ const Summmary = (props: ISummmaryProps) => {
   ));
 
   const buttonElement = useRef<HTMLAnchorElement | null>(null);
+
 
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
@@ -73,18 +76,27 @@ const Summmary = (props: ISummmaryProps) => {
           playAudio(audioElement, url).catch(error => console.error('playAudio error', error));
         }).catch(error => console.error('speak error', error));
       }).catch(error => console.error('play audio error', error));
-      /*  reset() */
     }
     // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* useEffect(() => {
-    buttonElement.current.focus()
-  }) */
+  useEffect(() => {
+    if (buttonElement && buttonElement.current) {
+      buttonElement.current.focus();
+    }
+  }, []);
+
+
+  const handleKey = (event: React.KeyboardEvent) => {
+    if (event.keyCode === 32) {
+      props.history.push('/task');
+    }
+  };
+
 
   let paragraphs;
-  if (localData === 'sv-SE') {
+  if (localData === 'sv-SE' || 'sv') {
     paragraphs = [
       currentTaskInstruction.missionSummary
     ];
@@ -93,31 +105,34 @@ const Summmary = (props: ISummmaryProps) => {
       currentTaskInstruction.missionSummaryEn
     ];
   }
-  /* if (currentTask >= 3) {
-    reset()
-  } */
-  console.log(currentTask)
+
   return (
     <>
       {currentTask < 3 ?
         <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
+
           <Grid item xs={12} sm={7}>
             <Typography variant="h2">{paragraphs[0]}</Typography>
           </Grid>
           <Grid item xs={12} sm={7}>
             <Typography variant="body1">{t('summary.completedText')}</Typography>
           </Grid>
-          <Grid item xs={12} sm={7}>
-            <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
+
+          <Grid item container justify="center" alignItems="center" className={classes.root}>
+            <Grid item xs={12} sm={4}>
+              <img src={spaceBar} alt={'space bar'} />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
+            </Grid>
           </Grid>
+
           <Grid item xs={12} className={classes.alignCenter}>
-            <Button variant="outlined" to="/task" ref={buttonElement} component={Link1} onClick={nextTask}>
-              {t('explore.next')}
-            </Button>
-            <Button variant="outlined" to="/task" ref={buttonElement} component={Link1} >
-              {t('explore.repeat')}
+            <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={nextTask} onKeyUp={handleKey}>
+              {t('summary.next')}
             </Button>
           </Grid>
+
         </Grid>
 
         :
@@ -133,8 +148,8 @@ const Summmary = (props: ISummmaryProps) => {
             <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
           </Grid>
           <Grid item xs={12} className={classes.alignCenter}>
-            <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset}>
-              {t('reset')}
+            <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset} onKeyUp={handleKey}>
+              {t('summary.reset')}
             </Button>
           </Grid>
         </Grid>

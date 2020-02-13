@@ -14,7 +14,6 @@
   },
   "explore": {
     "next": "Gå till nästa övning",
-    "repeat": "Upprepa uppdraget",
     "introHeader": "Uppvärmning",
     "introText": "Tryck på de olika tangenterna för att träna din ninja inför det första uppdraget. Börja nu!",
     "completedHeader": "Redo!",
@@ -63,7 +62,9 @@
   },
   "summary": {
     "completedHeader": "Uppdrag klart",
-    "completedText": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag.",
-    "completedTextLast": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag. Detta är det sista uppdraget för nu, nya uppdrag kommer snart."
+    "completedText": "Bra jobbat, Du har samlat flera verktyg som du kan använda vid nästa uppdrag. Tryck på enter för att gå till nästa uppdrag eller Mellanslagsfältet för att upprepa samma uppdrag. Mellanslagsfältet i form av en horisontell stapel i den nedersta raden, betydligt bredare än andra tangenter.",
+    "completedTextLast": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag. Detta är det sista uppdraget för nu, nya uppdrag kommer snart.",
+    "next": "Gå till nästa övning",
+    "reset": "Gå tillbaka från början"
   }
 }
