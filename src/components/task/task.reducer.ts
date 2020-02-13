@@ -376,7 +376,7 @@ export default (
         }
       };
     case ACTION_TYPES.RESET:
-      console.log("resat");
+      /* console.log("resat"); */
       localStorage.setItem("Current Task", JSON.stringify(0));
       return {
         ...initialState,
