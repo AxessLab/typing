@@ -63,7 +63,7 @@
   "summary": {
     "completedHeader": "Mission completed",
     "completedText": "Well done. You have collected several tools to use on the next mission. Press enter to go to the next mission or The space bar to repeat the same mission. The space bar in the form of a horizontal bar in the lowermost row, significantly wider than other keys",
-    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon.",
+    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon. Press enter to go back from the beginning or The space bar to repeat the same mission. The space bar in the form of a horizontal bar in the lowermost row, significantly wider than other keys",
     "next": "Next exercise",
     "reset": "Go back from the beginning"
   }

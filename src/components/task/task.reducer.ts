@@ -149,7 +149,7 @@ const tasks: ITask[] = [
       p2:
         "Håll vänster pekfinger på F och använd sen resten av fingrarna på D, S , och A.",
       p2En:
-        "Hold your left index finger on F and then use the rest of your fingers on A, S , D",
+        "Hold your left index finger on F and then use the rest of your fingers on D, S , A.",
       p3: "Tryck enter för att starta, lycka till!",
       p3En: "Press enter to begin, good luck!",
       img1: keyA,
@@ -190,7 +190,7 @@ const tasks: ITask[] = [
       missionText: "Frågesport",
       missionTextEn: "Quiz",
       missionSummary: "Frågesport klart",
-      missionSummaryEn: "Frågesport done",
+      missionSummaryEn: "Quiz done",
       missionAlreadyCompleted: "Uppdraget redan slutfört.",
       missionAlreadyCompletedEn: "Mission already completed.",
       character: "karaktär.",
@@ -274,6 +274,7 @@ export const ACTION_TYPES = {
   FETCH_TASK_LIST: "task/FETCH_TASK_LIST",
   FETCH_TASK: "task/FETCH_TASK",
   NEXT_TASK: "task/NEXT_TASK",
+  SET_TASK: "task/SET_TASK",
   FETCH_TASK_INSTRUCTION: "task/TASK_INSTRUCTION",
   CORRECT_INPUT: "task/CORRECT_INPUT",
   NEXT: "task/NEXT",
@@ -293,18 +294,18 @@ export interface ITaskState {
 }
 
 const getData = localStorage.getItem("Current Task");
-let witchTask;
+let whichTask;
 
 if (typeof getData === "string") {
-  witchTask = JSON.parse(getData);
+  whichTask = JSON.parse(getData);
 } else {
   localStorage.setItem("Current Task", JSON.stringify(0));
 }
 
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
-  entity: tasks[witchTask || 0],
-  currentTask: witchTask || 0,
+  entity: tasks[whichTask || 0],
+  currentTask: whichTask || 0,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
@@ -333,6 +334,17 @@ export default (
         ...state,
         entity: tasks[nextTask],
         currentTask: nextTask,
+        currentPos: 0
+      };
+    case ACTION_TYPES.SET_TASK:
+      localStorage.setItem(
+        "Current Task",
+        JSON.stringify(action.payload.exercise)
+      );
+      return {
+        ...state,
+        entity: tasks[action.payload.exercise],
+        currentTask: action.payload.exercise,
         currentPos: 0
       };
     case ACTION_TYPES.CORRECT_INPUT:
@@ -364,9 +376,11 @@ export default (
         }
       };
     case ACTION_TYPES.RESET:
+      console.log("resat");
       localStorage.setItem("Current Task", JSON.stringify(0));
       return {
-        ...initialState
+        ...initialState,
+        currentTask: 0
       };
     default:
       return state;
@@ -385,6 +399,14 @@ export const getTask = (task: ITask): IAction => ({
 
 export const nextTask = (): IAction => ({
   type: ACTION_TYPES.NEXT_TASK
+});
+
+export const setTask = (taskNumber: number): IAction => ({
+  type: ACTION_TYPES.SET_TASK,
+  payload: {
+    completed: false,
+    exercise: taskNumber
+  }
 });
 
 export const handleCorrectInput = (key: string) => async (

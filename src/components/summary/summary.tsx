@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(8),
       alignItems: 'center'
     },
+    img: {
+      marginTop: 30,
+      width: '100%'
+    },
     alignCenter: {
       textAlign: 'center'
     }
@@ -34,6 +38,7 @@ const mapDispatchToProps = {
 };
 
 const localData = localStorage.getItem('i18nextLng')
+
 
 const mapStateToProps = ({ game, task }: IRootState) => ({
   currentGameCharacter: game.gameCharacter,
@@ -96,7 +101,7 @@ const Summmary = (props: ISummmaryProps) => {
 
 
   let paragraphs;
-  if (localData === 'sv-SE' || 'sv') {
+  if (localData === 'sv-SE') {
     paragraphs = [
       currentTaskInstruction.missionSummary
     ];
@@ -117,16 +122,12 @@ const Summmary = (props: ISummmaryProps) => {
           <Grid item xs={12} sm={7}>
             <Typography variant="body1">{t('summary.completedText')}</Typography>
           </Grid>
-
-          <Grid item container justify="center" alignItems="center" className={classes.root}>
-            <Grid item xs={12} sm={4}>
-              <img src={spaceBar} alt={'space bar'} />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
-            </Grid>
+          <Grid item xs={12} sm={4}>
+            <img className={classes.img} src={spaceBar} alt={'space bar'} />
           </Grid>
-
+          <Grid item xs={12} sm={4}>
+            <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
+          </Grid>
           <Grid item xs={12} className={classes.alignCenter}>
             <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={nextTask} onKeyUp={handleKey}>
               {t('summary.next')}
@@ -144,7 +145,10 @@ const Summmary = (props: ISummmaryProps) => {
           <Grid item xs={12} sm={7}>
             <Typography variant="body1">{t('summary.completedTextLast')}</Typography>
           </Grid>
-          <Grid item xs={12} sm={7}>
+          <Grid item xs={12} sm={4}>
+            <img className={classes.img} src={spaceBar} alt={'space bar'} />
+          </Grid>
+          <Grid item xs={12} sm={4}>
             <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
           </Grid>
           <Grid item xs={12} className={classes.alignCenter}>
