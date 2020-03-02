@@ -298,6 +298,7 @@ let whichTask;
 
 if (typeof getData === "string") {
   whichTask = JSON.parse(getData);
+  console.log(whichTask);
 } else {
   localStorage.setItem("Current Task", JSON.stringify(0));
 }
