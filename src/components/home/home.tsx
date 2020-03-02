@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Grid, Typography, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
@@ -72,11 +72,7 @@ const Home = (props: IProps) => {
   const {
     gameCharacters
   } = props;
-  /* const resetAction = props.reset;
 
-  useEffect(() => {
-    resetAction();
-  }, [resetAction]); */
 
   const classes = useStyles();
 

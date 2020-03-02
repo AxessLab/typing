@@ -293,7 +293,7 @@ export interface ITaskState {
   errors: number;
 }
 
-const getData = localStorage.getItem("Current Task");
+/* const getData = localStorage.getItem("Current Task");
 let whichTask;
 
 if (typeof getData === "string") {
@@ -301,12 +301,12 @@ if (typeof getData === "string") {
   console.log(whichTask);
 } else {
   localStorage.setItem("Current Task", JSON.stringify(0));
-}
+} */
 
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
-  entity: tasks[whichTask || 0],
-  currentTask: whichTask || 0,
+  entity: tasks[0],
+  currentTask: 0,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
@@ -340,12 +340,12 @@ export default (
     case ACTION_TYPES.SET_TASK:
       localStorage.setItem(
         "Current Task",
-        JSON.stringify(action.payload.exercise)
+        JSON.stringify(action.payload.exercise.taskId)
       );
       return {
         ...state,
-        entity: tasks[action.payload.exercise],
-        currentTask: action.payload.exercise,
+        entity: action.payload.exercise,
+        currentTask: action.payload.exercise.taskId,
         currentPos: 0
       };
     case ACTION_TYPES.CORRECT_INPUT:
@@ -377,7 +377,6 @@ export default (
         }
       };
     case ACTION_TYPES.RESET:
-      /* console.log("resat"); */
       localStorage.setItem("Current Task", JSON.stringify(0));
       return {
         ...initialState,
@@ -406,7 +405,7 @@ export const setTask = (taskNumber: number): IAction => ({
   type: ACTION_TYPES.SET_TASK,
   payload: {
     completed: false,
-    exercise: taskNumber
+    exercise: tasks[taskNumber]
   }
 });
 
