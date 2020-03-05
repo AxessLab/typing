@@ -31,12 +31,12 @@ interface ITaskInstructions {
   alt1: string;
   img2: string;
   alt2: string;
-  img3: string;
-  alt3: string;
-  img4: string;
-  alt4: string;
-  img5: string;
-  alt5: string;
-  img6: string;
-  alt6: string;
+  img3?: string;
+  alt3?: string;
+  img4?: string;
+  alt4?: string;
+  img5?: string;
+  alt5?: string;
+  img6?: string;
+  alt6?: string;
 }

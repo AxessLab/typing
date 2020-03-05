@@ -1,29 +1,37 @@
 import React, { Suspense, useEffect } from "react";
 import { connect } from 'react-redux';
-import { IRootState } from './shared/reducers';
 import Explore from "./components/explore";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Task from "./components/task";
 import Summary from "./components/summary/summary";
 import Home from "./components/home/home";
 import { setTask } from './components/task/task.reducer';
+import { tasks } from './components/task/task.reducer';
 
-const mapStateToProps = ({ task }: IRootState) => ({
+
+const mapDispatchToProps = () => ({
+  setTask
 });
 
-const mapDispatchToProps = {
-  setTask
-};
 
+
+console.log(tasks.length)
 const Start = (props) => {
 
+  const { setTask } = props;
+
   useEffect(() => {
+
     const getData = localStorage.getItem("Current Task");
     let whichTask;
 
     if (typeof getData === "string") {
       whichTask = JSON.parse(getData);
-      props.setTask(whichTask)
+      if (whichTask > tasks.length - 1) {
+        localStorage.setItem("Current Task", JSON.stringify(0));
+      } else {
+        setTask(whichTask)
+      }
     } else {
       localStorage.setItem("Current Task", JSON.stringify(0));
     }
@@ -54,4 +62,4 @@ const App = (props) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapDispatchToProps)(App);

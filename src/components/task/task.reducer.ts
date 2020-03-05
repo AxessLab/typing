@@ -15,7 +15,7 @@ import keyD from "../../static/images/d_button.svg";
 import keyS from "../../static/images/s_button.svg";
 import keyA from "../../static/images/a_button.svg";
 
-const tasks: ITask[] = [
+export const tasks: ITask[] = [
   {
     taskId: 0,
     instructions: {
@@ -42,15 +42,7 @@ const tasks: ITask[] = [
       img1: keyBigF,
       alt1: "F",
       img2: keyBigJ,
-      alt2: "J",
-      img3: "",
-      alt3: "",
-      img4: "",
-      alt4: "",
-      img5: "",
-      alt5: "",
-      img6: "",
-      alt6: ""
+      alt2: "J"
     },
     completed: false,
     exercise: [
@@ -161,9 +153,7 @@ const tasks: ITask[] = [
       img4: keyF,
       alt4: "F",
       img5: keyG,
-      alt5: "G",
-      img6: "",
-      alt6: ""
+      alt5: "G"
     },
     completed: false,
     exercise: [
@@ -210,15 +200,7 @@ const tasks: ITask[] = [
       img1: keyBigF,
       alt1: "F",
       img2: keyBigJ,
-      alt2: "J",
-      img3: "",
-      alt3: "",
-      img4: "",
-      alt4: "",
-      img5: "",
-      alt5: "",
-      img6: "",
-      alt6: ""
+      alt2: "J"
     },
     completed: false,
     exercise: [
@@ -292,16 +274,6 @@ export interface ITaskState {
   wrongInput: boolean;
   errors: number;
 }
-
-/* const getData = localStorage.getItem("Current Task");
-let whichTask;
-
-if (typeof getData === "string") {
-  whichTask = JSON.parse(getData);
-  console.log(whichTask);
-} else {
-  localStorage.setItem("Current Task", JSON.stringify(0));
-} */
 
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
