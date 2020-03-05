@@ -106,8 +106,6 @@ const Task = props => {
 
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language, rate: 2 };
-    console.log(task.exercise)
-    console.log(currentPos)
     speak(task.exercise[currentPos].text, ttsOptionsInEffect).then(url =>
       playAudio(audioElement, url).catch(error =>
         console.error('play error intial character ' + error))).catch(error =>

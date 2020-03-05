@@ -102,12 +102,9 @@ const Summmary = (props: ISummmaryProps) => {
 
   }
 
-  /* const getData = JSON.parse(localStorage.getItem("Current Task"));
-  console.log(typeof getData); */
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 32) {
-
       setTask(whichTask)
       props.history.push('/task');
     }
