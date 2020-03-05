@@ -14,8 +14,6 @@ const mapDispatchToProps = () => ({
 });
 
 
-
-console.log(tasks.length)
 const Start = (props) => {
 
   const { setTask } = props;

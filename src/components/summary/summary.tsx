@@ -12,8 +12,9 @@ import { assetBaseUrl } from '../../config/audio';
 import { Typography, Grid, Button } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { nextTask, reset } from '../task/task.reducer';
-import spaceBar from '../../static/images/space_button.svg'
+import { nextTask, reset, setTask } from '../task/task.reducer';
+import spaceBar from '../../static/images/space_button.svg';
+import { tasks } from '../../components/task/task.reducer'
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +35,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const mapDispatchToProps = {
   nextTask,
-  reset
+  reset,
+  setTask
 };
 
 const localData = localStorage.getItem('i18nextLng')
@@ -55,7 +57,7 @@ type ISummmaryProps = StateProps & IDispatchProps & RouteComponentProps<{ url: s
 
 const Summmary = (props: ISummmaryProps) => {
   const classes = useStyles();
-  const { currentGameCharacter, nextTask, currentTaskInstruction, currentTask, reset } = props;
+  const { currentGameCharacter, nextTask, currentTaskInstruction, currentTask, reset, setTask } = props;
   const { t, i18n } = useTranslation();
 
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
@@ -69,7 +71,7 @@ const Summmary = (props: ISummmaryProps) => {
 
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
-    if (currentTask < 3) {
+    if (currentTask < tasks.length - 1) {
       playAudio(audioElement, assetBaseUrl + 'done.mp3').then(() => {
         speak(t('summary.completedText'), ttsOptionsInEffect).then(url => {
           playAudio(audioElement, url).catch(error => console.error('playAudio error', error));
@@ -92,9 +94,21 @@ const Summmary = (props: ISummmaryProps) => {
     }
   }, []);
 
+  const getData = localStorage.getItem("Current Task");
+  let whichTask;
+
+  if (typeof getData === "string") {
+    whichTask = JSON.parse(getData);
+
+  }
+
+  /* const getData = JSON.parse(localStorage.getItem("Current Task"));
+  console.log(typeof getData); */
 
   const handleKey = (event: React.KeyboardEvent) => {
     if (event.keyCode === 32) {
+
+      setTask(whichTask)
       props.history.push('/task');
     }
   };
@@ -113,7 +127,7 @@ const Summmary = (props: ISummmaryProps) => {
 
   return (
     <>
-      {currentTask < 3 ?
+      {currentTask < tasks.length - 1 ?
         <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
 
           <Grid item xs={12} sm={7}>
