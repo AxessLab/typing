@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect } from "react";
 import { connect } from 'react-redux';
+import { IRootState } from './shared/reducers';
 import Explore from "./components/explore";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Task from "./components/task";
@@ -9,9 +10,12 @@ import { setTask } from './components/task/task.reducer';
 import { tasks } from './components/task/task.reducer';
 
 
-const mapDispatchToProps = () => ({
-  setTask
+const mapStateToProps = ({ task }: IRootState) => ({
 });
+
+const mapDispatchToProps = {
+  setTask
+};
 
 
 const Start = (props) => {
@@ -60,4 +64,4 @@ const App = (props) => {
   );
 };
 
-export default connect(mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
