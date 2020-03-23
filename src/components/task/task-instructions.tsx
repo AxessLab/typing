@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
-const localData = localStorage.getItem('i18nextLng')
 
 const mapStateToProps = ({ game, task }: IRootState) => ({
   currentGameCharacter: game.gameCharacter,
@@ -58,6 +57,9 @@ const TaskInstruction = (props: IProps) => {
   const { currentGameCharacter, currentTaskInstruction, currentTask } = props;
 
   let paragraphs;
+  const localData = localStorage.getItem('i18nextLng');
+
+
   if (localData === 'sv-SE') {
     paragraphs = [
       currentTaskInstruction.missionText,
@@ -71,9 +73,11 @@ const TaskInstruction = (props: IProps) => {
       currentTaskInstruction.p1aEn + currentGameCharacter.name + currentTaskInstruction.p1bEn,
       currentTaskInstruction.p2En,
       currentTaskInstruction.p3En
-
     ];
   }
+
+
+
 
   return (
     <Grid container className={classes.root} spacing={8}>
