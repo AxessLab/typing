@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Grid, Typography, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
@@ -72,11 +72,7 @@ const Home = (props: IProps) => {
   const {
     gameCharacters
   } = props;
-  const resetAction = props.reset;
 
-  useEffect(() => {
-    resetAction();
-  }, [resetAction]);
 
   const classes = useStyles();
 
@@ -84,10 +80,10 @@ const Home = (props: IProps) => {
 
   let langCode = i18n.language;
 
-  const onLanguageSelect = (e) => { e.target.value === 'sv-SE'? langCode = 'sv-SE' : langCode = 'en-US'; i18n.changeLanguage(langCode); };
+  const onLanguageSelect = (e) => { e.target.value === 'sv-SE' ? langCode = 'sv-SE' : langCode = 'en-US'; i18n.changeLanguage(langCode); };
 
   return (
-    <Grid container className={classes.root}spacing={2}>
+    <Grid container className={classes.root} spacing={2}>
       <img src={logo} alt={t('home.logoAlt')} className={classes.logo} />
       <FormControl className={classes.FormControl}>
         <InputLabel id="label">{t('home.language')}</InputLabel>
@@ -121,7 +117,7 @@ const Home = (props: IProps) => {
           <img src={gameCharacters[1].image} alt={gameCharacters[1].name} />
         </Grid>
       </Grid>
-      <img src={whiteImage} alt={t('home.illustrations')} className={classes.illustration}/>
+      <img src={whiteImage} alt={t('home.illustrations')} className={classes.illustration} />
     </Grid>
   );
 }

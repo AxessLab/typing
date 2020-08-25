@@ -5,12 +5,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "es2015"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "es2015"],
     "allowJs": true,
     "checkJs": false,
     "skipLibCheck": true,
@@ -25,11 +20,6 @@
     "strict": false,
     "strictNullChecks": true
   },
-  "include": [
-    "src",
-    "src/typings.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src", "src/typings.d.ts"],
+  "exclude": ["node_modules"]
 }

@@ -104,12 +104,12 @@ const Task = props => {
 
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language, rate: 2 };
-    speak(task.exercise[currentPos].text, ttsOptionsInEffect).then(url => 
-      playAudio(audioElement, url).catch(error => 
-        console.error('play error intial character ' + error))).catch(error => 
+    speak(task.exercise[currentPos].text, ttsOptionsInEffect).then(url =>
+      playAudio(audioElement, url).catch(error =>
+        console.error('play error intial character ' + error))).catch(error =>
           console.error('speak inital character errror ' + error));
-      // Ignore lint warning about currentPos, i18n and audioElement
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Ignore lint warning about currentPos, i18n and audioElement
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleKey = (event: React.KeyboardEvent): void => {
@@ -118,15 +118,16 @@ const Task = props => {
       const correctKeyPressed = event.key.toLowerCase() === task.exercise[currentPos].text;
 
       if (currentPos + 1 === task.exercise.length && correctKeyPressed) {
+
         completedAction(task);
         props.history.push('/summary');
       }
 
       if (correctKeyPressed) {
         handleCorrectInputAction(event.key);
-          playAudio(audioElement, assetBaseUrl + 'correct.mp3').then(() => {
-            if (currentPos < task.exercise.length - 1) {
-              speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
+        playAudio(audioElement, assetBaseUrl + 'correct.mp3').then(() => {
+          if (currentPos < task.exercise.length - 1) {
+            speak(task.exercise[currentPos + 1].text, ttsOptions).then(textURL => {
               if (textURL !== '' && audioElement.current) {
                 playAudio(audioElement, textURL).catch(error => console.error('playAudio error ', error));
               }
@@ -136,7 +137,7 @@ const Task = props => {
       } else {
         handleWrongInputAction(event.key);
         playAudio(audioElement, assetBaseUrl + 'wrongsound.mp3').then(() => {
-          const ttsOptionsSlow = { language: i18n.language, rate: 1};
+          const ttsOptionsSlow = { language: i18n.language, rate: 1 };
           speak(fingerPlacement(task.exercise[currentPos].text, i18n.language), ttsOptionsSlow).then(textURL => {
             if (textURL !== '' && audioElement.current) {
               playAudio(audioElement, textURL).catch(error => console.error('playAudio error', error));
@@ -145,62 +146,61 @@ const Task = props => {
         }).catch(error => console.error('play wrong effect error', error));
       }
     }
-  }
-
-  
-  
+  };
 
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>
       <Grid item xs={12}>
-        <Typography variant="h1" align="center">{t('task.mission1Text')}</Typography>
+        <Typography variant="h1" align="center">
+          {t(`tasks.${task.id}.missionText`)}
+        </Typography>
       </Grid>
       {!task.completed ?
-      <React.StrictMode>
-        <Grid item container xs={12} justify="center" direction="column" alignItems="center" spacing={2} className={classes.typingGrid}>
-          <Grid item container justify="center" spacing={2}>
-            <Grid item xs={2}>
-              <div
-                className={classes.input}
-                role="application"
-                ref={inputElement}
-                tabIndex={0}
-                onKeyUp={handleKey}
-              >
+        <React.StrictMode>
+          <Grid item container xs={12} justify="center" direction="column" alignItems="center" spacing={2} className={classes.typingGrid}>
+            <Grid item container justify="center" spacing={2}>
+              <Grid item xs={2}>
+                <div
+                  className={classes.input}
+                  role="application"
+                  ref={inputElement}
+                  tabIndex={0}
+                  onKeyUp={handleKey}
+                >
+                  <Typography
+                    variant="h2"
+                    className={classes.textToType}
+                    style={{ color: (wrongInput ? '#ff6347' : 'inherit') }}
+                    aria-live="polite"
+                  >
+                    {task.exercise.length ? task.exercise[currentPos].text : ''}
+                  </Typography>
+                </div>
+                <div
+                  className={classes.borderBottom}
+                  style={{ background: wrongInput ? '#ff6347' : '#ffffff' }}
+                />
+              </Grid>
+              <Grid item xs={2}>
                 <Typography
                   variant="h2"
-                  className={classes.textToType}
-                  style={{ color: (wrongInput ? '#ff6347' : 'inherit') }}
-                  aria-live="polite"
+                  className={classes.remainingText}
                 >
-                  { task.exercise.length ? task.exercise[currentPos].text : '' }
+                  {
+                    (currentPos + 1 < task.exercise.length ? task.exercise[currentPos + 1].text : '') +
+                    (currentPos + 2 < task.exercise.length ? task.exercise[currentPos + 2].text : '')
+                  }
                 </Typography>
-              </div>
-              <div
-                className={classes.borderBottom}
-                style={{ background: wrongInput ? '#ff6347' : '#ffffff' }}
-              />
+              </Grid>
             </Grid>
             <Grid item xs={2}>
-              <Typography
-                variant="h2"
-                className={classes.remainingText}
-              >
-                {
-                  (currentPos + 1 < task.exercise.length ? task.exercise[currentPos + 1].text : '') +
-                  (currentPos + 2 < task.exercise.length ? task.exercise[currentPos + 2].text : '')
-                }
-              </Typography>
+              <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' ' + t('tasks.character')} />
             </Grid>
           </Grid>
-          <Grid item xs={2}>
-            <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' ' + t('task.character')} />
-          </Grid>
-        </Grid>
-        <audio id="player" ref={audioElement} src="" autoPlay />
-      </React.StrictMode>
-      :
-        <Typography variant="body1">{t('task.missionAlreadyCompleted')}</Typography>
+          <audio id="player" ref={audioElement} src="" autoPlay />
+        </React.StrictMode>
+        :
+        <Typography variant="body1">{t(`tasks.${task.id}.missionAlreadyCompleted`)}</Typography>
       }
     </Grid>
   );
