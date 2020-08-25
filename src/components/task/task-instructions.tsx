@@ -3,11 +3,10 @@ import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
 import InstructionLayout from '../layout/InstructionLayout';
-import buttonImageF from '../../static/images/f_button.svg';
-import buttonImageJ from '../../static/images/j_button.svg';
-import { connect } from 'react-redux';
-import { IRootState } from '../../shared/reducers';
 import { useTranslation } from 'react-i18next';
+import { IRootState } from '../../shared/reducers';
+import { connect } from 'react-redux';
+import { GridSize } from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,55 +42,76 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const mapStateToProps = ({ game }: IRootState) => ({
+const mapStateToProps = ({ task, game }: IRootState) => ({
+  task: task.entity,
   currentGameCharacter: game.gameCharacter
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 
-export type IProps = StateProps;
+export type ITaskInstructionsProps = StateProps;
 
-const TaskInstruction = (props: IProps) => {
+const TaskInstruction = (props: ITaskInstructionsProps) => {
   const classes = useStyles();
-
   const { t } = useTranslation();
+  const {
+    currentGameCharacter,
+    task
+  } = props;
 
-  const { currentGameCharacter } = props;
-  const paragraphs = [
-    t('task-instructions.p1a') + currentGameCharacter.name + t('task-instructions.p1b'),
-    t('task-instructions.p2'),
-    t('task-instructions.p3')
-  ];
-  return (
+  const getColumns = (numberOfItems: number): GridSize => {
+    if (numberOfItems === 2) return 2;
+    return 1;
+  }
+
+  return (task && (
     <Grid container className={classes.root} spacing={8}>
-      <InstructionLayout title={t('task.mission1Text')} to="/task/prestart" instructionToSpeak={ paragraphs.join(' ') }>
+      <InstructionLayout
+        title={
+          t(`tasks.instructions`)
+        }
+        to="/task/prestart"
+        instructionToSpeak={
+          t(`tasks.${task.id}.instructions.p1a`) +
+          currentGameCharacter.name +
+          t(`tasks.${task.id}.instructions.p1b`) +
+          t(`tasks.${task.id}.instructions.p2`) +
+          t(`tasks.${task.id}.instructions.p3`)
+        }
+      >
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[0]}
+            {t(`tasks.${task.id}.instructions.p1a`) + currentGameCharacter.name + t(`tasks.${task.id}.instructions.p1b`)}
           </Typography>
         </Grid>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[1]}
+            {t(`tasks.${task.id}.instructions.p2`)}
           </Typography>
         </Grid>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[2]}
+            {t(`tasks.${task.id}.instructions.p3`)}
           </Typography>
         </Grid>
       </InstructionLayout>
       <Grid item container justify="center">
-        <Grid item xs={12} md={2}>
-          <img src={buttonImageF} alt="F knapp" />
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <img src={buttonImageJ} alt="J knapp" />
-        </Grid>
-      </Grid>
-      <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration}/>
+        {task && task.keys.length > 0 && (
+          task.keys.map((key, index) => (
+            <Grid key={`exercise-${index}`} item xs={2} md={getColumns(task.keys.length)}>
+              <img src={key.image} alt={key.alt} />
+            </Grid>
+          ))
+        )}
+        <img
+          src={whiteImage}
+          alt="Vita illustrationer"
+          className={classes.illustration}
+        />
+      </Grid >
     </Grid>
+  )
   );
 };
 
-export default connect(mapStateToProps)(TaskInstruction);
+export default connect(mapStateToProps, null)(TaskInstruction);

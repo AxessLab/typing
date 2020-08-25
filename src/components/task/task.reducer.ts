@@ -1,10 +1,14 @@
 import { Dispatch } from 'redux';
 import { IAction } from '../../shared/reducers';
-import { ITask, defaultValue } from '../../shared/model/task.model';
+import { ITask } from '../../shared/model/task.model';
+import { tasks } from './task.config';
 
 export const ACTION_TYPES = {
   FETCH_TASK_LIST: 'task/FETCH_TASK_LIST',
   FETCH_TASK: 'task/FETCH_TASK',
+  NEXT_TASK: 'task/NEXT_TASK',
+  SET_TASK: 'task/SET_TASK',
+  FETCH_TASK_INSTRUCTION: 'task/TASK_INSTRUCTION',
   CORRECT_INPUT: 'task/CORRECT_INPUT',
   NEXT: 'task/NEXT',
   WRONG_INPUT: 'task/WRONG_INPUT',
@@ -15,6 +19,7 @@ export const ACTION_TYPES = {
 export interface ITaskState {
   entities: readonly ITask[];
   entity: Readonly<ITask>;
+  currentTask: number;
   currentPos: number;
   correctInput: boolean;
   wrongInput: boolean;
@@ -23,7 +28,8 @@ export interface ITaskState {
 
 const initialState: ITaskState = {
   entities: [] as ReadonlyArray<ITask>,
-  entity: defaultValue,
+  entity: tasks[0],
+  currentTask: 0,
   currentPos: 0,
   correctInput: false,
   wrongInput: false,
@@ -32,7 +38,10 @@ const initialState: ITaskState = {
 
 // Reducer
 
-export default (state: ITaskState = initialState, action: IAction): ITaskState => {
+export default (
+  state: ITaskState = initialState,
+  action: IAction
+): ITaskState => {
   switch (action.type) {
     case ACTION_TYPES.FETCH_TASK:
       return {
@@ -41,6 +50,27 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
           ...state.entity,
           exercise: action.payload.data
         }
+      };
+    case ACTION_TYPES.NEXT_TASK:
+      // tslint:disable-next-line: no-shadowed-variable
+      const nextTask: number = state.currentTask + 1;
+      localStorage.setItem('currentTask', JSON.stringify(nextTask));
+      return {
+        ...state,
+        entity: tasks[nextTask],
+        currentTask: nextTask,
+        currentPos: 0
+      };
+    case ACTION_TYPES.SET_TASK:
+      localStorage.setItem(
+        'currentTask',
+        JSON.stringify(action.payload.exercise.id)
+      );
+      return {
+        ...state,
+        entity: action.payload.exercise,
+        currentTask: action.payload.exercise.id,
+        currentPos: 0
       };
     case ACTION_TYPES.CORRECT_INPUT:
       return {
@@ -71,8 +101,10 @@ export default (state: ITaskState = initialState, action: IAction): ITaskState =
         }
       };
     case ACTION_TYPES.RESET:
+      localStorage.setItem('currentTask', JSON.stringify(0));
       return {
-        ...initialState
+        ...initialState,
+        currentTask: 0
       };
     default:
       return state;
@@ -89,7 +121,21 @@ export const getTask = (task: ITask): IAction => ({
   }
 });
 
-export const handleCorrectInput = (key: string) => async (dispatch: Dispatch): Promise<IAction> => {
+export const nextTask = (): IAction => ({
+  type: ACTION_TYPES.NEXT_TASK
+});
+
+export const setTask = (taskNumber: number): IAction => ({
+  type: ACTION_TYPES.SET_TASK,
+  payload: {
+    completed: false,
+    exercise: tasks[taskNumber]
+  }
+});
+
+export const handleCorrectInput = (key: string) => async (
+  dispatch: Dispatch
+): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.CORRECT_INPUT,
     payload: key
@@ -99,7 +145,9 @@ export const handleCorrectInput = (key: string) => async (dispatch: Dispatch): P
   return result;
 };
 
-export const handleWrongInput = (key: string) => async (dispatch: Dispatch): Promise<IAction> => {
+export const handleWrongInput = (key: string) => async (
+  dispatch: Dispatch
+): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.WRONG_INPUT,
     payload: key
@@ -108,7 +156,10 @@ export const handleWrongInput = (key: string) => async (dispatch: Dispatch): Pro
   return result;
 };
 
-export const completed = (task: ITask) => async (dispatch: Dispatch, getState: Function): Promise<IAction> => {
+export const completed = (task: ITask) => async (
+  dispatch: Dispatch,
+  getState: Function
+): Promise<IAction> => {
   const result = await dispatch({
     type: ACTION_TYPES.COMPLETED
   });

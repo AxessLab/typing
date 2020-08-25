@@ -25,18 +25,52 @@
     "selectHelp": "Tryck pil ned eller upp för att navigera. Välj ninja genom att trycka på enter.",
     "characterAltText": "karaktär"
   },
-  "task": {
-    "mission1Text": "Uppdrag 1",
-    "missionAlreadyCompleted": "Uppdraget redan slutfört.2",
-    "character": "karaktär."
+  "tasks": {
+    "missionAlreadyCompleted": "Uppdraget redan slutfört",
+    "character": "karaktär",
+    "instructions": "Instruktioner",
+    "0": {
+      "missionText": "Uppdrag 1",
+      "missionSummary": "Uppdrag 1 klart",
+      "instructions": {
+        "p1a": "Nu ska ",
+        "p1b": " samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.",
+        "p2": "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
+        "p3": "Tryck enter för att starta, lycka till!"
+      }
+    },
+    "1": {
+      "missionText": "Uppdrag 2",
+      "missionSummary": "Uppdrag 2 klart",
+      "instructions": {
+        "p1a": "Nu ska ",
+        "p1b": " träna sina reflexer på höger hand. Använd höger hand för att skriva bokstäverna som dyker upp.",
+        "p2": "Håll höger pekfinger på J och använd sen resten av fingrarna på K, L , Ö och Ä.",
+        "p3": "Tryck enter för att starta, lycka till!"
+      }
+    },
+    "2": {
+      "missionText": "Uppdrag 3",
+      "missionSummary": "Uppdrag 3 klart",
+      "instructions": {
+        "p1a": "Nu ska ",
+        "p1b": " träna sina reflexer på vänster hand. Använd vänster hand för att skriva bokstäverna som dyker upp.",
+        "p2": "Håll vänster pekfinger på F och använd sen resten av fingrarna på D, S , och A.",
+        "p3": "Tryck enter för att starta, lycka till!"
+      }
+    },
+    "3": {
+      "missionText": "Frågesport",
+      "missionSummary": "Frågesport klart",
+      "instructions": {
+        "p1a": "Nu ska ",
+        "p1b": " samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.",
+        "p2": "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
+        "p3": "Tryck enter för att starta, lycka till!"
+      }
+    }
   },
-  "task-instructions": {
-    "p1a": "Nu ska ",
-    "p1b": " samla verktyg för att klara av nästa uppdrag. För att hitta dom använd F och J på tangentbordet.",
-    "p2": "F och J har små upphöjningar på sina tangenter och sitter i mitten. Känn med pekfingrarna och placera höger pekfinger på J och vänster på F.",
-    "p3": "Tryck enter för att starta, lycka till!"
-  },
-  "utilsFingerPlacement":  {
+  "utilsFingerPlacement": {
     "useLeftLittleFinger": "Använd vänster lillfinger för att trycka på ",
     "useLeftRingFinger": "Använd vänster ringfinger för att trycka på ",
     "useLeftIndexFinger": "Använd vänster långfinger för att trycka på ",
@@ -51,6 +85,9 @@
   },
   "summary": {
     "completedHeader": "Uppdrag klart",
-    "completedText": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag."
+    "completedText": "Bra jobbat, Du har samlat flera verktyg som du kan använda vid nästa uppdrag. Tryck på enter för att gå till nästa uppdrag eller mellanslag för att upprepa samma uppdrag. Mellanslag är i form av en horisontell stapel i den nedersta raden, betydligt bredare än andra tangenter.",
+    "completedTextLast": "Bra jobbat, du har samlat flera verktyg klara att använda på nästa uppdrag. Detta är det sista uppdraget för nu, nya uppdrag kommer snart. Tryck på enter för att gå tillbaka från början eller mellanslags för att upprepa samma uppdrag. Mellanslags är i form av en horisontell stapel i den nedersta raden, betydligt bredare än andra tangenter.",
+    "next": "Gå till nästa övning",
+    "reset": "Gå tillbaka från början"
   }
 }

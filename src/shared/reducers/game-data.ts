@@ -11,7 +11,7 @@ export interface IGameState {
   gameCharacter: IGameCharacter;
 }
 
-interface IGameCharacter {
+export interface IGameCharacter {
   id: number;
   name: string;
   description: string;
@@ -22,13 +22,15 @@ const defaultCharacters: ReadonlyArray<IGameCharacter> = [
   {
     id: 0,
     name: 'Doruk',
-    description: 'Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.',
+    description:
+      'Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.',
     image: logo1
   },
   {
     id: 1,
     name: 'Fousari',
-    description: 'Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna.',
+    description:
+      'Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna.',
     image: logo2
   }
 ];
@@ -38,7 +40,10 @@ const initialState: IGameState = {
   gameCharacter: defaultCharacters[0]
 };
 
-export default (state: IGameState = initialState, action: IAction): IGameState => {
+export default (
+  state: IGameState = initialState,
+  action: IAction
+): IGameState => {
   switch (action.type) {
     case ACTION_TYPES.SET_CHARACTER: {
       return {
