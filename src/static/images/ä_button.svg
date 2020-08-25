@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84" height="75" viewBox="0 0 84 75">
+  <defs>
+    <filter id="Rectangle_115" x="0" y="0" width="84" height="75" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_83" data-name="Group 83" transform="translate(-1124 -477)">
+    <g transform="matrix(1, 0, 0, 1, 1124, 477)" filter="url(#Rectangle_115)">
+      <g id="Rectangle_115-2" data-name="Rectangle 115" transform="translate(9 6)" fill="#fff" stroke="#6facb9" stroke-width="4">
+        <rect width="66" height="57" rx="15" stroke="none"/>
+        <rect x="2" y="2" width="62" height="53" rx="13" fill="none"/>
+      </g>
+    </g>
+    <text id="Ä" transform="translate(1165 526)" font-size="33" font-family="HelveticaNeue-Bold, Helvetica Neue" font-weight="700"><tspan x="-11.302" y="0">Ä</tspan></text>
+  </g>
+</svg>

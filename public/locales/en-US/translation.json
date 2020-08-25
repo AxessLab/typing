@@ -11,7 +11,7 @@
   "game-data": {
     "dorukDescription": "Green clothes, white cane to quickly find keys in the dark. Doruks speciality is fast reflexes.",
     "fosauriDescription": "Purple clothes and white short sticks in each hand. Fousaris speciality is combos using both hands."
-  }, 
+  },
   "explore": {
     "next": "Next exercise",
     "introHeader": "Warm-up",
@@ -25,16 +25,50 @@
     "selectHelp": "Press the up and down arrows to navigate. Press enter to select ninja",
     "characterAltText": "character"
   },
-  "task": {
-    "mission1Text": "Mission 1",
-    "missionAlreadyCompleted": "Mission already completed.",
-    "character": "character."
-  },
-  "task-instructions": {
-    "p1a": "Now ",
-    "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
-    "p2": "F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
-    "p3": "Press enter to begin, good luck!"
+  "tasks": {
+    "missionAlreadyCompleted": "Mission already completed",
+    "character": "Character",
+    "instructions": "Instructions",
+    "0": {
+      "missionText": "Mission 1",
+      "missionSummary": "Mission 1 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "1": {
+      "missionText": "Mission 2",
+      "missionSummary": "Mission 2 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to practice the reflexes on the right hand. Use your right hand to enter the letters that appear.",
+        "p2": "Hold your right index finger on J and then use the rest of your fingers on K, L , Ö, Ä",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "2": {
+      "missionText": "Mission 3",
+      "missionSummary": "Mission 3 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to practice the reflexes on the left hand. Use your left hand to enter the letters that appear.",
+        "p2": "Hold your left index finger on F and then use the rest of your fingers on D, S , A.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "3": {
+      "missionText": "Quiz",
+      "missionSummary": "Quiz done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    }
   },
   "utilsFingerPlacement": {
     "useLeftPinky": "Use your left little finger to press ",
@@ -51,6 +85,9 @@
   },
   "summary": {
     "completedHeader": "Mission completed",
-    "completedText": "Well done. You have collected several tools to use on the next mission."
+    "completedText": "Well done. You have collected several tools to use on the next mission. Press enter to go to the next mission or The space bar to repeat the same mission. The space bar in the form of a horizontal bar in the lowermost row, significantly wider than other keys",
+    "completedTextLast": "Well done. You have collected several tools to use on the next mission. This is the last assignment for now, new assignments coming soon. Press enter to go back from the beginning or The space bar to repeat the same mission. The space bar in the form of a horizontal bar in the lowermost row, significantly wider than other keys",
+    "next": "Next exercise",
+    "reset": "Go back from the beginning"
   }
 }

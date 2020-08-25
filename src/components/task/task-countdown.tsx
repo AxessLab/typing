@@ -30,11 +30,9 @@ export type IProps = IOwnProps & RouteComponentProps<{ url: string }>;
 
 const TaskCountDown = (props: IProps) => {
   const classes = useStyles();
-  
   const { i18n } = useTranslation();
-
   const { startTime, to } = props;
-  const [ timeLeft, setTimeLeft ] = useState(startTime);
+  const [timeLeft, setTimeLeft] = useState(startTime);
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
   useEffect(() => {
@@ -58,7 +56,7 @@ const TaskCountDown = (props: IProps) => {
 
   return (
     <Grid container className={classes.root}>
-      <Typography variant="h2" className={classes.heading}>{ timeLeft }</Typography>
+      <Typography variant="h1" className={classes.heading}>{timeLeft}</Typography>
       <audio ref={audioElement} src="" />
     </Grid>
   );

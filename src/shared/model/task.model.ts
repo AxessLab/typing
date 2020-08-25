@@ -1,6 +1,8 @@
 export interface ITask {
+  id: number;
   completed?: boolean;
   exercise: ITypedText[];
+  keys: IKey[];
 }
 
 interface ITypedText {
@@ -8,23 +10,7 @@ interface ITypedText {
   correct: boolean;
 }
 
-export const defaultValue: Readonly<ITask> = {
-  completed: false,
-  exercise: [
-    { text: 'f', correct: false },
-    { text: 'j', correct: false },
-    { text: 'j', correct: false },
-    { text: 'f', correct: false },
-    { text: 'j', correct: false },
-    { text: 'j', correct: false },
-    { text: 'f', correct: false },
-    { text: 'f', correct: false },
-    { text: 'f', correct: false },
-    { text: 'j', correct: false },
-    { text: 'f', correct: false },
-    { text: 'f', correct: false },
-    { text: 'f', correct: false },
-    { text: 'j', correct: false },
-    { text: 'f', correct: false }
-  ]
-};
+interface IKey {
+  image: string;
+  alt: string;
+}

@@ -78,7 +78,7 @@ const ExploreMenu = (props: IProps) => {
     useRef<HTMLLIElement | null>(null),
     useRef<HTMLLIElement | null>(null)
   ];
-  const [ listIndex, setListIndex ] = useState(-1);
+  const [listIndex, setListIndex] = useState(-1);
 
   const ttsOptions: ITTS = { language: i18n.language };
 
@@ -91,19 +91,18 @@ const ExploreMenu = (props: IProps) => {
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
     speak(headerText + ' ' + introText, ttsOptionsInEffect).then(url => playAudio(audioElementIntro, url));
-    //ignore lint i18n warning
+    // ignore lint i18n warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerText, introText]);
 
-  //Can't use t() from i18n in a shared reducer, ugly fix for now
+  // Can't use t() from i18n in a shared reducer, ugly fix for now
   const localizeDescription = (id: number): string => {
     if (id === 0) {
       return t('game-data.dorukDescription');
-    }
-    else {
+    } else {
       return t('game-data.fosauriDescription');
     }
-  } 
+  };
 
   const handleFocus = (id: number) => {
     setListIndex(id);
