@@ -3,10 +3,9 @@ import { Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import whiteImage from '../../static/images/vita_illustrationer.svg';
 import InstructionLayout from '../layout/InstructionLayout';
-import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { IRootState } from '../../shared/reducers';
-
-
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,107 +41,71 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const mapStateToProps = ({ game, task }: IRootState) => ({
-  currentGameCharacter: game.gameCharacter,
-  currentTaskInstruction: task.entity.instructions,
-  currentTask: task.currentTask
+const mapStateToProps = ({ task, game }: IRootState) => ({
+  task: task.entity,
+  currentGameCharacter: game.gameCharacter
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 
-export type IProps = StateProps;
+export type ITaskInstructionsProps = StateProps;
 
-const TaskInstruction = (props: IProps) => {
+const TaskInstruction = (props: ITaskInstructionsProps) => {
   const classes = useStyles();
-  const { currentGameCharacter, currentTaskInstruction, currentTask } = props;
+  const { t } = useTranslation();
+  const {
+    currentGameCharacter,
+    task
+  } = props;
 
-  let paragraphs;
-  const localData = localStorage.getItem('i18nextLng');
-
-
-  if (localData === 'sv-SE') {
-    paragraphs = [
-      currentTaskInstruction.missionText,
-      currentTaskInstruction.p1a + currentGameCharacter.name + currentTaskInstruction.p1b,
-      currentTaskInstruction.p2,
-      currentTaskInstruction.p3
-    ];
-  } else {
-    paragraphs = [
-      currentTaskInstruction.missionTextEn,
-      currentTaskInstruction.p1aEn + currentGameCharacter.name + currentTaskInstruction.p1bEn,
-      currentTaskInstruction.p2En,
-      currentTaskInstruction.p3En
-    ];
-  }
-
-
-
-
-  return (
+  return (task && (
     <Grid container className={classes.root} spacing={8}>
-      <InstructionLayout title={paragraphs[0]} to="/task/prestart" instructionToSpeak={paragraphs.join(' ')}>
+      <InstructionLayout
+        title={
+          t(`tasks.instructions`)
+        }
+        to="/task/prestart"
+        instructionToSpeak={
+          t(`tasks.${task.id}.instructions.p1a`) +
+          currentGameCharacter.name +
+          t(`tasks.${task.id}.instructions.p1b`) +
+          t(`tasks.${task.id}.instructions.p2`) +
+          t(`tasks.${task.id}.instructions.p3`)
+        }
+      >
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[1]}
+            {t(`tasks.${task.id}.instructions.p1a`) + currentGameCharacter.name + t(`tasks.${task.id}.instructions.p1b`)}
           </Typography>
         </Grid>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[2]}
+            {t(`tasks.${task.id}.instructions.p2`)}
           </Typography>
         </Grid>
         <Grid item xs={12} md={7}>
           <Typography variant="body1" align="left">
-            {paragraphs[3]}
+            {t(`tasks.${task.id}.instructions.p3`)}
           </Typography>
         </Grid>
       </InstructionLayout>
-      {(currentTask === 0 || currentTask === 3) ?
-        <>
-          <Grid item container justify="center">
-            <Grid item xs={12} md={2}>
-              <img src={currentTaskInstruction.img1} alt={currentTaskInstruction.alt1} />
+      <Grid item container justify="center">
+        {task && task.keys.length > 0 && (
+          task.keys.map((key, index) => (
+            <Grid key={`exercise-${index}`} item xs={12} md={1}>
+              <img src={key.image} alt={key.alt} />
             </Grid>
-            <Grid item xs={12} md={2}>
-              <img src={currentTaskInstruction.img2} alt={currentTaskInstruction.alt2} />
-            </Grid>
-          </Grid>
-          <img src={whiteImage} alt="Vita illustrationer" className={classes.illustration} />
-        </>
-        :
-        <>
-          <Grid item container justify="center">
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img1} alt={currentTaskInstruction.alt1} />
-            </Grid>
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img2} alt={currentTaskInstruction.alt2} />
-            </Grid>
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img3} alt={currentTaskInstruction.alt3} />
-            </Grid>
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img4} alt={currentTaskInstruction.alt4} />
-            </Grid>
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img5} alt={currentTaskInstruction.alt5} />
-            </Grid>
-            <Grid item xs={12} md={1}>
-              <img src={currentTaskInstruction.img6} alt={currentTaskInstruction.alt6} />
-            </Grid>
-
-          </Grid>
-          <img
-            src={whiteImage}
-            alt='Vita illustrationer'
-            className={classes.illustration}
-          />
-        </>
-      }
-    </Grid >
-
+          ))
+        )}
+        <img
+          src={whiteImage}
+          alt="Vita illustrationer"
+          className={classes.illustration}
+        />
+      </Grid >
+    </Grid>
+  )
   );
 };
 
-export default connect(mapStateToProps)(TaskInstruction);
+export default connect(mapStateToProps, null)(TaskInstruction);

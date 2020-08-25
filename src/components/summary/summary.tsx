@@ -14,8 +14,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { nextTask, reset, setTask } from '../task/task.reducer';
 import spaceBar from '../../static/images/space_button.svg';
-import { tasks } from '../../components/task/task.reducer'
-
+import { tasks } from '../../components/task/task.config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,16 +38,11 @@ const mapDispatchToProps = {
   setTask
 };
 
-const localData = localStorage.getItem('i18nextLng')
-
-
 const mapStateToProps = ({ game, task }: IRootState) => ({
   currentGameCharacter: game.gameCharacter,
-  currentTaskInstruction: task.entity.instructions,
   currentTask: task.currentTask,
   tasks: task.entities
 });
-
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type IDispatchProps = typeof mapDispatchToProps;
@@ -57,17 +51,19 @@ type ISummmaryProps = StateProps & IDispatchProps & RouteComponentProps<{ url: s
 
 const Summmary = (props: ISummmaryProps) => {
   const classes = useStyles();
-  const { currentGameCharacter, nextTask, currentTaskInstruction, currentTask, reset, setTask } = props;
-  const { t, i18n } = useTranslation();
+  const {
+    currentGameCharacter,
+    currentTask
+  } = props;
 
+  const { t, i18n } = useTranslation();
   const audioElement: React.MutableRefObject<HTMLMediaElement | null> = useRef(null);
 
-  const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((props, ref) => (
-    <RouterLink innerRef={ref} {...props} />
+  const Link1 = React.forwardRef<HTMLAnchorElement, RouterLinkProps>((linkProps: any, ref) => (
+    <RouterLink innerRef={ref} {...linkProps} />
   ));
 
   const buttonElement = useRef<HTMLAnchorElement | null>(null);
-
 
   useEffect(() => {
     const ttsOptionsInEffect: ITTS = { language: i18n.language };
@@ -94,41 +90,33 @@ const Summmary = (props: ISummmaryProps) => {
     }
   }, []);
 
-  const getData = localStorage.getItem("Current Task");
+  const getData = localStorage.getItem('currentTask');
   let whichTask;
 
-  if (typeof getData === "string") {
+  if (typeof getData === 'string') {
     whichTask = JSON.parse(getData);
-
   }
-
-
   const handleKey = (event: React.KeyboardEvent) => {
-    if (event.keyCode === 32) {
-      setTask(whichTask)
-      props.history.push('/task');
+    switch (event.key) {
+      case 'Space':
+        props.setTask(whichTask);
+        props.history.push('/task');
+        break;
+      case 'Enter':
+        props.nextTask();
+        props.history.push('/task');
+        break;
+      default:
+        break;
     }
   };
 
-
-  let paragraphs;
-  if (localData === 'sv-SE') {
-    paragraphs = [
-      currentTaskInstruction.missionSummary
-    ];
-  } else {
-    paragraphs = [
-      currentTaskInstruction.missionSummaryEn
-    ];
-  }
-
   return (
     <>
-      {currentTask < tasks.length - 1 ?
+      {currentTask < tasks.length - 1 ? (
         <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
-
           <Grid item xs={12} sm={7}>
-            <Typography variant="h2">{paragraphs[0]}</Typography>
+            <Typography variant="h1">{t(`tasks.${currentTask}.missionSummary`)}</Typography>
           </Grid>
           <Grid item xs={12} sm={7}>
             <Typography variant="body1">{t('summary.completedText')}</Typography>
@@ -140,38 +128,33 @@ const Summmary = (props: ISummmaryProps) => {
             <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
           </Grid>
           <Grid item xs={12} className={classes.alignCenter}>
-            <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={nextTask} onKeyUp={handleKey}>
+            <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={props.nextTask} onKeyUp={handleKey}>
               {t('summary.next')}
             </Button>
           </Grid>
-
         </Grid>
-
-        :
-
-        <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
-          <Grid item xs={12} sm={7}>
-            <Typography variant="h2">{paragraphs[0]}</Typography>
+      ) : (
+          <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
+            <Grid item xs={12} sm={7}>
+              <Typography variant="h2">{t(`tasks.${currentTask}.missionSummary`)}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <Typography variant="body1">{t('summary.completedTextLast')}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <img className={classes.img} src={spaceBar} alt={'space bar'} />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
+            </Grid>
+            <Grid item xs={12} className={classes.alignCenter}>
+              <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset} onKeyUp={handleKey}>
+                {t('summary.reset')}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={7}>
-            <Typography variant="body1">{t('summary.completedTextLast')}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <img className={classes.img} src={spaceBar} alt={'space bar'} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
-          </Grid>
-          <Grid item xs={12} className={classes.alignCenter}>
-            <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset} onKeyUp={handleKey}>
-              {t('summary.reset')}
-            </Button>
-          </Grid>
-        </Grid>
-      }
-
+        )}
       <audio id="player" ref={audioElement} src="" autoPlay />
-
     </>
   );
 };

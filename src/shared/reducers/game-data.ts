@@ -1,9 +1,9 @@
-import { IAction } from "./index";
-import logo1 from "../../static/images/ninja_doruk.svg";
-import logo2 from "../../static/images/ninja_fousari.svg";
+import { IAction } from './index';
+import logo1 from '../../static/images/ninja_doruk.svg';
+import logo2 from '../../static/images/ninja_fousari.svg';
 
 export const ACTION_TYPES = {
-  SET_CHARACTER: "game/SET_CHARACTER"
+  SET_CHARACTER: 'game/SET_CHARACTER'
 };
 
 export interface IGameState {
@@ -21,16 +21,16 @@ export interface IGameCharacter {
 const defaultCharacters: ReadonlyArray<IGameCharacter> = [
   {
     id: 0,
-    name: "Doruk",
+    name: 'Doruk',
     description:
-      "Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.",
+      'Gröna kläder, vit käpp i handen som används för att hitta tangenterna snabbt i mörkret. Doruks specialitet är snabba reflexer.',
     image: logo1
   },
   {
     id: 1,
-    name: "Fousari",
+    name: 'Fousari',
     description:
-      "Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna.",
+      'Lila kläder och vita pinnar i händerna. Fousaris specialitet är kombos med båda händerna.',
     image: logo2
   }
 ];

@@ -25,27 +25,50 @@
     "selectHelp": "Press the up and down arrows to navigate. Press enter to select ninja",
     "characterAltText": "character"
   },
-  "task": {
-    "mission1Text": "Mission 1",
-    "missionAlreadyCompleted": "Mission already completed.",
-    "character": "character."
-  },
-  "task-instructions": {
-    "p1a": "Now ",
-    "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
-    "p2": "F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
-    "p3": "Press enter to begin, good luck!"
-  },
-  "task2": {
-    "mission2Text": "Mission 2",
-    "missionAlreadyCompleted": "Mission already completed.",
-    "character": "character."
-  },
-  "task2-instructions": {
-    "p1a": "Now ",
-    "p1b": " needs to practice the reflexes on the right hand. Use your right hand to enter the letters that appear.",
-    "p2": "Hold your right index finger on J and then use the rest of your fingers on K, L , Ö, Ä",
-    "p3": "Press enter to begin, good luck!"
+  "tasks": {
+    "missionAlreadyCompleted": "Mission already completed",
+    "character": "Character",
+    "instructions": "Instructions",
+    "0": {
+      "missionText": "Mission 1",
+      "missionSummary": "Mission 1 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "1": {
+      "missionText": "Mission 1",
+      "missionSummary": "Mission 1 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "2": {
+      "missionText": "Mission 1",
+      "missionSummary": "Mission 1 done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    },
+    "3": {
+      "missionText": "Quiz",
+      "missionSummary": "Quiz done",
+      "instructions": {
+        "p1a": "Now ",
+        "p1b": " needs to collect tools to use on the next mission. To find them use F and J on the keyboard.",
+        "p2": "'F and J have small bumps on their keys and are located in the middle of the keyboard. Search for them with your fore fingers and place your right fore finger on J and your left on F.",
+        "p3": "Press enter to begin, good luck!"
+      }
+    }
   },
   "utilsFingerPlacement": {
     "useLeftPinky": "Use your left little finger to press ",

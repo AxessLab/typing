@@ -60,8 +60,7 @@ const mapStateToProps = ({ task, game }: IRootState) => ({
   task: task.entity,
   currentPos: task.currentPos,
   wrongInput: task.wrongInput,
-  currentGameCharacter: game.gameCharacter,
-  currentTaskInstruction: task.entity.instructions
+  currentGameCharacter: game.gameCharacter
 });
 
 const mapDispatchToProps = {
@@ -85,8 +84,7 @@ const Task = props => {
     task,
     currentPos,
     wrongInput,
-    currentGameCharacter,
-    currentTaskInstruction
+    currentGameCharacter
   } = props;
 
   const inputElement = useRef<HTMLDivElement | null>(null);
@@ -148,12 +146,14 @@ const Task = props => {
         }).catch(error => console.error('play wrong effect error', error));
       }
     }
-  }
+  };
 
   return (
     <Grid container justify="center" alignItems="center" spacing={3} className={classes.root}>
       <Grid item xs={12}>
-        <Typography variant="h1" align="center">{currentTaskInstruction.mission1Text}</Typography>
+        <Typography variant="h1" align="center">
+          {t(`tasks.${task.id}.missionText`)}
+        </Typography>
       </Grid>
       {!task.completed ?
         <React.StrictMode>
@@ -194,13 +194,13 @@ const Task = props => {
               </Grid>
             </Grid>
             <Grid item xs={2}>
-              <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' ' + t('task.character')} />
+              <img src={currentGameCharacter.image} alt={currentGameCharacter.name + ' ' + t('tasks.character')} />
             </Grid>
           </Grid>
           <audio id="player" ref={audioElement} src="" autoPlay />
         </React.StrictMode>
         :
-        <Typography variant="body1">{t('task.missionAlreadyCompleted')}</Typography>
+        <Typography variant="body1">{t(`tasks.${task.id}.missionAlreadyCompleted`)}</Typography>
       }
     </Grid>
   );
