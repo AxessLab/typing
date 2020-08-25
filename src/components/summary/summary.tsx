@@ -88,72 +88,55 @@ const Summmary = (props: ISummmaryProps) => {
     if (buttonElement && buttonElement.current) {
       buttonElement.current.focus();
     }
-  }, []);
 
-  const getData = localStorage.getItem('currentTask');
-  let whichTask;
+    const onKeyDown: any = (event: KeyboardEvent) => {
+      const getData = localStorage.getItem('currentTask');
+      let whichTask;
 
-  if (typeof getData === 'string') {
-    whichTask = JSON.parse(getData);
-  }
-  const handleKey = (event: React.KeyboardEvent) => {
-    switch (event.key) {
-      case 'Space':
-        props.setTask(whichTask);
-        props.history.push('/task');
-        break;
-      case 'Enter':
-        props.nextTask();
-        props.history.push('/task');
-        break;
-      default:
-        break;
-    }
-  };
+      if (typeof getData === 'string') {
+        whichTask = JSON.parse(getData);
+      }
+      switch (event.key) {
+        case ' ':
+          props.setTask(whichTask);
+          props.history.push('/task');
+          break;
+        case 'Enter':
+          props.currentTask < tasks.length - 1 ? props.nextTask() : props.setTask(0);
+          props.history.push('/task');
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [props]);
 
   return (
     <>
-      {currentTask < tasks.length - 1 ? (
-        <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
-          <Grid item xs={12} sm={7}>
-            <Typography variant="h1">{t(`tasks.${currentTask}.missionSummary`)}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={7}>
-            <Typography variant="body1">{t('summary.completedText')}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <img className={classes.img} src={spaceBar} alt={'space bar'} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
-          </Grid>
-          <Grid item xs={12} className={classes.alignCenter}>
-            <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={props.nextTask} onKeyUp={handleKey}>
-              {t('summary.next')}
-            </Button>
-          </Grid>
+      <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
+        <Grid item xs={12} sm={7}>
+          <Typography variant="h1">{t(`tasks.${currentTask}.missionSummary`)}</Typography>
         </Grid>
-      ) : (
-          <Grid container justify="center" direction="column" alignItems="center" spacing={2} className={classes.root}>
-            <Grid item xs={12} sm={7}>
-              <Typography variant="h2">{t(`tasks.${currentTask}.missionSummary`)}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <Typography variant="body1">{t('summary.completedTextLast')}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <img className={classes.img} src={spaceBar} alt={'space bar'} />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
-            </Grid>
-            <Grid item xs={12} className={classes.alignCenter}>
-              <Button variant="outlined" to="/" ref={buttonElement} component={Link1} onClick={reset} onKeyUp={handleKey}>
-                {t('summary.reset')}
-              </Button>
-            </Grid>
-          </Grid>
-        )}
+        <Grid item xs={12} sm={7}>
+          <Typography variant="body1">
+            {currentTask < tasks.length - 1 ? t('summary.completedText') : t('summary.completedTextLast')}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <img className={classes.img} src={spaceBar} alt={'space bar'} />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <img src={currentGameCharacter.image} alt={currentGameCharacter.name} />
+        </Grid>
+        <Grid item xs={12} className={classes.alignCenter}>
+          <Button variant="outlined" id="next" to="/task" ref={buttonElement} component={Link1} onClick={props.nextTask}>
+            {t('summary.next')}
+          </Button>
+        </Grid>
+      </Grid>
       <audio id="player" ref={audioElement} src="" autoPlay />
     </>
   );

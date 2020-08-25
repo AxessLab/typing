@@ -6,6 +6,7 @@ import InstructionLayout from '../layout/InstructionLayout';
 import { useTranslation } from 'react-i18next';
 import { IRootState } from '../../shared/reducers';
 import { connect } from 'react-redux';
+import { GridSize } from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,6 +59,11 @@ const TaskInstruction = (props: ITaskInstructionsProps) => {
     task
   } = props;
 
+  const getColumns = (numberOfItems: number): GridSize => {
+    if (numberOfItems === 2) return 2;
+    return 1;
+  }
+
   return (task && (
     <Grid container className={classes.root} spacing={8}>
       <InstructionLayout
@@ -92,7 +98,7 @@ const TaskInstruction = (props: ITaskInstructionsProps) => {
       <Grid item container justify="center">
         {task && task.keys.length > 0 && (
           task.keys.map((key, index) => (
-            <Grid key={`exercise-${index}`} item xs={12} md={1}>
+            <Grid key={`exercise-${index}`} item xs={2} md={getColumns(task.keys.length)}>
               <img src={key.image} alt={key.alt} />
             </Grid>
           ))
